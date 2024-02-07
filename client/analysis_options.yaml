@@ -9,6 +9,18 @@
 # packages, and plugins designed to encourage good coding practices.
 include: package:flutter_lints/flutter.yaml
 
+analyzer:
+  strong-mode:
+    # mặc định là true, mình set rule này là false tức là ko cho phép ép kiểu ngầm định, phải tường minh
+    implicit-casts: false
+
+    # mặc định là true, mình set false, tức là ko cho phép sử dụng kiểu dynamic ngầm định
+    # vì Dart nó cho phép bạn khai báo param mà ko cần kiểu, Dart sẽ tự hiểu param này có kiểu dynamic
+    # Tuy nhiên, điều này làm cho việc đọc code hơi khó chịu nên mình đặt rule ngăn cấm
+    implicit-dynamic: false
+  errors:
+    close_sinks: ignore
+
 linter:
   # The lint rules applied to this project can be customized in the
   # section below to disable rules from the `package:flutter_lints/flutter.yaml`
@@ -21,6 +33,10 @@ linter:
   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
   # producing the lint.
   rules:
+    - annotate_overrides # phải sử dụng annotation overrides
+    - avoid_empty_else # tránh sử dụng else mà bên trong không có code
+    - avoid_function_literals_in_foreach_calls # kiểu cấm sử dụng lamdba trong forEach
+
     # avoid_print: false  # Uncomment to disable the `avoid_print` rule
     # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
 
