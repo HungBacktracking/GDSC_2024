@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "820743913209",
+    "project_id": "firstaid-b3f79",
+    "storage_bucket": "firstaid-b3f79.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:820743913209:android:b348166e6abe11693c6c28",
+        "android_client_info": {
+          "package_name": "com.backtracking.client"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBulkNEUihU9ZvGHFL62M_GKzysMgPiJzI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
