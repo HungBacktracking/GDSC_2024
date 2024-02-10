@@ -14,6 +14,7 @@ class MyTheme {
   static const blueLight = Color(0xFFF5F9FF);
   static const yellowBtn = Color.fromARGB(255, 243, 185, 37);
   static const redBtn = Color.fromARGB(255, 205, 50, 15);
+  static const mistyrose = Color.fromARGB(255, 255, 228, 225);
 
   static List<Color> redGiftGradientColors = [
     const Color(0xFFFCCAC6).withOpacity(0.3),

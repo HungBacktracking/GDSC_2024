@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'ui/login_screen.dart';
+import 'ui/greeting_screen.dart';
 
 
 void main() async {
@@ -21,10 +21,10 @@ class MyApp extends StatelessWidget {
       title: 'FirstAid App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrangeAccent),
         useMaterial3: true,
       ),
-      home: const LoginScreen(),
+      home: const GreetingScreen(),
     );
   }
 }
