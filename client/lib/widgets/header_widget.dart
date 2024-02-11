@@ -15,7 +15,7 @@ class HeaderWidget extends StatelessWidget {
         Image.asset('assets/images/logo.png'),
         const Gap(20),
         const Text(
-          Strings.header_text,
+          MyStrings.header_text,
           style: MyStyles.headerTextStyle,
         ),
       ],
