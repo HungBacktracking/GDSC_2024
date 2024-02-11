@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	opt := option.WithCredentialsFile("server\configs\firstaid-b3f79-firebase-adminsdk-zdw1h-bf16551ec6.json")
+	opt := option.WithCredentialsFile("server\configs\firstaid-b3f79-firebase-adminsdk-zdw1h-f40d04c897.json")
 	app, err := firebase.NewApp(context.Background(), nil, opt)
 	if err != nil {
 		return nil, fmt.Errorf("error initializing app: %v", err)
