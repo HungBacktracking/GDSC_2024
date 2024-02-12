@@ -1,4 +1,5 @@
 import 'package:client/firebase_options.dart';
+import 'package:client/ui/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,7 +25,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrangeAccent),
         useMaterial3: true,
       ),
-      home: const GreetingScreen(),
+      // home: const GreetingScreen(),
+      home: const HomeScreen(),
     );
   }
 }
