@@ -178,9 +178,12 @@ class _PhoneInputLoginState extends State<PhoneInputLogin> {
                     padding: const EdgeInsets.only(left: 16, right: 16, bottom: 5), // Ap dụng padding
                     child: Align(
                       alignment: Alignment.center, // Căn chỉnh nút về phía góc trên bên trái
-                      child: Text(
-                        MyStrings.already_have_account,
-                        style: TextStyle(fontSize: 16, color: Colors.deepOrangeAccent),
+                      child: TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          MyStrings.already_have_account,
+                          style: TextStyle(fontSize: 16, color: Colors.deepOrangeAccent),
+                        ),
                       ),
                     ),
                   ),
