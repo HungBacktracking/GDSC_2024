@@ -16,6 +16,14 @@ class MyTheme {
   static const redBtn = Color.fromARGB(255, 205, 50, 15);
   static const mistyrose = Color.fromARGB(255, 255, 228, 225);
 
+  static List<Color> defaultGradientColors = [
+    Colors.grey[100]!,
+    Colors.orange[100]!,
+  ];
+  static List<Color> orangeGiftGradientColors = [
+    const Color(0xFFEB8D2F).withOpacity(1),
+    const Color(0xFFF3B925).withOpacity(1),
+  ];
   static List<Color> redGiftGradientColors = [
     const Color(0xFFFCCAC6).withOpacity(0.3),
     const Color(0xFFDB5449).withOpacity(0.3),

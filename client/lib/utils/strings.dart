@@ -4,4 +4,5 @@ class MyStrings {
   static const String phone_input_title = "What's your mobile number?";
   static const String phone_input_guide = "Enter the mobile number you can be contacted. No one will see this on your profile.";
   static const String phone_input_sms_notice = "You'll also receive SMS notifications from us and can opt out anytime.";
+  static const String already_have_account = "Already have an account?";
 }
