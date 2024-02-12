@@ -1,26 +1,40 @@
 package main
 
 import (
-	"fmt"
-	"context"
-	"net/http"
+	// "github.com/labstack/echo/v4"
 
-	"github.com/labstack/echo/v4"
-	"google.golang.org/api/option"
-	firebase "firebase.google.com/go"
-	"firebase.google.com/go/auth"
+	"server/bootstrap"
+
+	"log"
+
+	"context"
 )
 
 func main() {
-	opt := option.WithCredentialsFile("server\configs\firstaid-b3f79-firebase-adminsdk-zdw1h-f40d04c897.json")
-	app, err := firebase.NewApp(context.Background(), nil, opt)
-	if err != nil {
-		return nil, fmt.Errorf("error initializing app: %v", err)
-	}	
+	// Init database
+	if err := bootstrap.InitializeDatabase(); err != nil {
+		log.Fatalf("Error initializing database: %v", err)
+	}
 
-	e := echo.New()
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
-	})
-	e.Logger.Fatal(e.Start(":1323"))
+	// Echo framework
+	// e := echo.New()
+	// routes.RegisterHomeRoutes(e)
+	// routes.RegisterUserRoutes(e)
+
+	// e.Logger.Fatal(e.Start(":1323"))
+
+	uid := "YtwhCfD5L6TWS8EpXlcWwMhjsZC3"
+
+	client := bootstrap.FirestoreClient
+
+	// Replace "users" with the actual collection name in your Firestore
+	collection := client.Collection("users")
+
+	// Query for the document with the specified UID
+	docRef := collection.Where("uid", "==", uid).Documents(context.Background())
+	docs, err := docRef.GetAll()
+	if err != nil {
+		return nil, err
+	}
+
 }
