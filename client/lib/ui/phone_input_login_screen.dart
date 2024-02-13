@@ -92,7 +92,7 @@ class _PhoneInputLoginState extends State<PhoneInputLogin> {
               child: Column(
                 children: [
                   const Padding(
-                    padding: EdgeInsets.only(left: 10, top: 15),
+                    padding: EdgeInsets.only(left: 0, top: 10),
                     child: Align(
                       alignment: Alignment.topLeft,
                       child: CupertinoNavigationBarBackButton(
@@ -100,7 +100,6 @@ class _PhoneInputLoginState extends State<PhoneInputLogin> {
                       ),
                     ),
                   ),
-                  const Gap(10),
                   const Padding(
                     padding: EdgeInsets.only(left: 16, right: 16, top: 5),
                     child: Align(

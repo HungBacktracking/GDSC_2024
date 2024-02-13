@@ -39,8 +39,8 @@ class MyApp extends StatelessWidget {
           }
         ),
       ),
-      // home: const GreetingScreen(),
-      home: const HomeScreen(),
+      home: const GreetingScreen(),
+      // home: const HomeScreen(),
     );
   }
 }

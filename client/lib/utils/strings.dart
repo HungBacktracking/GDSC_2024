@@ -6,4 +6,6 @@ class MyStrings {
   static const String phone_input_sms_notice = "You'll also receive SMS notifications from us and can opt out anytime.";
   static const String already_have_account = "Already have an account?";
   static const String viewAll_text = "View all";
+  static const String pin_authentication_title = "Enter the confirmation code";
+  static const String pin_authentication_guide = "To confirm your account, enter the 5-digit code we send to +84 97 110 5539.";
 }
