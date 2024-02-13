@@ -7,6 +7,7 @@ import 'package:gap/gap.dart';
 
 import '../utils/strings.dart';
 import '../utils/themes.dart';
+import 'name_input_register.dart';
 import 'phone_input_login_screen.dart';
 
 class GreetingScreen extends StatelessWidget {
@@ -15,6 +16,12 @@ class GreetingScreen extends StatelessWidget {
   onTapLogin(BuildContext context) {
     Navigator.of(context).push(
         MaterialPageRoute(builder: (context) => const PhoneInputLogin())
+    );
+  }
+
+  onTapSignup(BuildContext context) {
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => const NameInputRegister())
     );
   }
 
@@ -90,7 +97,7 @@ class GreetingScreen extends StatelessWidget {
                   child: SizedBox(
                     width: double.infinity,
                     child: OutlinedButton(
-                      onPressed: () {  },
+                      onPressed: () => onTapSignup(context),
                       style: OutlinedButton.styleFrom(
                         elevation: 5,
                         side: const BorderSide(color: Colors.deepOrangeAccent, width: 1.0),
