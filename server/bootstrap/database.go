@@ -4,6 +4,8 @@ package bootstrap
 import (
 	"context"
 	"log"
+	"os"
+	"path/filepath"
 	"server/configs"
 
 	"cloud.google.com/go/firestore"
@@ -12,11 +14,16 @@ import (
 )
 
 var (
-	serviceAccountPath = "configs\\service_account.json"
+	serviceAccountPath = "configs/service_account.json"
 
 	FirebaseApp     *firebase.App
 	FirestoreClient *firestore.Client
 )
+
+// SetServiceAccountPath sets the path to the service account JSON file.
+func SetServiceAccountPath(path string) {
+	serviceAccountPath = path
+}
 
 // InitializeApp initializes and returns a Firebase app instance
 func InitializeApp() (*firebase.App, error) {
@@ -52,6 +59,16 @@ func InitializeFirestore() (*firestore.Client, error) {
 
 // InitializeDatabase initializes Firebase App and Firestore Client
 func InitializeDatabase() error {
+	// Get the current working directory
+	cwd, err := os.Getwd()
+	if err != nil {
+		log.Printf("Error getting current working directory: %v", err)
+		return err
+	}
+
+	// Construct the full path to the service account file
+	serviceAccountPath = filepath.Join(cwd, serviceAccountPath)
+
 	// Initialize Firebase App
 	app, err := InitializeApp()
 	if err != nil {
