@@ -1,4 +1,4 @@
-
+import 'package:client/ui/pin_authen_login_screen.dart';
 import 'package:client/utils/strings.dart';
 import 'package:client/utils/styles.dart';
 import 'package:client/utils/themes.dart';
@@ -45,10 +45,17 @@ class _PhoneInputLoginState extends State<PhoneInputLogin> {
   @override
   void dispose() {
     _focusNode.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
 
-
+  onSubmitPhone(BuildContext context) {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => PinAuthenticationLogin(phoneNumber: _phoneController.text),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,37 +91,37 @@ class _PhoneInputLoginState extends State<PhoneInputLogin> {
               width: screen_size.width,
               child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10, top: 15), // Ap dụng padding
+                  const Padding(
+                    padding: EdgeInsets.only(left: 10, top: 15),
                     child: Align(
-                      alignment: Alignment.topLeft, // Căn chỉnh nút về phía góc trên bên trái
+                      alignment: Alignment.topLeft,
                       child: CupertinoNavigationBarBackButton(
                         color: Colors.black,
                       ),
                     ),
                   ),
-                  Gap(10),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16, right: 16, top: 5), // Ap dụng padding
+                  const Gap(10),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 16, right: 16, top: 5),
                     child: Align(
-                      alignment: Alignment.topLeft, // Căn chỉnh nút về phía góc trên bên trái
+                      alignment: Alignment.topLeft,
                       child: Text(
                         MyStrings.phone_input_title,
                         style: MyStyles.headerTextStyle,
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16, right: 16, top: 5), // Ap dụng padding
+                  const Padding(
+                    padding: EdgeInsets.only(left: 16, right: 16, top: 5),
                     child: Align(
-                      alignment: Alignment.topLeft, // Căn chỉnh nút về phía góc trên bên trái
+                      alignment: Alignment.topLeft,
                       child: Text(
                         MyStrings.phone_input_guide,
                         style: MyStyles.blackTinyTextStyle,
                       ),
                     ),
                   ),
-                  Gap(10),
+                  const Gap(10),
                   Form(
                     key: _formKey,
                     child: Container(
@@ -136,7 +143,7 @@ class _PhoneInputLoginState extends State<PhoneInputLogin> {
                           }
                           return null;
                         },
-                        style: TextStyle(fontSize: 16, color: Colors.black),
+                        style: const TextStyle(fontSize: 16, color: Colors.black),
                         cursorColor: Colors.black,
                         decoration: InputDecoration(
                           label: const Text('Mobile Number'),
@@ -155,10 +162,10 @@ class _PhoneInputLoginState extends State<PhoneInputLogin> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16, right: 16, top: 5), // Ap dụng padding
+                  const Padding(
+                    padding: EdgeInsets.only(left: 16, right: 16, top: 5),
                     child: Align(
-                      alignment: Alignment.topLeft, // Căn chỉnh nút về phía góc trên bên trái
+                      alignment: Alignment.topLeft,
                       child: Text(
                         MyStrings.phone_input_sms_notice,
                         style: MyStyles.moreTinyTextStyle,
@@ -170,17 +177,17 @@ class _PhoneInputLoginState extends State<PhoneInputLogin> {
                     margin: const EdgeInsets.only(left: 16, right: 16),
                     child: CustomFilledButton(
                       label: "Next",
-                      onPressed: () {},
+                      onPressed: () => onSubmitPhone(context),
                     ),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Padding(
-                    padding: const EdgeInsets.only(left: 16, right: 16, bottom: 5), // Ap dụng padding
+                    padding: const EdgeInsets.only(left: 16, right: 16, bottom: 5),
                     child: Align(
-                      alignment: Alignment.center, // Căn chỉnh nút về phía góc trên bên trái
+                      alignment: Alignment.center,
                       child: TextButton(
                         onPressed: () {},
-                        child: Text(
+                        child: const Text(
                           MyStrings.already_have_account,
                           style: TextStyle(fontSize: 16, color: Colors.deepOrangeAccent),
                         ),

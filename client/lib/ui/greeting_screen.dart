@@ -1,10 +1,9 @@
 import 'package:client/utils/styles.dart';
 import 'package:client/widgets/header_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
-import 'package:nb_utils/nb_utils.dart';
+
 
 import '../utils/strings.dart';
 import '../utils/themes.dart';
@@ -49,21 +48,21 @@ class GreetingScreen extends StatelessWidget {
             child: Column(
               children: [
                 Container(
-                  margin: EdgeInsets.only(left: 20.0, bottom: 20.0, top: 10.0),
-                    child: HeaderWidget()
+                  margin: const EdgeInsets.only(left: 20.0, bottom: 20.0, top: 10.0),
+                    child: const HeaderWidget()
                 ),
-                Gap(15),
+                const Gap(15),
                 Image.asset('assets/images/greeting_image.png'),
-                Gap(20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                const Gap(20),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 30.0),
                   child: Text(
                     MyStrings.greeting_text,
                     style: MyStyles.tinyTextStyle,
                     textAlign: TextAlign.center,
                   ),
                 ),
-                Gap(70),
+                const Gap(70),
                 Padding(
                   padding: const EdgeInsets.only(left: 30.0, right: 30.0),
                   child: SizedBox(
@@ -76,7 +75,7 @@ class GreetingScreen extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15.0),
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 12),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
                       ),
                       child: const Text(
                           'Login',
@@ -85,7 +84,7 @@ class GreetingScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                Gap(10),
+                const Gap(10),
                 Padding(
                   padding: const EdgeInsets.only(left: 30.0, right: 30.0),
                   child: SizedBox(
@@ -94,12 +93,12 @@ class GreetingScreen extends StatelessWidget {
                       onPressed: () {  },
                       style: OutlinedButton.styleFrom(
                         elevation: 5,
-                        side: BorderSide(color: Colors.deepOrangeAccent, width: 1.0),
+                        side: const BorderSide(color: Colors.deepOrangeAccent, width: 1.0),
                         foregroundColor: Colors.deepOrangeAccent,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15.0),
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 12),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
                       ),
                       child: const Text(
                         'Sign Up',
