@@ -13,7 +13,7 @@ type GetUserResponse struct {
 	IsActive    bool      `json:"isActive"`
 	IsVolunteer bool      `json:"isVolunteer"`
 	CreatedAt   time.Time `json:"createdAt"`
-	Avatar      string    `json:"avatar"`
-	UserInfo    *UserInfo `json:"userInfo"`
+	Avatar      string    `json:"photoURL"`
+	PhoneNumber string    `json:"phoneNumber"`
 	// Omitted "Email" field
 }
