@@ -124,7 +124,7 @@ class HomeScreen extends StatelessWidget {
                         InkWell(
                           onTap: () {},
                           child: const Text(
-                            Strings.viewAll_text,
+                            MyStrings.viewAll_text,
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
