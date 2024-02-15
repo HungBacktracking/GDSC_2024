@@ -10,5 +10,11 @@ class MyStrings {
   static const String pin_authentication_guide = "To confirm your account, enter the 5-digit code we send to +84 97 110 5539.";
   static const String name_input_register_title = "What's your name?";
   static const String name_input_register_guide = "Enter the name you use in your life.";
+  static const String volunteer_register_title = "Volunteering with ReadyAid?";
+  static const String volunteer_register_guide = "Choose your option, be our voluntarism if you have ability to do first aid and want to save people.";
+  static const String volunteer_register_option_1 = "Yes, I'm a doctor";
+  static const String volunteer_register_option_2 = "No, I don't want to";
+  static const String volunteer_register_option_3 = "I want to volunteer but I\'m not a doctor";
+  static const String volunteer_register_option_3_ = "However, I have knowledge about first aid";
   static const String viewLess_text = "View less";
 }

@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 
+import 'volunteer_register.dart';
+
 class NameInputRegister extends StatefulWidget {
   const NameInputRegister({super.key});
 
@@ -68,11 +70,11 @@ class _NameInputRegisterState extends State<NameInputRegister> {
   }
 
   onSubmitPhone(BuildContext context) {
-    // Navigator.of(context).pushReplacement(
-      // MaterialPageRoute(
-      //   builder: (context) => PinAuthenticationLogin(phoneNumber: _phoneController.text),
-      // ),
-    // );
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => VolunteerRegister(),
+      ),
+    );
   }
 
   @override
