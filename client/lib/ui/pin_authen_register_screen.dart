@@ -145,7 +145,7 @@ class PinAuthenticationRegisterState extends State<PinAuthenticationRegister> {
                       ),
                     ),
                   ),
-                  Gap(20),
+                  const Gap(20),
                   Form(
                     key: formKey,
                     child: Column(
@@ -200,7 +200,7 @@ class PinAuthenticationRegisterState extends State<PinAuthenticationRegister> {
                             ),
                           ),
                         ),
-                        Gap(30),
+                        const Gap(30),
                         Container(
                           margin: const EdgeInsets.only(left: 16, right: 16),
                           child: Row(
@@ -252,7 +252,7 @@ class PinAuthenticationRegisterState extends State<PinAuthenticationRegister> {
                       ],
                     ),
                   ),
-                  Gap(10),
+                  const Gap(10),
                   Container(
                     margin: const EdgeInsets.only(left: 16, right: 16),
                     child: CustomOutlinedButton(

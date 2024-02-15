@@ -1,4 +1,3 @@
-import 'package:client/ui/pin_authen_login_screen.dart';
 import 'package:client/utils/strings.dart';
 import 'package:client/utils/styles.dart';
 import 'package:client/utils/themes.dart';
@@ -72,7 +71,7 @@ class _NameInputRegisterState extends State<NameInputRegister> {
   onSubmitPhone(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => VolunteerRegister(),
+        builder: (context) => const VolunteerRegister(),
       ),
     );
   }
@@ -144,7 +143,7 @@ class _NameInputRegisterState extends State<NameInputRegister> {
                   Form(
                     key: _formKey,
                     child: Padding(
-                      padding: EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(16.0),
                       child: Row(
                         children: [
                           Expanded(
@@ -185,7 +184,7 @@ class _NameInputRegisterState extends State<NameInputRegister> {
                               ),
                             ),
                           ),
-                          Gap(12),
+                          const Gap(12),
                           Expanded(
                             child: Container(
                               decoration: BoxDecoration(

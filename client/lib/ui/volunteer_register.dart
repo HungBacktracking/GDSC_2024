@@ -8,7 +8,6 @@ import '../utils/strings.dart';
 import '../utils/styles.dart';
 import '../utils/themes.dart';
 import '../widgets/custom_filled_button.dart';
-import 'home_screen.dart';
 
 
 class VolunteerRegister extends StatefulWidget {
@@ -91,17 +90,17 @@ class VolunteerRegisterState extends State<VolunteerRegister> {
                     ),
                   ),
                 ),
-                Gap(20),
+                const Gap(20),
                 Card(
                   borderOnForeground: true,
                   shadowColor: Colors.deepOrange[200],
                   surfaceTintColor: Colors.white,
-                  margin: EdgeInsets.only(left: 16, right: 16),
+                  margin: const EdgeInsets.only(left: 16, right: 16),
                   elevation: 5,
                   child: Column(
                     children: [
                       RadioListTile<int>(
-                        contentPadding: EdgeInsets.only(left: 16, right: 10),
+                        contentPadding: const EdgeInsets.only(left: 16, right: 10),
                         controlAffinity: ListTileControlAffinity.trailing,
                         title: const Text(MyStrings.volunteer_register_option_1),
                         value: 0,
@@ -117,7 +116,7 @@ class VolunteerRegisterState extends State<VolunteerRegister> {
                         color: Colors.grey[200],
                       ),
                       RadioListTile<int>(
-                        contentPadding: EdgeInsets.only(left: 16, right: 10),
+                        contentPadding: const EdgeInsets.only(left: 16, right: 10),
                         controlAffinity: ListTileControlAffinity.trailing,
                         title: const Text(MyStrings.volunteer_register_option_2),
                         value: 1,
@@ -133,7 +132,7 @@ class VolunteerRegisterState extends State<VolunteerRegister> {
                         color: Colors.grey[200],
                       ),
                       RadioListTile<int>(
-                        contentPadding: EdgeInsets.only(left: 16, right: 10),
+                        contentPadding: const EdgeInsets.only(left: 16, right: 10),
                         controlAffinity: ListTileControlAffinity.trailing,
                         title: const Text(MyStrings.volunteer_register_option_3),
                         subtitle: const Text(MyStrings.volunteer_register_option_3_),
@@ -148,7 +147,7 @@ class VolunteerRegisterState extends State<VolunteerRegister> {
                     ],
                   ),
                 ),
-                Gap(30),
+                const Gap(30),
                 Container(
                   margin: const EdgeInsets.only(left: 16, right: 16),
                   child: CustomFilledButton(
