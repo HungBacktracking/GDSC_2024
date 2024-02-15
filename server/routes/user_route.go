@@ -7,5 +7,6 @@ import (
 )
 
 func RegisterUserRoutes(e *echo.Echo) {
-	e.POST("/get_user", controllers.GetUser)
+	e.POST("/user/get_user", controllers.GetUser)
+	e.POST("/user/get_profile", controllers.GetProfile)
 }

@@ -75,3 +75,38 @@ func GetUser(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, userInfo)
 }
+
+func GetProfile(c echo.Context) error {
+	req := new(GetUserRequest)
+	if err := c.Bind(req); err != nil {
+		return c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "Invalid request payload"})
+	}
+
+	ctx := context.Background()
+
+	collectionName := "profile"
+	query := bootstrap.FirestoreClient.Collection(collectionName).Where("id", "==", req.UID)
+
+	var userProfile domain.UserProfile
+
+	iter := query.Documents(ctx)
+	for {
+		doc, err := iter.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: "Internal Server Error"})
+		}
+
+		// Map Firestore document to UserProfile struct
+		var profile domain.UserProfile
+		if err := doc.DataTo(&profile); err != nil {
+			return c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: "Internal Server Error"})
+		}
+
+		userProfile = profile
+	}
+
+	return c.JSON(http.StatusOK, userProfile)
+}
