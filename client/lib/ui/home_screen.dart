@@ -147,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               });
                             },
                             child: Text(
-                              showAllCategories ? Strings.viewLess_text : Strings.viewAll_text,
+                              showAllCategories ? MyStrings.viewLess_text : MyStrings.viewAll_text,
                               style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
