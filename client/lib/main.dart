@@ -44,8 +44,8 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.grey, // Set your desired color here
         ),
       ),
-      // home: const GreetingScreen(),
-      home: MainScreen(),
+      home: const GreetingScreen(),
+      // home: MainScreen(),
     );
   }
 }

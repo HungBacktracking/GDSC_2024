@@ -1,3 +1,4 @@
+import 'package:client/ui/phone_input_register_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,7 +25,7 @@ class VolunteerRegisterState extends State<VolunteerRegister> {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) {
-          return const HomeScreen();
+          return const PhoneInputRegister();
         },
       ),
     );
