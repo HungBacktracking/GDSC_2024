@@ -12,6 +12,7 @@ import '../utils/strings.dart';
 import '../utils/styles.dart';
 import '../utils/themes.dart';
 import '../widgets/custom_outline_button.dart';
+import 'main_screen.dart';
 
 class PinAuthenticationLogin extends StatefulWidget {
   const PinAuthenticationLogin ( {super.key, required this.phoneNumber} );
@@ -54,12 +55,13 @@ class PinAuthenticationLoginState extends State<PinAuthenticationLogin> {
   }
 
   void handleCorrectPin(BuildContext context) {
-    Navigator.of(context).pushReplacement(
+    Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
-        builder: (context) {
-          return const HomeScreen();
-        },
+          builder: (context) {
+            return const MainScreen();
+          }
       ),
+          (Route<dynamic> route) => false,
     );
   }
 
