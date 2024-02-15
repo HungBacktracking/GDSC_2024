@@ -187,7 +187,7 @@ class _PhoneInputLoginState extends State<PhoneInputLogin> {
                       child: TextButton(
                         onPressed: () {},
                         child: const Text(
-                          MyStrings.already_have_account,
+                          MyStrings.create_account,
                           style: TextStyle(fontSize: 16, color: Colors.deepOrangeAccent),
                         ),
                       ),
