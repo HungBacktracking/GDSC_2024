@@ -8,6 +8,7 @@ class MyTheme {
   static const greenColor = Color(0xFF2EC492);
   static const orangeColor = Color(0xFFEB8D2F);
   static const greyColor = Color(0xFFF4F4F4);
+  static const darkGreyColor = Color(0xFFD9D9D9);
   static const greenGray = Color(0xFFE7EAEA);
   static const blueBorder = Color(0xFF3164CE);
   static const Blue = Color(0xFF2A15AD);
@@ -15,6 +16,8 @@ class MyTheme {
   static const lightBlue = Color(0xFF4179E0);
   static const redBorder = Color(0xFFF14336);
   static const redLight = Color(0xFFFFF1F0);
+  static const orangeLight = Color(0x44FB5E2C);
+  static const orange = Color(0xAAFB5E2C);
   static const lightRedBackGround = Color(0xFFF4F0F0);
   static const blueLight = Color(0xFFF5F9FF);
   static const yellowBtn = Color.fromARGB(255, 243, 185, 37);

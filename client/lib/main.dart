@@ -1,5 +1,7 @@
 import 'package:client/firebase_options.dart';
+import 'package:client/ui/frame_screen.dart';
 import 'package:client/ui/home_screen.dart';
+import 'package:client/ui/main_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,9 +26,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrangeAccent),
         useMaterial3: true,
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: Colors.grey, // Set your desired color here
+        ),
       ),
       // home: const GreetingScreen(),
-      home: const HomeScreen(),
+      home: MainScreen(),
     );
   }
 }

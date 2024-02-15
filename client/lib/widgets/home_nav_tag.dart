@@ -19,7 +19,7 @@ class HomeNavigationTag extends StatelessWidget {
   Widget build(BuildContext context) {
    return Container(
         decoration: BoxDecoration(
-          color: MyTheme.lightRedBackGround,
+          color: textColor.withOpacity(0.1),
           borderRadius: BorderRadius.circular(15),
         ),
      child: Padding(
