@@ -20,7 +20,7 @@ class CustomFilledButton extends StatelessWidget {
       child: FilledButton(
         onPressed: onPressed,
         style: FilledButton.styleFrom(
-          elevation: 5,
+          elevation: 3,
           backgroundColor: Colors.deepOrangeAccent,
           padding: EdgeInsets.symmetric(vertical: 12),
         ),
