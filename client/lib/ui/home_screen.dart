@@ -1,12 +1,14 @@
+import 'package:client/ui/category_screen.dart';
 import 'package:client/utils/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 
+import '../model/sub_category_model.dart';
 import '../utils/strings.dart';
 import '../widgets/header_widget.dart';
 import '../widgets/home_nav_tag.dart';
-import 'category_screen.dart';
+import 'all_category_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -97,7 +99,20 @@ class _HomeScreenState extends State<HomeScreen> {
                         itemCount: showAllCategories ? Titles.length : 6,
                         itemBuilder: (BuildContext context, int index) {
                           return InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              List<CategoryItem> cprCategories = [
+                                CategoryItem(title: 'Adult', iconPath: 'assets/icons/ic_adult.png'),
+                                CategoryItem(title: 'Child', iconPath: 'assets/icons/ic_child.png'),
+                                CategoryItem(title: 'Baby', iconPath: 'assets/icons/ic_baby.png'),
+                              ];
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CategoryScreen(screenTitle: 'CPR', categories: cprCategories),
+                                ),
+                              );
+                            },
                             child: Container(
                               margin: const EdgeInsets.symmetric(vertical : 4, horizontal: 4),
                               padding: const EdgeInsets.only(top: 8),
