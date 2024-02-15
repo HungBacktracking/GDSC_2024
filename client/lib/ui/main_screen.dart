@@ -1,4 +1,4 @@
-import 'package:client/ui/category_screen.dart';
+import 'package:client/ui/all_category_screen.dart';
 import 'package:client/ui/home_screen.dart';
 import 'package:client/utils/themes.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +30,7 @@ class _MainScreenState extends State<MainScreen> {
         navKey: homeNavKey,
       ),
       NavModel(
-        page: const CategoryScreen(),
+        page: const AllCategoryScreen(),
         navKey: searchNavKey,
       ),
       NavModel(
