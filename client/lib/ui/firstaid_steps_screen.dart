@@ -33,34 +33,34 @@ class _StepScreenState extends State<StepScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            widget.appBarTitle,
-            style: const TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.w700,
-              color: Colors.black,
+          widget.appBarTitle,
+          style: const TextStyle(
+            fontSize: 20.0,
+            fontWeight: FontWeight.w700,
+            color: Colors.black,
           ),
-      ),
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () => Navigator.of(context).pop(),
         ),
+        backgroundColor: Colors.white, // Assuming your AppBar background is white
       ),
-      body: Column(
-        children: <Widget>[
-          YoutubePlayer(
-            controller: _controller,
-            showVideoProgressIndicator: true,
-          ),
-          const Gap(20),
-          Expanded(
-            child: ListView.builder(
-              itemCount: widget.steps.length,
-              itemBuilder: (context, index) {
-                return StepTag(content: widget.steps[index], index: index);
-              },
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            YoutubePlayer(
+              controller: _controller,
+              showVideoProgressIndicator: true,
             ),
-          ),
-        ],
+            const SizedBox(height: 20), // Replacing Gap(20) for standard SizedBox for spacing
+            ...widget.steps.asMap().entries.map((entry) {
+              int index = entry.key;
+              String step = entry.value;
+              return StepTag(content: step, index: index);
+            }).toList(),
+          ],
+        ),
       ),
     );
   }
