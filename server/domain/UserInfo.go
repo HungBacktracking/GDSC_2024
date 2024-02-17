@@ -6,6 +6,7 @@ import (
 
 // UserInfo represents the structure of the user document in Firestore
 type UserInfo struct {
+	ID          string    `firestore:"id"`
 	Name        string    `firestore:"name"`
 	IsBanned    bool      `firestore:"isBanned"`
 	IsActive    bool      `firestore:"isActive"`

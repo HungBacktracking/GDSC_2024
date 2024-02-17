@@ -1,8 +1,11 @@
 package controllers
 
 import (
+	"log"
 	"net/http"
+	"time"
 
+	"firebase.google.com/go/auth"
 	"github.com/labstack/echo/v4"
 
 	"server/domain"
@@ -109,4 +112,73 @@ func GetProfile(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, userProfile)
+}
+
+type AddUserRequest struct {
+	Name        string `json:"name"`
+	DisplayName string `json:"displayName"`
+	IsBanned    bool   `json:"isBanned"`
+	IsActive    bool   `json:"isActive"`
+	IsVolunteer bool   `json:"isVolunteer"`
+	PhotoURL    string `json:"photoURL"`
+	PhoneNumber string `json:"phoneNumber"`
+}
+
+// AddUserResponse represents the response payload for the AddUser endpoint
+type AddUserResponse struct {
+	ID string `json:"uid"`
+}
+
+// AddUser adds a new user to Firebase Authentication and Firestore
+func AddUser(c echo.Context) error {
+	req := new(AddUserRequest)
+	if err := c.Bind(req); err != nil {
+		return c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "Invalid request payload"})
+	}
+
+	// Step 1: Create user in Firebase Authentication
+	authClient, err := bootstrap.FirebaseApp.Auth(context.Background())
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: "Failed to get Auth client"})
+	}
+
+	params := (&auth.UserToCreate{}).
+		PhoneNumber(req.PhoneNumber).
+		DisplayName(req.DisplayName)
+
+	u, err := authClient.CreateUser(context.Background(), params)
+	if err != nil {
+		log.Printf("Error creating user in Authentication: %v", err)
+		return c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: "Failed to create user in Authentication"})
+	}
+
+	// Step 2: Create user document in Firestore
+	ctx := context.Background()
+	collectionName := "user"
+	userDoc := bootstrap.FirestoreClient.Collection(collectionName).Doc(u.UID)
+
+	// Check if the user already exists in Firestore
+	if doc, err := userDoc.Get(ctx); err == nil && doc.Exists() {
+		return c.JSON(http.StatusConflict, domain.ErrorResponse{Message: "User already exists"})
+	}
+
+	// Map AddUserRequest to Firestore document
+	userInfo := domain.UserInfo{
+		ID:          u.UID,
+		Name:        req.Name,
+		IsBanned:    req.IsBanned,
+		IsActive:    req.IsActive,
+		IsVolunteer: req.IsVolunteer,
+		CreatedAt:   time.Now(),
+		Avatar:      req.PhotoURL,
+	}
+
+	// Set Firestore document with the user information
+	if _, err := userDoc.Set(ctx, userInfo); err != nil {
+		return c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: "Failed to create user in Firestore"})
+	}
+
+	// Return the user ID
+	response := AddUserResponse{ID: u.UID}
+	return c.JSON(http.StatusCreated, response)
 }
