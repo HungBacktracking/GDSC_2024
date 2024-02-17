@@ -2,6 +2,7 @@ import 'package:client/firebase_options.dart';
 import 'package:client/ui/frame_screen.dart';
 import 'package:client/ui/home_screen.dart';
 import 'package:client/ui/main_screen.dart';
+import 'package:client/ui/quiz_game_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       // home: const GreetingScreen(),
-      home: MainScreen(),
+      home: QuizScreen(),
     );
   }
 }
