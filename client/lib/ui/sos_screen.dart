@@ -18,9 +18,14 @@ class SOSScreen extends StatefulWidget {
 }
 
 class _SOSScreenState extends State<SOSScreen> {
+  GoogleMapController? mapController;
   final Completer<GoogleMapController> _controller = Completer();
 
   final FirebaseAuth auth = FirebaseAuth.instance;
+
+  void onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
 
   Position? currentPosition;
   Set<Marker> markers = {};
@@ -66,6 +71,16 @@ class _SOSScreenState extends State<SOSScreen> {
     });
   }
 
+  Future<void> goToCurrentLocation() async {
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    mapController?.animateCamera(CameraUpdate.newCameraPosition(
+      CameraPosition(
+        target: LatLng(position.latitude, position.longitude),
+        zoom: 15.0,
+      ),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,9 +98,7 @@ class _SOSScreenState extends State<SOSScreen> {
               ),
               zoom: 15,
             ),
-            onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
-            },
+            onMapCreated: onMapCreated,
             markers: markers,
           ),
           Container(
@@ -148,9 +161,7 @@ class _SOSScreenState extends State<SOSScreen> {
                     Icons.near_me,
                     color: Colors.blue,
                   ),
-                  onPressed: () {
-                    // Định nghĩa hành động khi nút được nhấn
-                  },
+                  onPressed: goToCurrentLocation,
                 )),
           ),
           Positioned(
