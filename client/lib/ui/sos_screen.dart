@@ -122,7 +122,7 @@ class _SOSScreenState extends State<SOSScreen> {
                     onPressed: () {},
                     style: FilledButton.styleFrom(
                       elevation: 0,
-                      backgroundColor: Colors.green,
+                      backgroundColor: Colors.red[600],
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
                     child: const Text(

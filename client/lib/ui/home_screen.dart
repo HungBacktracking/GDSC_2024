@@ -81,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             borderSide: BorderSide.none,
                           ),
                           filled: true,
-                          fillColor: MyTheme.greenGray
+                          fillColor: Colors.grey[100]
                         ),
                       ),
                     ),
@@ -117,11 +117,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               margin: const EdgeInsets.symmetric(vertical : 4, horizontal: 4),
                               padding: const EdgeInsets.only(top: 8),
                               decoration: BoxDecoration(
-                                color: MyTheme.lightRedBackGround,
+                                color: Colors.white,
                                 borderRadius: BorderRadius.circular(15),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.grey.withOpacity(0.5),
+                                    color: Colors.grey.withOpacity(0.2),
                                     spreadRadius: 1,
                                     blurRadius: 5,
                                     offset: const Offset(0, 2), // changes position of shadow

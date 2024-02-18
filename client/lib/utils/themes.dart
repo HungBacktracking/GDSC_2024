@@ -26,8 +26,8 @@ class MyTheme {
   static const submitBtn = Color(0xFFABD1C6);
 
   static List<Color> defaultGradientColors = [
-    Colors.grey[100]!,
-    Colors.orange[100]!,
+    Colors.white,
+    Colors.orange[50]!,
   ];
   static List<Color> orangeGiftGradientColors = [
     const Color(0xFFEB8D2F).withOpacity(1),
