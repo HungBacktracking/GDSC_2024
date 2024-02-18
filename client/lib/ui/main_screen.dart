@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../model/nav_model.dart';
 import '../widgets/nav_bar.dart';
+import 'sos_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -44,6 +45,16 @@ class _MainScreenState extends State<MainScreen> {
     ];
   }
 
+  void onTapSOSCall(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) {
+          return const SOSScreen();
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -78,7 +89,7 @@ class _MainScreenState extends State<MainScreen> {
           child: FloatingActionButton(
             backgroundColor: MyTheme.orangeLight,
             elevation: 0,
-            onPressed: () => debugPrint("Add Button pressed"),
+            onPressed: () => onTapSOSCall(context),
             shape: RoundedRectangleBorder(
               side: const BorderSide(width: 4, color: MyTheme.orange),
               borderRadius: BorderRadius.circular(100),
