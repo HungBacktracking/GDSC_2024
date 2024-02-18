@@ -8,7 +8,7 @@ class AddressModel {
     required this.stringName,
     required this.coordinates,
   });
-  
+
   Map<String, dynamic> toJson() {
     return {
       "stringName": stringName,
