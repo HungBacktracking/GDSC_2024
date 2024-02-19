@@ -1,5 +1,9 @@
 package domain
 
+import (
+	"fmt"
+)
+
 type WsServer struct {
 	clients    map[*Client]bool
 	register   chan *Client
@@ -21,7 +25,6 @@ func NewWebsocketServer() *WsServer {
 func (server *WsServer) Run() {
 	for {
 		select {
-
 		case client := <-server.register:
 			server.registerClient(client)
 
@@ -36,10 +39,35 @@ func (server *WsServer) Run() {
 
 // TODO: Implement the following methods
 func (server *WsServer) registerClient(client *Client) {
+	server.notifyClientJoined(client)
+	server.listOnlineClients(client)
+	server.clients[client] = true
 }
 
 func (server *WsServer) unregisterClient(client *Client) {
+	if _, ok := server.clients[client]; ok {
+		delete(server.clients, client)
+		server.notifyClientLeft(client)
+	}
 }
 
 func (server *WsServer) broadcastToClients(message []byte) {
+	for client := range server.clients {
+		client.send <- message
+	}
+}
+
+func (server *WsServer) notifyClientJoined(client *Client) {
+	// broadcast to all clients that a new client has joined
+	fmt.Println("notifyClientJoined")
+}
+
+func (server *WsServer) notifyClientLeft(client *Client) {
+	// broadcast to all clients that a client has left
+	fmt.Println("notifyClientLeft")
+}
+
+func (server *WsServer) listOnlineClients(client *Client) {
+	// list all online clients to the new client
+	fmt.Println("listOnlineClients")
 }
