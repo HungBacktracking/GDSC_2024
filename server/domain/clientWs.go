@@ -39,7 +39,7 @@ type Client struct {
 	WsServer *WsServer
 	send 		 chan []byte
 	id 			 int								`json:"id"`
-	name		 string
+	name		 string							`json:"name"`
 	rooms		 map[*Room]bool
 }
 
@@ -186,7 +186,7 @@ func (client *Client) handleSendMessage(message Message) {
 	roomID := message.Target.GetID()
 	if room,_ := client.WsServer.GetRoomByID(roomID); room != nil {
 		if !client.isInRoom(room) {
-			room.broadcast <- message.encode()
+			room.broadcast <- &message
 		}
 	}
 }
@@ -238,4 +238,12 @@ func (client *Client) isInRoom(room *Room) bool {
 		return true
 	}
 	return false
+}
+
+func (client *Client) Name() string {
+	return client.name
+}
+
+func (client *Client) ID() int {
+	return client.id
 }

@@ -10,8 +10,8 @@ const UpdatePosition		 		= "update-position"
 const CreateRoomAction 			= "create-room"
 const JoinRoomAction 				= "join-room"
 const LeaveRoomAction 			= "leave-room"
-const UserJoinedAction 			= "user-join"
-const UserLeftAction 				= "user-left"
+const UserJoinedAction 			= "user-join"      // online
+const UserLeftAction 				= "user-left"			 // offline
 const JoinRoomPrivateAction = "join-room-private"
 const RoomJoinedAction 			= "room-joined"
 
