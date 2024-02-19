@@ -24,6 +24,10 @@ class MyTheme {
   static const redBtn = Color.fromARGB(255, 205, 50, 15);
   static const mistyrose = Color.fromARGB(255, 255, 228, 225);
   static const submitBtn = Color(0xFFABD1C6);
+  static const correctBtn = Color(0xFF3EFC7E);
+  static const wrongBtn = Color(0xFFE8AC9A);
+  static const wrongBorder = Color(0xFFEB4D1D);
+  static const correctBorder = Color(0xFF00FF57);
 
   static List<Color> redGiftGradientColors = [
     const Color(0xFFFCCAC6).withOpacity(0.3),
