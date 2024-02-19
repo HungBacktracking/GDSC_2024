@@ -5,13 +5,13 @@ import (
 )
 
 type Room struct {
-	id         int
-	name       string
+	id         int							`json:"id"`
+	name       string						`json:"name"`
 	clients    map[*Client]bool
 	register   chan *Client
 	unregister chan *Client
 	broadcast  chan []byte
-	isPrivate  bool
+	isPrivate  bool							`json:"private"`
 }
 
 func NewRoom(id int, name string, isPrivate bool) *Room {
@@ -55,4 +55,23 @@ func (room *Room) unregisterClientInRoom(client *Client) {
 }
 
 func (room *Room) broadcastToClientsInRoom(message []byte) {
+}
+
+func (room *Room) GetID() int {
+	return room.id
+}
+
+func (room *Room) GetName() string {
+	return room.name
+}
+
+func (room *Room) IsPrivate() bool {
+	return room.isPrivate
+}
+
+func (room *Room) HasClient(client *Client) bool {
+	if _, ok := room.clients[client]; ok {
+		return true
+	}
+	return false
 }

@@ -9,7 +9,8 @@ type WsServer struct {
 	register   chan *Client
 	unregister chan *Client
 	broadcast  chan []byte
-	rooms      map[string]map[*Client]bool
+	rooms      map[*Room]bool
+	roomsList  map[int]*Room
 }
 
 func NewWebsocketServer() *WsServer {
@@ -18,7 +19,8 @@ func NewWebsocketServer() *WsServer {
 		register:   make(chan *Client),
 		unregister: make(chan *Client),
 		broadcast:  make(chan []byte),
-		rooms:      make(map[string]map[*Client]bool),
+		rooms:      make(map[*Room]bool),
+		roomsList:  make(map[int]*Room),
 	}
 }
 
@@ -70,4 +72,17 @@ func (server *WsServer) notifyClientLeft(client *Client) {
 func (server *WsServer) listOnlineClients(client *Client) {
 	// list all online clients to the new client
 	fmt.Println("listOnlineClients")
+}
+
+func (server *WsServer) CreateRoom(id int, name string, isPrivate bool) *Room {
+	room := NewRoom(id, name, isPrivate)
+	server.rooms[room] = true
+	server.roomsList[id] = room
+	go room.RunRoom()
+	return room
+}
+
+func (server *WsServer) GetRoomByID(id int) (*Room, bool) {
+	room, ok := server.roomsList[id]
+	return room, ok
 }
