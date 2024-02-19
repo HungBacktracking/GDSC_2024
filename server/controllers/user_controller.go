@@ -33,7 +33,7 @@ func GetUser(c echo.Context) error {
 
 	client, err := bootstrap.FirebaseApp.Auth(ctx)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: "Failed to get Auth client"})
+		return c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: "Internal Server Error"})
 	}
 
 	u, err := client.GetUser(ctx, req.UID)
