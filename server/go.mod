@@ -5,6 +5,7 @@ go 1.22.0
 require (
 	cloud.google.com/go/firestore v1.14.0
 	firebase.google.com/go v3.13.0+incompatible
+	github.com/gorilla/websocket v1.5.1
 	github.com/labstack/echo/v4 v4.11.4
 	google.golang.org/api v0.163.0
 )
