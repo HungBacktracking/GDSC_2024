@@ -118,6 +118,20 @@ class GreetingScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+                const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16, bottom: 0),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: TextButton(
+                      onPressed: () {},
+                      child: const Text(
+                        MyStrings.privacy,
+                        style: MyStyles.moreTinyTextStyle,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

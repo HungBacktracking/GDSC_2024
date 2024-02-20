@@ -18,4 +18,5 @@ class MyStrings {
   static const String volunteer_register_option_3 = "I want to volunteer but I\'m not a doctor";
   static const String volunteer_register_option_3_ = "However, I have knowledge about first aid";
   static const String viewLess_text = "View less";
+  static const String privacy = "By continuing, you agree to our Privacy Policy";
 }
