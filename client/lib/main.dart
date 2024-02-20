@@ -1,6 +1,9 @@
 import 'package:client/firebase_options.dart';
+import 'package:client/model/quiz_category_model.dart';
+import 'package:client/ui/complete_quiz_screen.dart';
 import 'package:client/ui/frame_screen.dart';
 import 'package:client/ui/home_screen.dart';
+import 'package:client/ui/learning_firstaid_screen.dart';
 import 'package:client/ui/main_screen.dart';
 import 'package:client/ui/quiz_game_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -28,6 +31,24 @@ class MyApp extends StatelessWidget {
         statusBarIconBrightness: Brightness.dark,
       ),
     );
+    final List<QuizCategoryModel> challengeYouCategories = [
+      QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
+      QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
+      QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
+      QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
+    ];
+
+    final List<QuizCategoryModel> topicsCategories = [
+      QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
+      QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
+      QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
+      QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
+      QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
+      QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
+      QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
+      QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
+    ];
+
     return MaterialApp(
       title: 'FirstAid App',
       debugShowCheckedModeBanner: false,

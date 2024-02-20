@@ -1,5 +1,7 @@
 import 'package:client/utils/themes.dart';
 import 'package:flutter/material.dart';
+
+import 'complete_quiz_screen.dart';
 class QuizScreen extends StatefulWidget {
   @override
   _QuizScreenState createState() => _QuizScreenState();
@@ -16,16 +18,24 @@ class _QuizScreenState extends State<QuizScreen> {
   Color buttonColor = MyTheme.submitBtn; // Initialize with default color
   String buttonText = "Submit"; // Initial button text
   bool showHint = false;
+  Color questionCardColor = MyTheme.lightRedBackGround;
+  bool isCorrect = false;
+  int correctQuestions = 0;
 
   void submitAnswer() {
     setState(() {
       if (!isSubmitted) {
         isSubmitted = true;
-        buttonColor = selectedChoice == correctAnswer ? Colors.green : Colors.orange;
+        isCorrect = selectedChoice == correctAnswer;
+        buttonColor = selectedChoice == correctAnswer ? MyTheme.correctBtn : MyTheme.wrongBtn;
         showHint = true; // Show hint when an answer is submitted
+        questionCardColor = selectedChoice == correctAnswer ? MyTheme.correctBtn.withOpacity(0.1) : MyTheme.wrongBtn.withOpacity(0.1);
+        if (isCorrect) {
+          correctQuestions++;
+        }
         if (currentQuestionIndex == totalQuestions){
           buttonText = "Finish";
-          buttonColor = Colors.green;
+          buttonColor = MyTheme.correctBtn;
         }
         else{
           buttonText = "Next Question";
@@ -42,9 +52,21 @@ class _QuizScreenState extends State<QuizScreen> {
           buttonColor = MyTheme.submitBtn;
           buttonText = "Submit";
           showHint = false; // Hide hint when moving to the next question
+          questionCardColor = MyTheme.lightRedBackGround;
         }
         else {
           // Go to result screen
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) => CompleteScreen(
+                imageUrl: 'https://raw.githubusercontent.com/BaoNinh2808/Jetpack-Compose/main/images/cpr%20(1)%201.png?token=GHSAT0AAAAAACJ6YV2UULTBIV7XLUZ7NNMIZOTLGWQ',
+                time: '3:21',
+                correctQuestions: correctQuestions,
+                totalQuestions: totalQuestions,
+                title: 'CPR for Adult',
+              ),
+            ),
+          );
         }
       }
     });
@@ -54,7 +76,7 @@ class _QuizScreenState extends State<QuizScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
             'CPR for Adult',
             style: TextStyle(
               fontSize: 20.0,
@@ -63,12 +85,12 @@ class _QuizScreenState extends State<QuizScreen> {
             )
         ),
         leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back_ios),
           onPressed: () => Navigator.of(context).pop(),
         ),
         actions: [
           Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: Center(
               child: Text(
                 '$currentQuestionIndex/$totalQuestions',
@@ -91,6 +113,7 @@ class _QuizScreenState extends State<QuizScreen> {
                 QuestionCard(
                   title: 'Question $currentQuestionIndex',
                   content: question,
+                  backgroundColor: questionCardColor,
                 ),
                 const Positioned(
                   top: -50,
@@ -161,30 +184,31 @@ class _QuizScreenState extends State<QuizScreen> {
             ),
           ),
           Expanded(
-            child:  ListView(
+            child:  ListView.builder(
               padding: const EdgeInsets.all(5.0),
-              children: choices.map((choice) {
-                Color? borderColor;
-                if (isSubmitted) {
-                  if (choice == correctAnswer) {
-                    borderColor = Colors.green; // Correct answer border
-                  } else if (choice == selectedChoice) {
-                    borderColor = Colors.orange; // Incorrectly selected answer border
-                  }
-                }
+              itemCount: choices.length,
+              itemBuilder: (context, index) {
+                String choice = choices[index];
+                bool isCorrectChoice = choice == correctAnswer;
+                Color? borderColor = isSubmitted
+                    ? (isCorrectChoice ? Colors.green : (selectedChoice == choice ? Colors.orange : null))
+                    : null;
+
                 return ChoiceCard(
                   choice: choice,
                   isSelected: selectedChoice == choice,
                   onSelect: () {
-                    if (!isSubmitted) { // Prevent changing selection after submission
+                    if (!isSubmitted) {
                       setState(() {
                         selectedChoice = choice;
                       });
                     }
                   },
                   borderColor: borderColor,
+                  isCorrect: isCorrectChoice,
+                  isSubmitted: isSubmitted,
                 );
-              }).toList(),
+              },
             ),
           ),
           Padding(
@@ -217,57 +241,78 @@ class ChoiceCard extends StatelessWidget {
   final String choice;
   final bool isSelected;
   final VoidCallback onSelect;
-  final Color? borderColor; // Optional parameter for border color
+  final Color? borderColor;
+  final bool isCorrect;
+  final bool isSubmitted;
 
   const ChoiceCard({
     Key? key,
     required this.choice,
     required this.isSelected,
     required this.onSelect,
-    this.borderColor, // Initialize in constructor
+    this.borderColor,
+    required this.isCorrect,
+    required this.isSubmitted,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Widget? leadingWidget;
+    if (isSubmitted) {
+      if (isSelected && isCorrect) {
+        leadingWidget = Image.asset('assets/icons/correct_checkbox.png', width: 24, height: 24);
+      } else if (isSelected && !isCorrect) {
+        leadingWidget = Image.asset('assets/icons/incorrect_checkbox.png', width: 24, height: 24);
+      }
+      else if (!isSelected && isCorrect) {
+        leadingWidget = Image.asset('assets/icons/checkbox.png', width: 24, height: 24, color: MyTheme.darkGreen);
+      }
+      else {
+        leadingWidget = Image.asset('assets/icons/checkbox.png', width: 24, height: 24);
+      }
+    }
+    else {
+      leadingWidget = isSelected
+          ? Image.asset('assets/icons/selected_checkbox.png', width: 24, height: 24)
+          : Image.asset('assets/icons/checkbox.png', width: 24, height: 24);
+    }
+
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 10.0),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
-        side: borderColor != null ? BorderSide(color: borderColor!, width: 2.0) : BorderSide.none, // Use borderColor if provided
+        side: borderColor != null ? BorderSide(color: borderColor!, width: 2.0) : BorderSide.none,
       ),
-      child: Theme(
-        data: ThemeData(unselectedWidgetColor: Colors.blue),
-        child: CheckboxListTile(
-          activeColor: Colors.blue,
-          checkColor: Colors.white,
-          controlAffinity: ListTileControlAffinity.leading,
-          title: Text(
-            choice,
-            style: TextStyle(
-              fontSize: 18.0,
-              fontWeight: FontWeight.w600,
-              color: isSelected ? Colors.blue : Colors.black,
-            ),
+      child: ListTile(
+        leading: leadingWidget,
+        title: Text(
+          choice,
+          style: TextStyle(
+            fontSize: 18.0,
+            fontWeight: FontWeight.w600,
+            color: isSelected ? borderColor : Colors.black,
           ),
-          value: isSelected,
-          onChanged: (bool? value) {
-            onSelect();
-          },
         ),
+        onTap: onSelect,
+        tileColor: isSelected ? borderColor?.withOpacity(0.2) : null,
       ),
     );
   }
 }
 
 
+
+
 class QuestionCard extends StatelessWidget {
   final String title;
   final String content;
+  final Color backgroundColor;
 
   const QuestionCard({
     Key? key,
     required this.title,
     required this.content,
+    required this.backgroundColor,
   }) : super(key: key);
 
   @override
@@ -277,7 +322,7 @@ class QuestionCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
-      color: MyTheme.greyColor,
+      color: backgroundColor,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
