@@ -3,6 +3,7 @@ import 'package:client/model/quiz_category_model.dart';
 import 'package:client/ui/complete_quiz_screen.dart';
 import 'package:client/ui/frame_screen.dart';
 import 'package:client/ui/home_screen.dart';
+import 'package:client/ui/leader_board_screen.dart';
 import 'package:client/ui/learning_firstaid_screen.dart';
 import 'package:client/ui/main_screen.dart';
 import 'package:client/ui/quiz_game_screen.dart';
@@ -32,17 +33,6 @@ class MyApp extends StatelessWidget {
       ),
     );
     final List<QuizCategoryModel> challengeYouCategories = [
-      QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
-      QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
-      QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
-      QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
-    ];
-
-    final List<QuizCategoryModel> topicsCategories = [
-      QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
-      QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
-      QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
-      QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
       QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
       QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
       QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),

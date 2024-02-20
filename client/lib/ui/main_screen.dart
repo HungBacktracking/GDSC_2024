@@ -1,5 +1,6 @@
 import 'package:client/ui/all_category_screen.dart';
 import 'package:client/ui/home_screen.dart';
+import 'package:client/ui/leader_board_screen.dart';
 import 'package:client/utils/themes.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final homeNavKey = GlobalKey<NavigatorState>();
   final searchNavKey = GlobalKey<NavigatorState>();
-  final notificationNavKey = GlobalKey<NavigatorState>();
+  final learderBoardNavKey = GlobalKey<NavigatorState>();
   final profileNavKey = GlobalKey<NavigatorState>();
   int selectedTab = 0;
   List<NavModel> items = [];
@@ -35,8 +36,8 @@ class _MainScreenState extends State<MainScreen> {
         navKey: searchNavKey,
       ),
       NavModel(
-        page: const TabPage(tab: 3),
-        navKey: notificationNavKey,
+        page: LeaderboardScreen(),
+        navKey: learderBoardNavKey,
       ),
       NavModel(
         page: const TabPage(tab: 4),
