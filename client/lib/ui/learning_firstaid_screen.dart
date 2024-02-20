@@ -23,7 +23,7 @@ class LearningFirstAidScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
-            // Handle back button press
+            Navigator.of(context).pop();
           },
         ),
         title: const Text(
@@ -166,7 +166,7 @@ class CategoryGrid extends StatelessWidget {
       itemCount: categories.length, // Replace with your actual item count
       itemBuilder: (context, index) {
         // Replace with your category data
-        return CategoryItem(
+        return QuizCategoryItem(
           title: categories[index].title,
           tag: categories[index].tag,
           tagColor: categories[index].tagColor, // Pass the tag color
@@ -185,13 +185,13 @@ class CategoryGrid extends StatelessWidget {
   }
 }
 
-class CategoryItem extends StatelessWidget {
+class QuizCategoryItem extends StatelessWidget {
   final String title;
   final String tag;
   final Color tagColor;
   final VoidCallback onTap;
 
-  CategoryItem({
+  QuizCategoryItem({
     required this.title,
     required this.tag,
     required this.tagColor,

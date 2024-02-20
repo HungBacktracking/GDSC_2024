@@ -3,6 +3,7 @@ import 'package:client/model/quiz_category_model.dart';
 import 'package:client/ui/complete_quiz_screen.dart';
 import 'package:client/ui/frame_screen.dart';
 import 'package:client/ui/home_screen.dart';
+import 'package:client/ui/leader_board_screen.dart';
 import 'package:client/ui/learning_firstaid_screen.dart';
 import 'package:client/ui/main_screen.dart';
 import 'package:client/ui/quiz_game_screen.dart';
@@ -24,23 +25,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<QuizCategoryModel> challengeYouCategories = [
-      QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
-      QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
-      QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
-      QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
-    ];
-
-    final List<QuizCategoryModel> topicsCategories = [
-      QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
-      QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
-      QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
-      QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
-      QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
-      QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
-      QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
-      QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
-    ];
 
     return MaterialApp(
       title: 'FirstAid App',
@@ -52,19 +36,7 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.grey, // Set your desired color here
         ),
       ),
-      // home: CompleteScreen(
-      //   imageUrl: 'https://raw.githubusercontent.com/BaoNinh2808/Jetpack-Compose/main/images/cpr%20(1)%201.png?token=GHSAT0AAAAAACJ6YV2U6TM3Y65KD7ALK4RIZOTEHFA',
-      //   time: '3:21',
-      //   correctQuestions: 5,
-      //   totalQuestions: 10,
-      //   title: 'CPR for Adult',
-      // ),
-      home: LearningFirstAidScreen(
-        userName: 'Rohan', // Pass the user name here
-        avatarUrl: 'https://static-images.vnncdn.net/files/publish/2022/6/28/lannha01-1073.jpg', // Pass the user avatar URL here
-        challengeYouCategories: challengeYouCategories,
-        topicsCategories: topicsCategories,
-      ),
+      home: const MainScreen(),
     );
   }
 }

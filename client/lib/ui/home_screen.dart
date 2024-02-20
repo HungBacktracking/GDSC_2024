@@ -1,14 +1,15 @@
 import 'package:client/ui/category_screen.dart';
+import 'package:client/ui/learning_firstaid_screen.dart';
 import 'package:client/utils/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 
+import '../model/quiz_category_model.dart';
 import '../model/sub_category_model.dart';
 import '../utils/strings.dart';
 import '../widgets/header_widget.dart';
 import '../widgets/home_nav_tag.dart';
-import 'all_category_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -19,6 +20,24 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool showAllCategories = false;
+
+  final List<QuizCategoryModel> challengeYouCategories = [
+    QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
+    QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
+    QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
+    QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
+  ];
+
+  final List<QuizCategoryModel> topicsCategories = [
+    QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
+    QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
+    QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
+    QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
+    QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
+    QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
+    QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
+    QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -179,13 +198,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     ,
                     SizedBox(
                       height: 90.0,
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: const HomeNavigationTag(
-                          assetUrl: 'assets/icons/ic_school.png',
-                          tittle: "LEARNING FIRST AID",
-                          subTittle: "Play a game",
-                          textColor: MyTheme.Blue,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => LearningFirstAidScreen(userName: 'Rohan', avatarUrl: 'https://i1-giaitri.vnecdn.net/2022/06/25/lan-nha-1-JPG-2518-1656130984.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=KG41XneV1XWJx66-iZtinA', challengeYouCategories: challengeYouCategories, topicsCategories: topicsCategories)),
+                          );
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                          child:  const HomeNavigationTag(
+                            assetUrl: 'assets/icons/ic_school.png',
+                            tittle: "LEARNING FIRST AID",
+                            subTittle: "Play a game",
+                            textColor: MyTheme.Blue,
+                          ),
                         ),
                       ),
                     ),
@@ -194,7 +221,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 90.0,
                       child: Container(
                         margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: const HomeNavigationTag(
+                        child:  const HomeNavigationTag(
                           assetUrl: 'assets/icons/ic_volunteer.png',
                           tittle: "BE VOLUNTEER",
                           subTittle: "Help more people",

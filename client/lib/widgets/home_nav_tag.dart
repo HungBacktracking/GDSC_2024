@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../utils/themes.dart';
-
 class HomeNavigationTag extends StatelessWidget {
   const HomeNavigationTag({
     super.key,
@@ -15,6 +13,7 @@ class HomeNavigationTag extends StatelessWidget {
   final String tittle;
   final String subTittle;
   final Color textColor;
+
   @override
   Widget build(BuildContext context) {
    return Container(
