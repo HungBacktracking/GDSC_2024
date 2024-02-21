@@ -53,7 +53,7 @@ class _PhoneInputRegisterState extends State<PhoneInputRegister> {
   onSubmitPhone(BuildContext context) {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (context) => PinAuthenticationRegister(phoneNumber: _phoneController.text),
+        builder: (context) => PinAuthenticationRegister(verificationId: "1",),
       ),
     );
   }

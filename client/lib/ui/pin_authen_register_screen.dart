@@ -1,6 +1,4 @@
 import 'package:client/ui/greeting_screen.dart';
-import 'package:client/ui/home_screen.dart';
-import 'package:client/ui/phone_input_login_screen.dart';
 import 'package:client/ui/phone_input_register_screen.dart';
 import 'package:client/widgets/custom_filled_button.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,9 +14,9 @@ import '../widgets/custom_outline_button.dart';
 import 'main_screen.dart';
 
 class PinAuthenticationRegister extends StatefulWidget {
-  const PinAuthenticationRegister ( {super.key, required this.phoneNumber} );
+  const PinAuthenticationRegister ( {super.key, required this.verificationId} );
 
-  final String phoneNumber;
+  final String verificationId;
 
   @override
   State<PinAuthenticationRegister> createState() => PinAuthenticationRegisterState();
