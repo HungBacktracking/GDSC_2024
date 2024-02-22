@@ -14,6 +14,7 @@ import (
 
 	"server/bootstrap"
 
+	"cloud.google.com/go/firestore"
 	"google.golang.org/api/iterator"
 )
 
@@ -216,4 +217,41 @@ func IsExistPhone(c echo.Context) error {
 
 	// User found, return appropriate response
 	return c.JSON(http.StatusOK, map[string]bool{"exists": true})
+}
+
+// UpdLocationRequest represents the request payload for updating user location
+type UpdLocationRequest struct {
+	UID       string  `json:"uid"`
+	Latitude  float64 `json:"latitude"`
+	Longitude float64 `json:"longitude"`
+}
+
+// UpdLocation updates the user location in Firestore
+func UpdLocation(c echo.Context) error {
+	req := new(UpdLocationRequest)
+	if err := c.Bind(req); err != nil {
+		return c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "Invalid request payload"})
+	}
+
+	ctx := context.Background()
+
+	// Get the user document
+	userDoc, err := bootstrap.FirestoreClient.Collection("user").Doc(req.UID).Get(ctx)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: "Internal Server Error"})
+	}
+
+	// Update or create the location field
+	location := domain.GeoPoint{
+		Lat: req.Latitude,
+		Lng: req.Longitude,
+	}
+
+	updateData := map[string]interface{}{"location": location}
+
+	if _, err := userDoc.Ref.Set(ctx, updateData, firestore.MergeAll); err != nil {
+		return c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: "Failed to update user location"})
+	}
+
+	return c.NoContent(http.StatusOK)
 }
