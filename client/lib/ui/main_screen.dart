@@ -1,6 +1,7 @@
 import 'package:client/ui/all_category_screen.dart';
 import 'package:client/ui/home_screen.dart';
 import 'package:client/ui/leader_board_screen.dart';
+import 'package:client/ui/profile_screen.dart';
 import 'package:client/utils/themes.dart';
 import 'package:flutter/material.dart';
 
@@ -39,7 +40,7 @@ class _MainScreenState extends State<MainScreen> {
         navKey: learderBoardNavKey,
       ),
       NavModel(
-        page: const TabPage(tab: 4),
+        page: const ProfileScreen(avatarUrl: 'https://i1-giaitri.vnecdn.net/2022/06/25/lan-nha-1-JPG-2518-1656130984.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=KG41XneV1XWJx66-iZtinA', userName: 'Nguyen Tan',),
         navKey: profileNavKey,
       ),
     ];
