@@ -1,16 +1,21 @@
 import 'package:client/utils/strings.dart';
 import 'package:client/utils/styles.dart';
 import 'package:client/utils/themes.dart';
+import 'package:client/view_model/auth_viewmodel.dart';
 import 'package:client/widgets/custom_filled_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
+import 'package:provider/provider.dart';
 
 import 'pin_authen_register_screen.dart';
 
 class PhoneInputRegister extends StatefulWidget {
-  const PhoneInputRegister({super.key});
+  final String name;
+  final int optionVolunteer;
+
+  const PhoneInputRegister({super.key, required this.name, required this.optionVolunteer});
 
   @override
   State<PhoneInputRegister> createState() => _PhoneInputRegisterState();
@@ -50,12 +55,17 @@ class _PhoneInputRegisterState extends State<PhoneInputRegister> {
     super.dispose();
   }
 
-  onSubmitPhone(BuildContext context) {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => PinAuthenticationRegister(verificationId: "1",),
-      ),
-    );
+  void onSubmitPhone(BuildContext context) {
+    if (_formKey.currentState!.validate()) {
+      final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
+      String phoneNumber = _phoneController.text.trim();
+      if (phoneNumber.startsWith('0')) {
+        String countryCode = '84';
+        phoneNumber = phoneNumber.substring(1);
+        phoneNumber = '+$countryCode$phoneNumber';
+      }
+      authViewModel.signUpWithPhone(context, widget.name, widget.optionVolunteer, phoneNumber);
+    }
   }
 
   @override
@@ -140,6 +150,9 @@ class _PhoneInputRegisterState extends State<PhoneInputRegister> {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your phone number';
+                          }
+                          if (value.length != 10) {
+                            return 'Invalid phone number!';
                           }
                           return null;
                         },

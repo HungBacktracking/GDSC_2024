@@ -11,20 +11,22 @@ import '../widgets/custom_filled_button.dart';
 
 
 class VolunteerRegister extends StatefulWidget {
-  const VolunteerRegister({super.key});
+  final String name;
+
+  const VolunteerRegister({super.key, required this.name});
 
   @override
   State<VolunteerRegister> createState() => VolunteerRegisterState();
 }
 
 class VolunteerRegisterState extends State<VolunteerRegister> {
-  int? option = 0; // Default or saved user choice
+  int option = 0;
 
   void handleSubmit(BuildContext context) {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) {
-          return const PhoneInputRegister();
+          return PhoneInputRegister(name: widget.name, optionVolunteer: option);
         },
       ),
     );
@@ -107,7 +109,7 @@ class VolunteerRegisterState extends State<VolunteerRegister> {
                         groupValue: option,
                         onChanged: (int? value) {
                           setState(() {
-                            option = value;
+                            option = value!;
                           });
                         },
                       ),
@@ -123,7 +125,7 @@ class VolunteerRegisterState extends State<VolunteerRegister> {
                         groupValue: option,
                         onChanged: (int? value) {
                           setState(() {
-                            option = value;
+                            option = value!;
                           });
                         },
                       ),
@@ -140,7 +142,7 @@ class VolunteerRegisterState extends State<VolunteerRegister> {
                         groupValue: option,
                         onChanged: (int? value) {
                           setState(() {
-                            option = value;
+                            option = value!;
                           });
                         },
                       ),

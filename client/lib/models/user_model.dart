@@ -3,45 +3,51 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'address_model.dart';
 
 class UserModel {
-  String firstName;
-  String lastName;
-  String profilePic;
+  String name;
+  String? profilePic;
   String? createdAt;
   AddressModel? address;
   String phoneNumber;
   bool isBanned;
-  String uid;
+  bool isActive;
+  bool isVolunteer;
+  String? id;
 
   UserModel({
-    required this.firstName,
-    required this.lastName,
-    required this.profilePic,
+    required this.name,
+    this.profilePic,
     required this.createdAt,
     required this.phoneNumber,
-    required this.uid,
+    this.id,
     this.address,
     this.isBanned = false,
+    this.isActive = true,
+    this.isVolunteer = false,
   });
 
   // from map
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      firstName: map['firstName'] ?? '',
-      lastName: map['lastName'],
-      uid: map['uid'] ?? '',
+      name: map['name'] ?? '',
+      id: map['id'] ?? '',
       phoneNumber: map['phoneNumber'] ?? '',
       createdAt: map['createdAt'] ?? '',
-      profilePic: map['profilePic'] ?? '',
+      profilePic: map['avatar'] ?? '',
+      isBanned: map['isBanned'] ?? false,
+      isActive: map['isActive'] ?? true,
+      isVolunteer: map['isVolunteer'] ?? false,
     );
   }
 
   // to map
   Map<String, dynamic> toMap() {
     return {
-      "firstName": firstName,
-      "lastName": lastName,
-      "uid": uid,
-      "profilePic": profilePic,
+      "name": name,
+      "displayName": name,
+      "avatar": profilePic,
+      "isActive": isActive,
+      "isBanned": isBanned,
+      "isVolunteer": isVolunteer,
       "phoneNumber": phoneNumber,
       "createdAt": createdAt,
     };

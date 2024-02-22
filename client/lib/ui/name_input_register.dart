@@ -17,7 +17,8 @@ class NameInputRegister extends StatefulWidget {
 }
 
 class _NameInputRegisterState extends State<NameInputRegister> {
-  bool _validate = false;
+  bool firstValidate = false;
+  bool secondValidate = false;
   final _formKey = GlobalKey<FormState>();
   final FocusNode firstFocusNode = FocusNode();
   final FocusNode lastFocusNode = FocusNode();
@@ -68,12 +69,15 @@ class _NameInputRegisterState extends State<NameInputRegister> {
     super.dispose();
   }
 
-  onSubmitPhone(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const VolunteerRegister(),
-      ),
-    );
+  void onSubmitPhone(BuildContext context) {
+    if (_formKey.currentState!.validate()) {
+      String name = firstNameController.text + lastNameController.text;
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => VolunteerRegister(name: name),
+        ),
+      );
+    }
   }
 
   @override
@@ -173,14 +177,14 @@ class _NameInputRegisterState extends State<NameInputRegister> {
                                   floatingLabelStyle: TextStyle(fontSize: 16, color: Colors.grey[700]),
                                   contentPadding: const EdgeInsets.all(8),
                                   border: InputBorder.none,
-                                  errorText: _validate ? 'Invalid name!' : null,
+                                  errorText: firstValidate ? 'Invalid name!' : null,
                                 ),
                                 keyboardType: TextInputType.name,
-                                // onChanged: (value) {
-                                //   setState(() {
-                                //     _validate = value.length != 10;
-                                //   });
-                                // },
+                                onChanged: (value) {
+                                  setState(() {
+                                    firstNameController.text = value;
+                                  });
+                                },
                               ),
                             ),
                           ),
@@ -212,14 +216,14 @@ class _NameInputRegisterState extends State<NameInputRegister> {
                                   floatingLabelStyle: TextStyle(fontSize: 16, color: Colors.grey[700]),
                                   contentPadding: const EdgeInsets.all(8),
                                   border: InputBorder.none,
-                                  errorText: _validate ? 'Invalid name!' : null,
+                                  errorText: secondValidate ? 'Invalid name!' : null,
                                 ),
                                 keyboardType: TextInputType.name,
-                                // onChanged: (value) {
-                                //   setState(() {
-                                //     _validate = value.length != 10;
-                                //   });
-                                // },
+                                onChanged: (value) {
+                                  setState(() {
+                                    lastNameController.text = value;
+                                  });
+                                },
                               ),
                             ),
                           ),

@@ -7,9 +7,11 @@ import 'package:client/ui/leader_board_screen.dart';
 import 'package:client/ui/learning_firstaid_screen.dart';
 import 'package:client/ui/main_screen.dart';
 import 'package:client/ui/quiz_game_screen.dart';
+import 'package:client/view_model/auth_viewmodel.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 import 'ui/greeting_screen.dart';
 
@@ -39,26 +41,32 @@ class MyApp extends StatelessWidget {
       QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
     ];
 
-    return MaterialApp(
-      title: 'FirstAid App',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrangeAccent),
-        useMaterial3: true,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthViewModel()),
+      ],
+      child: MaterialApp(
+        title: 'FirstAid App',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrangeAccent),
+          useMaterial3: true,
 
-        pageTransitionsTheme: const PageTransitionsTheme(
-          builders: {
-            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-            TargetPlatform.iOS: CupertinoPageTransitionsBuilder()
-          }
+          pageTransitionsTheme: const PageTransitionsTheme(
+            builders: {
+              TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+              TargetPlatform.iOS: CupertinoPageTransitionsBuilder()
+            }
+          ),
+          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+            backgroundColor: Colors.grey, // Set your desired color here
+          ),
         ),
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          backgroundColor: Colors.grey, // Set your desired color here
-        ),
+        home: const MainScreen(),
+        // home: MainScreen(),
       ),
-      home: const GreetingScreen(),
-      // home: MainScreen(),
     );
+
   }
 }
 

@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+
 import 'package:client/ui/pin_authen_register_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,7 +22,7 @@ class AuthRepository {
     return (_firebaseAuth.currentUser != null);
   }
 
-  Future signInWithPhone(BuildContext context, String phoneNumber) async {
+  Future signUpWithPhone(BuildContext context, String name, int optionVolunteer, String phoneNumber) async {
     try {
       await _firebaseAuth.verifyPhoneNumber(
           phoneNumber: phoneNumber,
@@ -30,10 +34,15 @@ class AuthRepository {
             throw Exception(error.message);
           },
           codeSent: (verificationId, forceResendingToken) {
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => PinAuthenticationRegister(verificationId: verificationId),
+                builder: (context) => PinAuthenticationRegister(
+                    verificationId: verificationId,
+                    name: name,
+                    optionVolunteer: optionVolunteer,
+                    phoneNumber: phoneNumber
+                ),
               ),
             );
           },
@@ -80,22 +89,28 @@ class AuthRepository {
     required Function onSuccess,
   }) async {
     try {
-        userModel.createdAt = DateTime.now().millisecondsSinceEpoch.toString();
-        userModel.phoneNumber = _firebaseAuth.currentUser!.phoneNumber!;
-        userModel.uid = _firebaseAuth.currentUser!.phoneNumber!;
+      userModel.createdAt = DateTime.now().millisecondsSinceEpoch.toString();
+      userModel.phoneNumber = _firebaseAuth.currentUser!.phoneNumber!;
+      // userModel.id = _firebaseAuth.currentUser!.phoneNumber!;
 
-      // uploading to database
-      await _firebaseFirestore
-          .collection("users")
-          .doc(_firebaseAuth.currentUser!.uid)
-          .set(userModel.toMap())
-          .then((value) {
+      String bodyJson = json.encode(userModel.toMap());
+      final response = await http.post(
+        Uri.parse("localhost:1323/user/add_user"),
+        headers: {"Content-Type": "application/json"},
+        body: bodyJson,
+      );
+
+      // Kiểm tra trạng thái phản hồi
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print('Response data: ${response.body}');
         onSuccess();
-      });
+      } else {
+        throw Exception('Failed to create post.');
+      }
+
     } on FirebaseAuthException catch (e) {
       showSnackBar(context, e.message.toString());
     }
   }
-
 
 }

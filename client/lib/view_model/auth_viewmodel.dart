@@ -31,9 +31,9 @@ class AuthViewModel extends ChangeNotifier {
   //   notifyListeners();
   // }
 
-  Future signInWithPhone(BuildContext context, String phoneNumber) async {
+  Future signUpWithPhone(BuildContext context, String name, int optionVolunteer, String phoneNumber) async {
     try {
-      await _authRepository.signInWithPhone(context, phoneNumber);
+      await _authRepository.signUpWithPhone(context, name, optionVolunteer, phoneNumber);
     } on FirebaseAuthException catch (e) {
       showSnackBar(context, e.message.toString());
       notifyListeners();
@@ -73,8 +73,8 @@ class AuthViewModel extends ChangeNotifier {
     notifyListeners();
     try {
       await _authRepository.saveUserDataToFirebase(context: context, userModel: userModel, onSuccess: onSuccess);
-    } on FirebaseAuthException catch (e) {
-      showSnackBar(context, e.message.toString());
+    } catch (e) {
+      showSnackBar(context, e.toString());
       _isLoading = false;
       notifyListeners();
     }
