@@ -1,4 +1,6 @@
+import 'package:client/api/firebase_api.dart';
 import 'package:client/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:client/model/quiz_category_model.dart';
 import 'package:client/ui/complete_quiz_screen.dart';
 import 'package:client/ui/frame_screen.dart';
@@ -7,16 +9,15 @@ import 'package:client/ui/leader_board_screen.dart';
 import 'package:client/ui/learning_firstaid_screen.dart';
 import 'package:client/ui/main_screen.dart';
 import 'package:client/ui/quiz_game_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'ui/greeting_screen.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await FirebaseAPI().initNotification(); // Add this line
 
   runApp(const MyApp());
 }
@@ -33,10 +34,14 @@ class MyApp extends StatelessWidget {
       ),
     );
     final List<QuizCategoryModel> challengeYouCategories = [
-      QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
-      QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
-      QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
-      QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
+      QuizCategoryModel(
+          title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
+      QuizCategoryModel(
+          title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
+      QuizCategoryModel(
+          title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
+      QuizCategoryModel(
+          title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
     ];
 
     return MaterialApp(
@@ -45,13 +50,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrangeAccent),
         useMaterial3: true,
-
-        pageTransitionsTheme: const PageTransitionsTheme(
-          builders: {
-            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-            TargetPlatform.iOS: CupertinoPageTransitionsBuilder()
-          }
-        ),
+        pageTransitionsTheme: const PageTransitionsTheme(builders: {
+          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder()
+        }),
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: Colors.grey, // Set your desired color here
         ),
