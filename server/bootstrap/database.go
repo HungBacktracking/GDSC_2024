@@ -10,6 +10,7 @@ import (
 
 	"cloud.google.com/go/firestore"
 	firebase "firebase.google.com/go"
+	"firebase.google.com/go/messaging"
 	"google.golang.org/api/option"
 )
 
@@ -18,6 +19,7 @@ var (
 
 	FirebaseApp     *firebase.App
 	FirestoreClient *firestore.Client
+	FCMClient       *messaging.Client
 )
 
 // SetServiceAccountPath sets the path to the service account JSON file.
@@ -75,6 +77,13 @@ func InitializeDatabase() error {
 		return err
 	}
 	FirebaseApp = app
+
+	// Initialize FCM Client
+	fcmClient, err := FirebaseApp.Messaging(context.Background())
+	if err != nil{
+		return err
+	}
+	FCMClient = fcmClient
 
 	// Initialize Firestore Client
 	client, err := InitializeFirestore()
