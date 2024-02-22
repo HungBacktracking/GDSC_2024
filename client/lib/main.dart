@@ -7,6 +7,8 @@ import 'package:client/ui/leader_board_screen.dart';
 import 'package:client/ui/learning_firstaid_screen.dart';
 import 'package:client/ui/main_screen.dart';
 import 'package:client/ui/quiz_game_screen.dart';
+import 'package:client/ui/update_screen.dart';
+import 'package:client/ui/upload_image.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -36,7 +38,7 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.grey, // Set your desired color here
         ),
       ),
-      home: const MainScreen(),
+      home: ImageUploadScreen(appBarTitle: 'Certificates',),
     );
   }
 }
