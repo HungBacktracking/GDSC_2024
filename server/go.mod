@@ -7,6 +7,7 @@ require (
 	firebase.google.com/go v3.13.0+incompatible
 	github.com/gorilla/websocket v1.5.1
 	github.com/labstack/echo/v4 v4.11.4
+	golang.org/x/net v0.21.0
 	google.golang.org/api v0.163.0
 )
 
@@ -38,7 +39,6 @@ require (
 	go.opentelemetry.io/otel/metric v1.22.0 // indirect
 	go.opentelemetry.io/otel/trace v1.22.0 // indirect
 	golang.org/x/crypto v0.19.0 // indirect
-	golang.org/x/net v0.21.0 // indirect
 	golang.org/x/oauth2 v0.17.0 // indirect
 	golang.org/x/sync v0.6.0 // indirect
 	golang.org/x/sys v0.17.0 // indirect
