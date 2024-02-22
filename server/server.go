@@ -21,6 +21,7 @@ func main() {
 	routes.RegisterHomeRoutes(e)
 	routes.RegisterUserRoutes(e)
 	routes.RegisterCategoryRoutes(e)
+	routes.RegisterFCMRoutes(e)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }

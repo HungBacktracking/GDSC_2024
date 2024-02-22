@@ -13,4 +13,5 @@ type UserInfo struct {
 	IsVolunteer bool      `firestore:"isVolunteer"`
 	CreatedAt   time.Time `firestore:"createdAt"`
 	Avatar      string    `firestore:"avatar"`
+	FcmTokens   []string  `firestore:"fcm_tokens,omitempty"`
 }

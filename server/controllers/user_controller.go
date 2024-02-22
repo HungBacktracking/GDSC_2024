@@ -182,3 +182,38 @@ func AddUser(c echo.Context) error {
 	response := AddUserResponse{ID: u.UID}
 	return c.JSON(http.StatusCreated, response)
 }
+
+// IsExistPhoneRequest represents the request payload for checking if a user with a phone number exists
+type IsExistPhoneRequest struct {
+	PhoneNumber string `json:"phone_number"`
+}
+
+// IsExistPhone checks if a user with the provided phone number exists in Firebase Authentication
+func IsExistPhone(c echo.Context) error {
+	req := new(IsExistPhoneRequest)
+	if err := c.Bind(req); err != nil {
+		return c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "Invalid request payload"})
+	}
+
+	// Create Auth client
+	authClient, err := bootstrap.FirebaseApp.Auth(context.Background())
+	if err != nil {
+		log.Printf("Error getting Auth client: %v", err)
+		return c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: "Internal Server Error"})
+	}
+
+	// Check if user with phone number exists
+	_, err = authClient.GetUserByPhoneNumber(context.Background(), req.PhoneNumber)
+	if err != nil {
+		if auth.IsUserNotFound(err) {
+			// User not found, return appropriate response
+			return c.JSON(http.StatusOK, map[string]bool{"exists": false})
+		}
+
+		log.Printf("Error checking user existence: %v", err)
+		return c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: "Internal Server Error"})
+	}
+
+	// User found, return appropriate response
+	return c.JSON(http.StatusOK, map[string]bool{"exists": true})
+}
