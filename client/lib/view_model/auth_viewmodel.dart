@@ -83,6 +83,10 @@ class AuthViewModel extends ChangeNotifier {
     }
   }
 
+  Future signOut(BuildContext context) async {
+    await _authRepository.signOut(context);
+  }
+
   Future saveUserDataToFirebase({
     required BuildContext context,
     required UserModel userModel,

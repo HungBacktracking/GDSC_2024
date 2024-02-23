@@ -13,6 +13,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import '../models/user_model.dart';
+import '../ui/greeting_screen.dart';
 import '../utils/helper.dart';
 
 class AuthRepository {
@@ -134,6 +135,24 @@ class AuthRepository {
       print("Error!!!!");
       return false;
     }
+  }
+
+  Future signOut(BuildContext context) async {
+    String? userId = _firebaseAuth.currentUser?.uid;
+    await _firebaseAuth.signOut();
+
+    print("delete device token!!!");
+    deleteDeviceToken(userId!);
+
+    Navigator.of(context).popUntil((route) => false);
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+          builder: (context) {
+            return const GreetingScreen();
+          }
+      ),
+          (Route<dynamic> route) => false,
+    );
   }
 
   Future saveUserDataToFirebase({

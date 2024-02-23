@@ -1,8 +1,10 @@
 import 'package:client/ui/greeting_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../utils/themes.dart';
+import '../view_model/auth_viewmodel.dart';
 
 class ProfileScreen extends StatelessWidget{
   final String avatarUrl;
@@ -233,18 +235,8 @@ class ProfileScreen extends StatelessWidget{
                 children: [
                   InkWell(
                     onTap: () async {
-                      final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-                      await _firebaseAuth.signOut();
-
-                      Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                            builder: (context) {
-                              return const GreetingScreen();
-                            }
-                        ),
-                            (Route<dynamic> route) => false,
-                      );
-                      
+                      final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
+                      await authViewModel.signOut(context);
                     },
                     child: const Text(
                       'Log out',
