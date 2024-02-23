@@ -1,6 +1,7 @@
 import 'package:client/firebase_options.dart';
 import 'package:client/model/quiz_category_model.dart';
 import 'package:client/ui/complete_quiz_screen.dart';
+import 'package:client/ui/contact_us_screen.dart';
 import 'package:client/ui/frame_screen.dart';
 import 'package:client/ui/home_screen.dart';
 import 'package:client/ui/leader_board_screen.dart';
@@ -47,7 +48,8 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.grey, // Set your desired color here
         ),
       ),
-      home: UpdateCertificateScreen(certificatesTitles: certificatesTitles, certificatesImageUrls: certificatesImageUrls),
+      // home: UpdateCertificateScreen(certificatesTitles: certificatesTitles, certificatesImageUrls: certificatesImageUrls),
+      home: ContactUsScreen(),
     );
   }
 }

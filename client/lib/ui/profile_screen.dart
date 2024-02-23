@@ -45,209 +45,216 @@ class ProfileScreen extends StatelessWidget{
         ),
       ),
 
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 8.0, right: 16.0, left: 16.0, bottom: 100),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+      body: Column(
+        children: [
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8.0, right: 16.0, left: 16.0, bottom: 100),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
 
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.grey,
-                            width: 1,
-                          ),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.grey,
-                              blurRadius: 5,
-                              spreadRadius: 1,
+                      Column(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.grey,
+                                width: 1,
+                              ),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.grey,
+                                  blurRadius: 5,
+                                  spreadRadius: 1,
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        child: CircleAvatar(
-                          radius: 70,
-                          backgroundImage: NetworkImage(avatarUrl), // Use NetworkImage
-                          backgroundColor: Colors.white,
-                        ),
+                            child: CircleAvatar(
+                              radius: 70,
+                              backgroundImage: NetworkImage(avatarUrl), // Use NetworkImage
+                              backgroundColor: Colors.white,
+                            ),
+                          ),
+                        const SizedBox(height: 8),
+                        Text(
+                          userName,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold
+                          ),
+                        )
+                        ],
                       ),
-                    const SizedBox(height: 8),
-                    Text(
-                      userName,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold
-                      ),
-                    )
                     ],
                   ),
-                ],
-              ),
 
-              const SizedBox(height: 25),
+                  const SizedBox(height: 25),
 
-              //General Information
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'General Information',
-                    style: TextStyle(
-                      fontSize: 22.0,
-                      fontWeight: FontWeight.w600
-                    ),
-                  ),
-                  InkWell(
-                    onTap: (){
-                      //handle tap
-                    },
-                    child: const Text(
-                      'Update',
-                      style: TextStyle(
-                        fontSize: 22.0,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.blue,
+                  //General Information
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'General Information',
+                        style: TextStyle(
+                          fontSize: 22.0,
+                          fontWeight: FontWeight.w600
+                        ),
                       ),
-                    ),
-                  )
-                ],
-              ),
-              const SizedBox(height: 8),
-              ContentContainer(titles: titles, contents: contents),
-
-            //Skills
-            const SizedBox(height: 25),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Skills',
-                    style: TextStyle(
-                        fontSize: 22.0,
-                        fontWeight: FontWeight.w600
-                    ),
+                      InkWell(
+                        onTap: (){
+                          //handle tap
+                        },
+                        child: const Text(
+                          'Update',
+                          style: TextStyle(
+                            fontSize: 22.0,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      )
+                    ],
                   ),
-                  InkWell(
-                    onTap: (){
-                      //handle tap
-                    },
-                    child: const Text(
-                      'Update',
-                      style: TextStyle(
-                        fontSize: 22.0,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.blue,
+                  const SizedBox(height: 8),
+                  ContentContainer(titles: titles, contents: contents),
+
+                //Skills
+                const SizedBox(height: 25),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Skills',
+                        style: TextStyle(
+                            fontSize: 22.0,
+                            fontWeight: FontWeight.w600
+                        ),
                       ),
-                    ),
-                  )
-                ],
-              ),
-              const SizedBox(height: 8),
-              ContentContainer(titles: skills, contents: skillContents),
+                      InkWell(
+                        onTap: (){
+                          //handle tap
+                        },
+                        child: const Text(
+                          'Update',
+                          style: TextStyle(
+                            fontSize: 22.0,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  ContentContainer(titles: skills, contents: skillContents),
 
-              const SizedBox(height: 25),
-              //Activity
-              const Text(
-                'Your Activity',
-                style: TextStyle(
-                    fontSize: 22.0,
-                    fontWeight: FontWeight.w600
-                ),
-              ),
-
-              const SizedBox(height: 8),
-              const FunctionTag(
-                  icon: Icons.history,
-                  title: "History",
-                  onPressed: null
-              ),
-
-              //Certificates
-              const SizedBox(height: 25),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                  const SizedBox(height: 25),
+                  //Activity
                   const Text(
-                    'Certificates',
+                    'Your Activity',
                     style: TextStyle(
                         fontSize: 22.0,
                         fontWeight: FontWeight.w600
                     ),
                   ),
-                  InkWell(
-                    onTap: (){
-                      //handle tap
-                    },
-                    child: const Text(
-                      'Update',
-                      style: TextStyle(
-                        fontSize: 22.0,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.blue,
+
+                  const SizedBox(height: 8),
+                  const FunctionTag(
+                      icon: Icons.history,
+                      title: "History",
+                      onPressed: null
+                  ),
+
+                  //Certificates
+                  const SizedBox(height: 25),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Certificates',
+                        style: TextStyle(
+                            fontSize: 22.0,
+                            fontWeight: FontWeight.w600
+                        ),
                       ),
+                      InkWell(
+                        onTap: (){
+                          //handle tap
+                        },
+                        child: const Text(
+                          'Update',
+                          style: TextStyle(
+                            fontSize: 22.0,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  CertificatesBlock(
+                    certificatesTitles: certificatesTitles,
+                    certificatesImgageUrls: certificatesImageUrls,
+                  ),
+
+                  //Support and Legal
+                  const SizedBox(height: 25),
+                  const Text(
+                    'Support & Legal',
+                    style: TextStyle(
+                        fontSize: 22.0,
+                        fontWeight: FontWeight.w600
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              CertificatesBlock(
-                certificatesTitles: certificatesTitles,
-                certificatesImgageUrls: certificatesImageUrls,
-              ),
-
-              //Support and Legal
-              const SizedBox(height: 25),
-              const Text(
-                'Support & Legal',
-                style: TextStyle(
-                    fontSize: 22.0,
-                    fontWeight: FontWeight.w600
-                ),
-              ),
-              const SizedBox(height: 8),
-              const FunctionTag(
-                  icon: Icons.privacy_tip,
-                  title: "Privacy Policy",
-                  onPressed: null
-              ),
-              const SizedBox(height: 8),
-              const FunctionTag(
-                  icon: Icons.call,
-                  title: "Contact us",
-                  onPressed: null
-              ),
-
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  InkWell(
-                    onTap: (){
-                      //handle tap
-                    },
-                    child: const Text(
-                      'Log out',
-                      style: TextStyle(
-                        fontSize: 22.0,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.red,
-                      ),
-                    ),
+                  const SizedBox(height: 8),
+                  const FunctionTag(
+                      icon: Icons.privacy_tip,
+                      title: "Privacy Policy",
+                      onPressed: null
                   ),
+                  const SizedBox(height: 8),
+                  const FunctionTag(
+                      icon: Icons.call,
+                      title: "Contact us",
+                      onPressed: null
+                  ),
+
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      InkWell(
+                        onTap: (){
+                          //handle tap
+                        },
+                        child: const Text(
+                          'Log out',
+                          style: TextStyle(
+                            fontSize: 22.0,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
                 ],
-              )
-            ],
+              ),
+            ),
           ),
-        ),
+
+          const SizedBox(height: 100),
+        ],
       ),
+
     );
   }
 }
