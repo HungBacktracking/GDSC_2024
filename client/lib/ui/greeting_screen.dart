@@ -59,7 +59,11 @@ class GreetingScreen extends StatelessWidget {
                     child: const HeaderWidget()
                 ),
                 const Gap(15),
-                Image.asset('assets/images/greeting_image.png'),
+                Container(
+                    height: screen_size.height / 3,
+                    width: screen_size.width,
+                    child: Image.asset('assets/images/greeting_image.png', fit: BoxFit.contain,)
+                ),
                 const Gap(20),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 30.0),
