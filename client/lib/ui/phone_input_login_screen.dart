@@ -65,11 +65,19 @@ class _PhoneInputLoginState extends State<PhoneInputLogin> {
     final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
     String phoneNumber = _phoneController.text.trim();
     phoneNumber = formatPhoneNumber(phoneNumber);
-    if (await authViewModel.checkExistingUser(phoneNumber) == true) {
+
+    bool userExists = await authViewModel.checkExistingUser(phoneNumber);
+    if (userExists) {
       authViewModel.signInWithPhone(context, phoneNumber);
     }
     else {
-      _validate = true;
+      setState(() {
+        _validate = true; // Đảm bảo bạn cập nhật UI để phản ánh trạng thái này
+      });
+      // Hiển thị thông báo lỗi cho người dùng
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('The account is not exists.')),
+      );
     }
   }
 

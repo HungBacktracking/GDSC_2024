@@ -68,11 +68,18 @@ class _PhoneInputRegisterState extends State<PhoneInputRegister> {
     final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
     String phoneNumber = _phoneController.text.trim();
     phoneNumber = formatPhoneNumber(phoneNumber);
-    if (await authViewModel.checkExistingUser(phoneNumber) == false) {
+
+    bool userExists = await authViewModel.checkExistingUser(phoneNumber);
+    if (!userExists) {
       authViewModel.signUpWithPhone(context, widget.name, widget.optionVolunteer, phoneNumber);
     }
     else {
-      _validate = true;
+      setState(() {
+        _validate = true;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('The account already exists.')),
+      );
     }
   }
 
