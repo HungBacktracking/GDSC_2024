@@ -36,6 +36,7 @@ class AuthRepository {
             await _firebaseAuth.signInWithCredential(phoneAuthCredential);
           },
           verificationFailed: (error) {
+            getErrorSnackBar("Verification failed!", error);
             throw Exception(error.message);
           },
           codeSent: (verificationId, forceResendingToken) {
@@ -49,7 +50,7 @@ class AuthRepository {
           },
           codeAutoRetrievalTimeout: (verificationId) {});
     } on FirebaseAuthException catch (e) {
-      showSnackBar(context, e.message.toString());
+      getErrorSnackBar("Verification failed!", e);
     }
   }
 
@@ -63,6 +64,7 @@ class AuthRepository {
             await _firebaseAuth.signInWithCredential(phoneAuthCredential);
           },
           verificationFailed: (error) {
+            getErrorSnackBar("Verification failed!", error);
             throw Exception(error.message);
           },
           codeSent: (verificationId, forceResendingToken) {
@@ -79,7 +81,7 @@ class AuthRepository {
           },
           codeAutoRetrievalTimeout: (verificationId) {});
     } on FirebaseAuthException catch (e) {
-      showSnackBar(context, e.message.toString());
+      getErrorSnackBar("Verification failed!", e);
     }
   }
 
@@ -105,7 +107,7 @@ class AuthRepository {
         onSuccess();
       }
     } on FirebaseAuthException catch (e) {
-      showSnackBar(context, e.message.toString());
+      getErrorSnackBar("Verification failed!", e);
     }
   }
 
@@ -143,6 +145,7 @@ class AuthRepository {
 
     print("delete device token!!!");
     deleteDeviceToken(userId!);
+    getSuccessSnackBar("Logged out successfully!");
 
     Navigator.of(context).popUntil((route) => false);
     Navigator.of(context).pushAndRemoveUntil(
@@ -180,10 +183,11 @@ class AuthRepository {
         print('Response data: ${response.body}');
         onSuccess();
       } else {
+        getErrorSnackBarNew("Saving user failed!");
         throw Exception('Failed to create post.');
       }
-    } on FirebaseAuthException catch (e) {
-      showSnackBar(context, e.message.toString());
+    } catch (e) {
+      getErrorSnackBar("Saving user failed!", e);
     }
   }
 

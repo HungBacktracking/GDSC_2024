@@ -10,6 +10,7 @@ import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 
 import '../models/user_model.dart';
+import '../utils/helper.dart';
 import '../utils/strings.dart';
 import '../utils/styles.dart';
 import '../utils/themes.dart';
@@ -80,6 +81,7 @@ class PinAuthenticationRegisterState extends State<PinAuthenticationRegister> {
           id: "",
         );
         await authenViewModel.saveUserDataToFirebase(context: context, userModel: userModel, onSuccess: () {
+          getSuccessSnackBar("Successfully signed up!");
           Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
                 builder: (context) {

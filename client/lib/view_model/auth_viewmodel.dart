@@ -32,22 +32,12 @@ class AuthViewModel extends ChangeNotifier {
   // }
 
   Future signInWithPhone(BuildContext context, String phoneNumber) async {
-    try {
-      await _authRepository.signInWithPhone(context, phoneNumber);
-    } on FirebaseAuthException catch (e) {
-      showSnackBar(context, e.message.toString());
-      notifyListeners();
-    }
+    await _authRepository.signInWithPhone(context, phoneNumber);
     notifyListeners();
   }
 
   Future signUpWithPhone(BuildContext context, String name, int optionVolunteer, String phoneNumber) async {
-    try {
-      await _authRepository.signUpWithPhone(context, name, optionVolunteer, phoneNumber);
-    } on FirebaseAuthException catch (e) {
-      showSnackBar(context, e.message.toString());
-      notifyListeners();
-    }
+    await _authRepository.signUpWithPhone(context, name, optionVolunteer, phoneNumber);
     notifyListeners();
   }
 
@@ -67,8 +57,8 @@ class AuthViewModel extends ChangeNotifier {
           onSuccess: onSuccess);
       _isLoading = false;
       notifyListeners();
-    } on FirebaseAuthException catch (e) {
-      showSnackBar(context, e.message.toString());
+    } catch (e) {
+      getErrorSnackBar("Verification failed!", e);
       _isLoading = false;
       notifyListeners();
     }
@@ -78,7 +68,6 @@ class AuthViewModel extends ChangeNotifier {
     try {
       return _authRepository.checkExistingUser(phoneNumber);
     } catch (e) {
-      print(e.toString());
       return false;
     }
   }
@@ -97,7 +86,7 @@ class AuthViewModel extends ChangeNotifier {
     try {
       await _authRepository.saveUserDataToFirebase(context: context, userModel: userModel, onSuccess: onSuccess);
     } catch (e) {
-      showSnackBar(context, e.toString());
+      getErrorSnackBar("Saving user failed!", e);
       _isLoading = false;
       notifyListeners();
     }
