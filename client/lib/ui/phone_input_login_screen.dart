@@ -178,7 +178,7 @@ class _PhoneInputLoginState extends State<PhoneInputLogin> {
                           floatingLabelStyle: TextStyle(fontSize: 16, color: Colors.grey[700]),
                           contentPadding: const EdgeInsets.all(12),
                           border: InputBorder.none,
-                          errorText: _validate ? 'Invalid phone number!' : null,
+                          errorText: _validate ? 'The account is not exists.' : null,
                         ),
                         keyboardType: TextInputType.phone,
                         // onChanged: (value) {

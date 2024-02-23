@@ -78,7 +78,7 @@ class _PhoneInputRegisterState extends State<PhoneInputRegister> {
         _validate = true;
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('The account already exists.')),
+        SnackBar(content: Text('The account is already exists.')),
       );
     }
   }
@@ -179,7 +179,7 @@ class _PhoneInputRegisterState extends State<PhoneInputRegister> {
                           floatingLabelStyle: TextStyle(fontSize: 16, color: Colors.grey[700]),
                           contentPadding: const EdgeInsets.all(12),
                           border: InputBorder.none,
-                          errorText: _validate ? 'Invalid phone number!' : null,
+                          errorText: _validate ? 'The account is already exists.' : null,
                         ),
                         keyboardType: TextInputType.phone,
                         // onChanged: (value) {
