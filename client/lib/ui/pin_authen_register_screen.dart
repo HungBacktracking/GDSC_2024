@@ -68,27 +68,27 @@ class PinAuthenticationRegisterState extends State<PinAuthenticationRegister> {
   Future<void> handleValidPin(BuildContext context) async {
     final authenViewModel = Provider.of<AuthViewModel>(context, listen: false);
     await authenViewModel.verifyOtp(
-        context: context,
-        verificationId: widget.verificationId,
-        userOtp: pinController.text,
-        onSuccess: () async {
-          UserModel userModel = UserModel(
-            name: widget.name,
-            isVolunteer: (widget.optionVolunteer == 0 || widget.optionVolunteer == 2),
-            createdAt: "",
-            phoneNumber: "",
+      context: context,
+      verificationId: widget.verificationId,
+      userOtp: pinController.text,
+      onSuccess: () async {
+        UserModel userModel = UserModel(
+          name: widget.name,
+          isVolunteer: (widget.optionVolunteer == 0 || widget.optionVolunteer == 2),
+          createdAt: "",
+          phoneNumber: "",
+        );
+        await authenViewModel.saveUserDataToFirebase(context: context, userModel: userModel, onSuccess: () {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+                builder: (context) {
+                  return const MainScreen();
+                }
+            ),
+                (Route<dynamic> route) => false,
           );
-          await authenViewModel.saveUserDataToFirebase(context: context, userModel: userModel, onSuccess: () {
-            Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                  builder: (context) {
-                    return const MainScreen();
-                  }
-              ),
-                  (Route<dynamic> route) => false,
-            );
-          });
-        }
+        });
+      }
     );
   }
 

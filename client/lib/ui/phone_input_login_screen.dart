@@ -7,6 +7,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
+import 'package:provider/provider.dart';
+
+import '../view_model/auth_viewmodel.dart';
 
 class PhoneInputLogin extends StatefulWidget {
   const PhoneInputLogin({super.key});
@@ -49,12 +52,17 @@ class _PhoneInputLoginState extends State<PhoneInputLogin> {
     super.dispose();
   }
 
-  onSubmitPhone(BuildContext context) {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => PinAuthenticationLogin(phoneNumber: _phoneController.text),
-      ),
-    );
+  void onSubmitPhone(BuildContext context) {
+    if (_formKey.currentState!.validate()) {
+      final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
+      String phoneNumber = _phoneController.text.trim();
+      if (phoneNumber.startsWith('0')) {
+        String countryCode = '84';
+        phoneNumber = phoneNumber.substring(1);
+        phoneNumber = '+$countryCode$phoneNumber';
+      }
+      authViewModel.signInWithPhone(context, phoneNumber);
+    }
   }
 
   @override
@@ -139,6 +147,9 @@ class _PhoneInputLoginState extends State<PhoneInputLogin> {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your phone number';
+                          }
+                          if (value.length != 10) {
+                            return 'Invalid phone number!';
                           }
                           return null;
                         },

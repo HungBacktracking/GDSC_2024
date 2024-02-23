@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:client/ui/pin_authen_login_screen.dart';
 import 'package:http/http.dart' as http;
 
 
@@ -20,6 +21,34 @@ class AuthRepository {
 
   Future<bool> checkSignIn() async {
     return (_firebaseAuth.currentUser != null);
+  }
+
+  Future signInWithPhone(BuildContext context, String phoneNumber) async {
+    try {
+      await _firebaseAuth.verifyPhoneNumber(
+          phoneNumber: phoneNumber,
+          verificationCompleted:
+              (PhoneAuthCredential phoneAuthCredential) async {
+            await _firebaseAuth.signInWithCredential(phoneAuthCredential);
+          },
+          verificationFailed: (error) {
+            throw Exception(error.message);
+          },
+          codeSent: (verificationId, forceResendingToken) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PinAuthenticationLogin(
+                    verificationId: verificationId,
+                    phoneNumber: phoneNumber
+                ),
+              ),
+            );
+          },
+          codeAutoRetrievalTimeout: (verificationId) {});
+    } on FirebaseAuthException catch (e) {
+      showSnackBar(context, e.message.toString());
+    }
   }
 
   Future signUpWithPhone(BuildContext context, String name, int optionVolunteer, String phoneNumber) async {
