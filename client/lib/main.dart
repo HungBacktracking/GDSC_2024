@@ -86,7 +86,8 @@ class MyApp extends StatelessWidget {
           // '/learning': (context) => const LearningFirstAidScreen(),
         }
         // home: MainScreen(),
-        );
+      )
+    );
   }
 }
 
