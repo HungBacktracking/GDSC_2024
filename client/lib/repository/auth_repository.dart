@@ -201,7 +201,7 @@ class AuthRepository {
   }
 
   Future<void> deleteDeviceToken(String userId) async {
-    String? token = await new FirebaseAPI().getFirebaseToken();
+    String? token = await FirebaseAPI().getFirebaseToken();
 
     if (token != null) {
       Map<String, dynamic> data = {
@@ -209,11 +209,11 @@ class AuthRepository {
         'fcm_token': token,
       };
 
-      String body = jsonEncode(data);
+      String body = json.encode(data);
 
       try {
         http.Response response = await http.post(
-          Uri.parse('localhost:1323/fcm/delete_token'),
+          Uri.parse('https://go-echo-server.onrender.com/fcm/delete_token'),
           headers: {
             'Content-Type': 'application/json',
           },
