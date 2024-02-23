@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:nb_utils/nb_utils.dart';
 
+import '../utils/spacer.dart';
 import '../utils/strings.dart';
 import '../utils/themes.dart';
 
@@ -14,6 +15,7 @@ class GreetingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final Size screen_size = MediaQuery.of(context).size;
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
@@ -37,7 +39,7 @@ class GreetingScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 30.0),
                 child: Text(
                   Strings.greeting_text,
-                  style: MyStyles.tinyTextStyle,
+                  // style: MyStyles.tinyTextStyle,
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -58,7 +60,7 @@ class GreetingScreen extends StatelessWidget {
                     ),
                     child: const Text(
                         'Login',
-                        style: MyStyles.tinyBoldTextStyle,
+                        // style: MyStyles.tinyBoldTextStyle,
                     ),
                   ),
                 ),

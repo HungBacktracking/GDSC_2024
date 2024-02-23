@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-import '../model/sub_category_model.dart';
+import '../models/sub_category_model.dart';
 import '../utils/themes.dart';
 import 'firstaid_steps_screen.dart';
 

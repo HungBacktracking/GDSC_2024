@@ -1,6 +1,8 @@
 import 'package:client/ui/upload_image.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/spacer.dart';
+import '../utils/styles.dart';
 import '../utils/themes.dart';
 
 class UpdateCertificateScreen extends StatelessWidget{
@@ -15,15 +17,21 @@ class UpdateCertificateScreen extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    // Get screen size
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    // Calculate padding dynamically based on screen size
+    double horizontalMargin = MySpacer.normalHorizontalMargin(context);
+    double verticalMargin = MySpacer.normalVerticalMargin(context);
+    double largeVerticalSpacer = MySpacer.largeHeight(context);
+    // Get the text scale factor
+    TextScaler textScaler = MyStyles.textScaler(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Update Certificate',
-          style: TextStyle(
-            fontSize: 20.0,
-            fontWeight: FontWeight.w700,
-            color: Colors.black,
-          ),
+          style: MyStyles.largeBoldTextStyle(),
         ),
         centerTitle: true,
         leading: IconButton(
@@ -40,26 +48,26 @@ class UpdateCertificateScreen extends StatelessWidget{
         children: <Widget>[
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.only(top: 8.0, right: 16.0, left: 16.0),
+              padding: EdgeInsets.only(top: verticalMargin, right: horizontalMargin, left: horizontalMargin),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   // Space before the certificates
-                  const SizedBox(height: 25),
+                  SizedBox(height: largeVerticalSpacer),
                   // Certificates Block
                   CertificatesBlock(
                     certificatesTitles: certificatesTitles,
                     certificatesImgageUrls: certificatesImageUrls,
                   ),
                   // Space after the certificates
-                  const SizedBox(height: 25),
+                 SizedBox(height: largeVerticalSpacer),
                 ],
               ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(horizontalMargin),
             child: ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -69,12 +77,19 @@ class UpdateCertificateScreen extends StatelessWidget{
                   ),
                 );
               },
-              child: const Text(
-                'Upload Certificate',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w500,
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(screenWidth, 50), // Ensure the button is wide enough
+                backgroundColor: MyTheme.submitBtnColor, // Set the background color
+                // You can also set the foreground (text) color, if needed
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder( // Set the button's shape
+                  borderRadius: BorderRadius.circular(MyStyles.cornerRadius), // Rounded corners
                 ),
+              ),
+              child: Text(
+                'Upload Certificate',
+                style: MyStyles.largeBoldTextStyle(color: Colors.white),
+                textScaler: textScaler,
               ),
             ),
           ),
@@ -96,14 +111,23 @@ class CertificatesBlock extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    // Calculate padding dynamically based on screen size
+    double horizontalMargin = MySpacer.smallHorizontalMargin(context);
+    double verticalMargin = MySpacer.largeVerticalMargin(context);
+    double largeVerticalSpacer = MySpacer.largeHeight(context);
+    double smallVerticalSpacer = MySpacer.smallHeight(context);
+
+    // Get the text scale factor
+    TextScaler textScaler = MyStyles.textScaler(context);
+
     return Container(
       decoration: BoxDecoration(
         color: MyTheme.lightRedBackGround,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(MyStyles.cornerRadius),
       ),
       child: Padding(
-        padding: const EdgeInsets.only(
-            left: 20.0, top: 5.0, bottom: 5.0, right: 20.0),
+        padding: EdgeInsets.only(
+            left: verticalMargin, top: horizontalMargin, bottom: 5.0, right: 20.0),
         child: certificatesTitles.isNotEmpty?
             SingleChildScrollView(
               child: Column(
@@ -123,12 +147,10 @@ class CertificatesBlock extends StatelessWidget{
                                 children: [
                                   Text(
                                     certificatesTitles[index],
-                                    style: const TextStyle(
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                    style: MyStyles.normalBoldTextStyle(),
+                                    textScaler: textScaler,
                                   ),
-                                  const SizedBox(height: 5),
+                                  SizedBox(height: smallVerticalSpacer),
                                   Container(
                                     decoration: BoxDecoration(
                                       border: Border.all(
@@ -141,11 +163,11 @@ class CertificatesBlock extends StatelessWidget{
                                       fit: BoxFit.cover, // Cover the width without distorting aspect ratio
                                     ),
                                   ),
-                                  const SizedBox(height: 15), // Adjusted for consistent spacing
+                                  SizedBox(height: largeVerticalSpacer), // Adjusted for consistent spacing
                                 ],
                                 ),
                             ),
-                            const SizedBox(width: 20),
+                            SizedBox(width: largeVerticalSpacer),
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -163,26 +185,38 @@ class CertificatesBlock extends StatelessWidget{
                                         ),
                                       );
                                     },
-                                    child: const Text(
-                                      "Update",
-                                      style: TextStyle(
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.w500,
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: MyTheme.submitBtnColor, // Set the background color
+                                      // You can also set the foreground (text) color, if needed
+                                      foregroundColor: Colors.white,
+                                      shape: RoundedRectangleBorder( // Set the button's shape
+                                        borderRadius: BorderRadius.circular(MyStyles.cornerRadius), // Rounded corners
                                       ),
+                                    ),
+                                    child: Text(
+                                      "Update",
+                                      style: MyStyles.largeBoldTextStyle(color: Colors.white),
+                                      textScaler: textScaler,
                                     )
                                 ),
                                 ElevatedButton(
                                     onPressed: () {
                                       _showRemoveConfirmationDialog(context);
                                       },
-                                    child: const Text(
-                                      "Remove",
-                                      style: TextStyle(
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.w500,
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: MyTheme.submitBtnColor, // Set the background color
+                                    // You can also set the foreground (text) color, if needed
+                                    foregroundColor: Colors.white,
+                                    shape: RoundedRectangleBorder( // Set the button's shape
+                                      borderRadius: BorderRadius.circular(MyStyles.cornerRadius), // Rounded corners
+                                    ),
+                                  ),
+                                    child: Text(
+                                        "Remove",
+                                        style: MyStyles.largeBoldTextStyle(color: Colors.white),
+                                        textScaler: textScaler,
                                       ),
                                     )
-                                ),
                               ],
                             )
                           ],
@@ -203,19 +237,31 @@ class CertificatesBlock extends StatelessWidget{
   }
 
   void _showRemoveConfirmationDialog(BuildContext context) {
+    TextScaler textScaler = MyStyles.textScaler(context);
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Confirm Removal'),
-          content: const Text('Are you sure you want to remove this item?'),
+          title: Text(
+              'Confirm Removal',
+            style: MyStyles.largeBoldTextStyle(),
+          ),
+          content: Text(
+              'Are you sure you want to remove this item?',
+              style: MyStyles.normalTextStyle(),
+          ),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 // Close the dialog
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: Text(
+                  'Cancel',
+                style: MyStyles.normalBoldTextStyle(),
+                textScaler: textScaler,
+              ),
             ),
             TextButton(
               onPressed: () {
@@ -224,7 +270,11 @@ class CertificatesBlock extends StatelessWidget{
                 // Close the dialog
                 Navigator.of(context).pop();
               },
-              child: Text('Remove'),
+              child: Text(
+                  'Remove',
+                  style: MyStyles.normalBoldTextStyle(),
+                  textScaler: textScaler,
+              )
             ),
           ],
         );
@@ -235,127 +285,5 @@ class CertificatesBlock extends StatelessWidget{
   void _removeItem() {
     // Implement your item removal logic here
     print('Item removed');
-  }
-}
-
-class FunctionTag extends StatelessWidget{
-  final IconData icon;
-  final String title;
-  final VoidCallback? onPressed;
-
-  const FunctionTag({
-    Key? key,
-    required this.icon,
-    required this.title,
-    required this.onPressed,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context){
-    return Container(
-      decoration: BoxDecoration(
-        color: MyTheme.lightRedBackGround,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Expanded(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: InkWell(
-            onTap: onPressed,
-            child: Container(
-              decoration: BoxDecoration(
-                color: MyTheme.lightRedBackGround,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20.0, top: 5.0, bottom: 5.0, right: 20.0),
-                child: Row(
-                  children: [
-                    Icon(
-                      icon,
-                      size: 30,
-                      color: Colors.black,
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-class ContentContainer extends StatelessWidget {
-  final List<String> titles;
-  final List<String> contents;
-
-  const ContentContainer({
-    Key? key,
-    required this.titles,
-    required this.contents,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context){
-    return Container(
-      decoration: BoxDecoration(
-        color: MyTheme.lightRedBackGround,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 20.0, top: 5.0, bottom: 5.0, right: 20.0),
-            child:
-            contents.isEmpty ?
-            const Text(
-              "No data",
-              style: TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-                fontStyle: FontStyle.italic,
-              ),
-            ) :
-            Column(
-                children:
-                titles.asMap().entries.map((entry) {
-                  int index = entry.key;
-                  return
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "${titles[index]} : ",
-                          style: const TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          contents[index],
-                          style: const TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.normal,
-                          ),
-                          maxLines: 2,
-                        )
-                      ],
-                    );
-                }).toList()
-            ),
-          )
-      ),
-
-    );
   }
 }

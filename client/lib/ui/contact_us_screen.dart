@@ -1,3 +1,6 @@
+import 'package:client/utils/spacer.dart';
+import 'package:client/utils/styles.dart';
+import 'package:client/utils/themes.dart';
 import 'package:flutter/material.dart';
 
 class ContactUsScreen extends StatelessWidget {
@@ -8,20 +11,20 @@ class ContactUsScreen extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
 
     // Calculate padding dynamically based on screen size
-    double horizontalPadding = screenWidth * 0.05;
-    double verticalPadding = screenHeight * 0.01;
-    double largePadding = screenHeight * 0.04;
-    double smallPadding = screenHeight * 0.015;
+    double horizontalMargin = MySpacer.normalHorizontalMargin(context);
+    double verticalMargin = MySpacer.normalVerticalMargin(context);
+    double largeVerticalHeight = MySpacer.largeHeight(context);
+    double normalVerticalHeight = MySpacer.normalHeight(context);
+    double smallVerticalHeight = MySpacer.smallHeight(context);
 
+    // Get the text scale factor
+    TextScaler textScaler = MyStyles.textScaler(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Support Us',
-          style: TextStyle(
-            fontSize: 20.0,
-            fontWeight: FontWeight.w700,
-            color: Colors.black,
-          ),
+          style: MyStyles.largeBoldTextStyle(),
+          textScaler: textScaler,
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
@@ -37,44 +40,40 @@ class ContactUsScreen extends StatelessWidget {
         },
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
+            padding: EdgeInsets.symmetric(horizontal: horizontalMargin, vertical: verticalMargin),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
               Text(
                 'Contact us and we will try our best to resolve your issue.',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: MyStyles.largeBoldTextStyle(),
+                textScaler: textScaler,
               ),
-              SizedBox(height: largePadding),
+              SizedBox(height: largeVerticalHeight),
               Text(
                 'Email',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: MyStyles.largeBoldTextStyle(),
+                textScaler: textScaler,
               ),
-              SizedBox(height: smallPadding),
+              SizedBox(height: smallVerticalHeight),
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'example@gmail.com',
                   filled: true, // Enable the fill color
                   fillColor: Colors.grey[200], // Fill color
                   border: OutlineInputBorder( // Outline border
-                    borderRadius: BorderRadius.circular(8.0),
+                    borderRadius: BorderRadius.circular(MyStyles.cornerRadius),
                     borderSide: BorderSide.none, // No border side
                   ),
                   // Optional: Customize the appearance when the field is focused
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: BorderSide(color: Colors.blue, width: 2.0),
+                    borderRadius: BorderRadius.circular(MyStyles.cornerRadius),
+                    borderSide: const BorderSide(color: Colors.blue, width: 2.0),
                   ),
                   // Optional: Customize the appearance when the field is enabled but not focused
                   enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
+                    borderRadius: BorderRadius.circular(MyStyles.cornerRadius),
                     borderSide: BorderSide(color: Colors.grey.shade400, width: 1.0),
                   ),
                 ),
@@ -92,15 +91,13 @@ class ContactUsScreen extends StatelessWidget {
                   }
                 },
               ),
-                SizedBox(height: largePadding),
-              const Text(
+                SizedBox(height: largeVerticalHeight),
+              Text(
                 'Message',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: MyStyles.largeBoldTextStyle(),
+                textScaler: textScaler,
               ),
-                SizedBox(height: smallPadding),
+                SizedBox(height: smallVerticalHeight),
               TextFormField(
                 maxLines: 10, // Set the maximum number of lines
                 decoration: InputDecoration(
@@ -115,7 +112,7 @@ class ContactUsScreen extends StatelessWidget {
                   // Optional: Customize the appearance when the field is focused
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.0),
-                    borderSide: BorderSide(color: Colors.blue, width: 2.0),
+                    borderSide: const BorderSide(color: Colors.blue, width: 2.0),
                   ),
                   // Optional: Customize the appearance when the field is enabled but not focused
                   enabledBorder: OutlineInputBorder(
@@ -142,13 +139,23 @@ class ContactUsScreen extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: EdgeInsets.all(horizontalPadding),
+        padding: EdgeInsets.all(horizontalMargin),
         child: ElevatedButton(
           onPressed: () {/* Submit form logic */},
           style: ElevatedButton.styleFrom(
             minimumSize: Size(screenWidth, 50), // Ensure the button is wide enough
+            backgroundColor: MyTheme.submitBtnColor, // Set the background color
+            // You can also set the foreground (text) color, if needed
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder( // Set the button's shape
+              borderRadius: BorderRadius.circular(MyStyles.cornerRadius), // Rounded corners
+            ),
           ),
-          child: const Text('Submit'),
+          child: Text(
+              'Submit',
+              style: MyStyles.largeBoldTextStyle(color: Colors.white),
+              textScaler: textScaler,
+          ),
         ),
       ),
     );

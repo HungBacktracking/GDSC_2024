@@ -1,4 +1,4 @@
-import 'package:client/model/quiz_category_model.dart';
+import 'package:client/models/quiz_category_model.dart';
 import 'package:client/ui/quiz_game_screen.dart';
 import 'package:client/utils/themes.dart';
 import 'package:flutter/material.dart';

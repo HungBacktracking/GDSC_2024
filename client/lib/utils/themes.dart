@@ -13,6 +13,7 @@ class MyTheme {
   static const blueBorder = Color(0xFF3164CE);
   static const Blue = Color(0xFF2A15AD);
   static const darkGreen = Color(0xFF017227);
+  static const submitBtnColor = Color(0xFF1C9444);
   static const lightBlue = Color(0xFF4179E0);
   static const redBorder = Color(0xFFF14336);
   static const redLight = Color(0xFFFFF1F0);

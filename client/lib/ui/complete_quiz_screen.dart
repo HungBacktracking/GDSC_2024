@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../model/quiz_category_model.dart';
+import '../models/quiz_category_model.dart';
 import 'learning_firstaid_screen.dart';
 
 class CompleteScreen extends StatelessWidget {

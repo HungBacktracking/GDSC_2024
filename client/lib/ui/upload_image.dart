@@ -156,4 +156,3 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
     );
   }
 }
-

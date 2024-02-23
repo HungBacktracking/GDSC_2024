@@ -5,7 +5,7 @@ import 'package:client/ui/profile_screen.dart';
 import 'package:client/utils/themes.dart';
 import 'package:flutter/material.dart';
 
-import '../model/nav_model.dart';
+import '../models/nav_model.dart';
 import '../widgets/nav_bar.dart';
 
 class MainScreen extends StatefulWidget {

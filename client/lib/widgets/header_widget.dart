@@ -16,7 +16,7 @@ class HeaderWidget extends StatelessWidget {
         const Gap(20),
         const Text(
           Strings.header_text,
-          style: MyStyles.headerTextStyle,
+          // style: MyStyles.headerTextStyle,
         ),
       ],
     );
