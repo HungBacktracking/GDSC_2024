@@ -9,6 +9,7 @@ import 'package:client/ui/leader_board_screen.dart';
 import 'package:client/ui/learning_firstaid_screen.dart';
 import 'package:client/ui/main_screen.dart';
 import 'package:client/ui/quiz_game_screen.dart';
+import 'package:client/ui/update_certificate_screen.dart';
 import 'package:client/ui/update_screen.dart';
 import 'package:client/ui/upload_image.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -30,23 +31,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> certificatesTitles = ["CPR", "First Aid", "AED", "CPR", "First Aid", "AED"];
+    final List<String> certificatesImageUrls = [
+      "https://blogs.bournemouth.ac.uk/research/files/2014/07/Certificate-of-Merit2.jpg",
+      "https://blogs.bournemouth.ac.uk/research/files/2014/07/Certificate-of-Merit2.jpg",
+          "https://blogs.bournemouth.ac.uk/research/files/2014/07/Certificate-of-Merit2.jpg",
+      "https://blogs.bournemouth.ac.uk/research/files/2014/07/Certificate-of-Merit2.jpg",
+      "https://blogs.bournemouth.ac.uk/research/files/2014/07/Certificate-of-Merit2.jpg",
+      "https://blogs.bournemouth.ac.uk/research/files/2014/07/Certificate-of-Merit2.jpg",
+    ];
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.dark,
       ),
     );
-    final List<QuizCategoryModel> challengeYouCategories = [
-      QuizCategoryModel(
-          title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
-      QuizCategoryModel(
-          title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
-      QuizCategoryModel(
-          title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
-      QuizCategoryModel(
-          title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
-    ];
-
     return MaterialApp(
       title: 'FirstAid App',
       debugShowCheckedModeBanner: false,

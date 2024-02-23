@@ -3,21 +3,34 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImageUploadScreen extends StatefulWidget {
-  final String appBarTitle;
+  final String? oldTitle;
+  final String? oldImageUrl;
 
-  const ImageUploadScreen({Key? key, required this.appBarTitle}) : super(key: key);
+  const ImageUploadScreen({
+    super.key,
+    this.oldTitle,
+    this.oldImageUrl,
+  }
+  );
+
   @override
   _ImageUploadScreenState createState() => _ImageUploadScreenState();
 }
 
 class _ImageUploadScreenState extends State<ImageUploadScreen> {
-  late String _appBarTitle;
+  late TextEditingController _titleController;
   File? _image;
-  final TextEditingController _titleController = TextEditingController();
+  late String _oldImageUrl;
+
+  @override
+  void dispose() {
+    // Dispose the controller when the widget is removed from the widget tree
+    _titleController.dispose();
+    super.dispose();
+  }
 
   Future getImage() async {
     final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
@@ -30,7 +43,8 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
   @override
   void initState() {
     super.initState();
-    _appBarTitle = widget.appBarTitle;
+    _oldImageUrl = widget.oldImageUrl ?? '';
+    _titleController = TextEditingController(text: widget.oldTitle);
   }
 
   void saveChanges() {
@@ -45,9 +59,10 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
       appBar: AppBar(
           title: Text(
-              'Update $_appBarTitle',
+              _titleController.text.isEmpty ? 'Upload Certificate' : 'Update Certificate',
               style: const TextStyle(
                 fontSize: 20.0,
                 fontWeight: FontWeight.bold,
@@ -61,7 +76,7 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
       ),
       body: Column(
         children: <Widget>[
-          imageContainer(),
+          imageContainer(_oldImageUrl),
           ElevatedButton(
             onPressed: getImage,
             child: const Text('Upload Image'),
@@ -71,7 +86,7 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
             child: TextFormField(
               controller: _titleController,
               decoration: const InputDecoration(
-                labelText: 'Image Title',
+                labelText: 'First Aid Type',
                 border: OutlineInputBorder(),
               ),
             ),
@@ -92,7 +107,8 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
     );
   }
 
-  Widget imageContainer() {
+  Widget imageContainer(String? oldImageUrl) {
+
     double screenWidth = MediaQuery.of(context).size.width;
     double containerWidth = screenWidth - 32.0; // Subtracting 16.0 margin from both sides
     double containerHeight = (containerWidth / 16) * 9; // Maintaining 16:9 aspect ratio
@@ -110,13 +126,30 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
           borderRadius: BorderRadius.circular(10),
           color: Colors.grey[200],
         ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(10), // Match the container's borderRadius
-          child: _image == null
-              ? const Center(child: Text('No image selected.')) // Center align the text
-              : Image.file(
-            _image!,
-            fit: BoxFit.cover, // Make sure the image covers the container correctly
+        child: Expanded(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10), // Match the container's borderRadius
+            child: (){
+              if (_image != null) {
+                return Image.file(
+                  _image!,
+                  width: containerWidth,
+                  height: containerHeight,
+                  fit: BoxFit.contain,
+                );
+              } else if (oldImageUrl != '') {
+                return Image.network(
+                  oldImageUrl!,
+                  width: containerWidth,
+                  height: containerHeight,
+                  fit: BoxFit.contain,
+                );
+              } else {
+                return const Center(
+                  child: Text('No image selected.'),
+                );
+              }
+            } (),
           ),
         ),
       ),
