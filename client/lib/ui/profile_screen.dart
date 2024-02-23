@@ -1,3 +1,5 @@
+import 'package:client/ui/greeting_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/themes.dart';
@@ -230,8 +232,19 @@ class ProfileScreen extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   InkWell(
-                    onTap: (){
-                      //handle tap
+                    onTap: () async {
+                      final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+                      await _firebaseAuth.signOut();
+
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (context) {
+                              return const GreetingScreen();
+                            }
+                        ),
+                            (Route<dynamic> route) => false,
+                      );
+                      
                     },
                     child: const Text(
                       'Log out',

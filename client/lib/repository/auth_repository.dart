@@ -177,10 +177,10 @@ class AuthRepository {
         'fcm_token': token,
       };
 
-      String body = jsonEncode(data);
+      String body = json.encode(data);
 
       try {
-        http.Response response = await http.post(
+        final response = await http.post(
           Uri.parse('https://go-echo-server.onrender.com/fcm/add_token'),
           headers: {
             'Content-Type': 'application/json',
@@ -188,7 +188,7 @@ class AuthRepository {
           body: body,
         );
 
-        if (response.statusCode == 200) {
+        if (response.statusCode == 200 || response.statusCode == 201) {
           print('Device token registered successfully');
         } else {
           print(
