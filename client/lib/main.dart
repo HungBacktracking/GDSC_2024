@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
             backgroundColor: Colors.grey, // Set your desired color here
           ),
         ),
-        home: const MainScreen(),
+        home: const GreetingScreen(),
         // home: MainScreen(),
       ),
     );
