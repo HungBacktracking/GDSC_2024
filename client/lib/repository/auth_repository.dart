@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:client/ui/pin_authen_login_screen.dart';
 import 'package:http/http.dart' as http;
 
-
 import 'package:client/ui/pin_authen_register_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -43,9 +42,7 @@ class AuthRepository {
               context,
               MaterialPageRoute(
                 builder: (context) => PinAuthenticationLogin(
-                    verificationId: verificationId,
-                    phoneNumber: phoneNumber
-                ),
+                    verificationId: verificationId, phoneNumber: phoneNumber),
               ),
             );
           },
@@ -55,7 +52,8 @@ class AuthRepository {
     }
   }
 
-  Future signUpWithPhone(BuildContext context, String name, int optionVolunteer, String phoneNumber) async {
+  Future signUpWithPhone(BuildContext context, String name, int optionVolunteer,
+      String phoneNumber) async {
     try {
       await _firebaseAuth.verifyPhoneNumber(
           phoneNumber: phoneNumber,
@@ -74,8 +72,7 @@ class AuthRepository {
                     verificationId: verificationId,
                     name: name,
                     optionVolunteer: optionVolunteer,
-                    phoneNumber: phoneNumber
-                ),
+                    phoneNumber: phoneNumber),
               ),
             );
           },
@@ -97,6 +94,13 @@ class AuthRepository {
 
       User? user = (await _firebaseAuth.signInWithCredential(creds)).user;
       if (user != null) {
+        // VERIFY USER SUCCESS
+        String? uid = _firebaseAuth.currentUser?.uid;
+        if (uid != null) {
+          print("Register device token for user: $uid - $userOtp");
+          registerDeviceToken(uid);
+        }
+
         onSuccess();
       }
     } on FirebaseAuthException catch (e) {
@@ -105,9 +109,7 @@ class AuthRepository {
   }
 
   Future<bool> checkExistingUser(String phoneNumber) async {
-    Map<String, dynamic> phoneMap = {
-      "phone_number": phoneNumber
-    };
+    Map<String, dynamic> phoneMap = {"phone_number": phoneNumber};
 
     String bodyJson = json.encode(phoneMap);
     print("Body Json: $bodyJson");
@@ -128,12 +130,10 @@ class AuthRepository {
         print("NEW USER");
         return false;
       }
-    }
-    else {
+    } else {
       print("Error!!!!");
       return false;
     }
-
   }
 
   Future saveUserDataToFirebase({
@@ -163,14 +163,13 @@ class AuthRepository {
       } else {
         throw Exception('Failed to create post.');
       }
-
     } on FirebaseAuthException catch (e) {
       showSnackBar(context, e.message.toString());
     }
   }
 
-  Future<void> registerDeviceToken(int userId) async {
-    String? token = await new FirebaseAPI().getFirebaseToken();
+  Future<void> registerDeviceToken(String userId) async {
+    String? token = await FirebaseAPI().getFirebaseToken();
 
     if (token != null) {
       Map<String, dynamic> data = {
@@ -182,7 +181,7 @@ class AuthRepository {
 
       try {
         http.Response response = await http.post(
-          Uri.parse('localhost:1323/fcm/add_token'),
+          Uri.parse('https://go-echo-server.onrender.com/fcm/add_token'),
           headers: {
             'Content-Type': 'application/json',
           },
@@ -201,7 +200,7 @@ class AuthRepository {
     }
   }
 
-  Future<void> deleteDeviceToken(int userId) async {
+  Future<void> deleteDeviceToken(String userId) async {
     String? token = await new FirebaseAPI().getFirebaseToken();
 
     if (token != null) {
