@@ -74,6 +74,15 @@ class AuthViewModel extends ChangeNotifier {
     }
   }
 
+  Future<bool> checkExistingUser(String phoneNumber) async {
+    try {
+      return _authRepository.checkExistingUser(phoneNumber);
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
+  }
+
   Future saveUserDataToFirebase({
     required BuildContext context,
     required UserModel userModel,

@@ -11,14 +11,14 @@ class UserModel {
   bool isBanned;
   bool isActive;
   bool isVolunteer;
-  String? id;
+  String id;
 
   UserModel({
     required this.name,
     this.profilePic,
     required this.createdAt,
     required this.phoneNumber,
-    this.id,
+    required this.id,
     this.address,
     this.isBanned = false,
     this.isActive = true,
@@ -43,6 +43,7 @@ class UserModel {
   Map<String, dynamic> toMap() {
     return {
       "name": name,
+      "id": id,
       "displayName": name,
       "avatar": profilePic,
       "isActive": isActive,

@@ -77,6 +77,7 @@ class PinAuthenticationRegisterState extends State<PinAuthenticationRegister> {
           isVolunteer: (widget.optionVolunteer == 0 || widget.optionVolunteer == 2),
           createdAt: "",
           phoneNumber: "",
+          id: "",
         );
         await authenViewModel.saveUserDataToFirebase(context: context, userModel: userModel, onSuccess: () {
           Navigator.of(context).pushAndRemoveUntil(

@@ -102,14 +102,35 @@ class AuthRepository {
   }
 
   Future<bool> checkExistingUser(String phoneNumber) async {
-    QuerySnapshot querySnapshot = await _firebaseFirestore.collection("users").where("phoneNumber", isEqualTo: phoneNumber).get();
-    if (querySnapshot.docs.isNotEmpty) {
-      print("USER EXISTS");
-      return true;
-    } else {
-      print("NEW USER");
+    Map<String, dynamic> phoneMap = {
+      "phone_number": phoneNumber
+    };
+
+    String bodyJson = json.encode(phoneMap);
+    print("Body Json: $bodyJson");
+    final response = await http.post(
+      Uri.parse("https://go-echo-server.onrender.com/user/is_exist_phone"),
+      headers: {"Content-Type": "application/json"},
+      body: bodyJson,
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      Map<String, dynamic> responseData = json.decode(response.body);
+      bool isUserExists = responseData['exists'];
+
+      if (isUserExists) {
+        print("USER EXISTS");
+        return true;
+      } else {
+        print("NEW USER");
+        return false;
+      }
+    }
+    else {
+      print("Error!!!!");
       return false;
     }
+
   }
 
   Future saveUserDataToFirebase({
@@ -120,14 +141,17 @@ class AuthRepository {
     try {
       userModel.createdAt = DateTime.now().millisecondsSinceEpoch.toString();
       userModel.phoneNumber = _firebaseAuth.currentUser!.phoneNumber!;
-      // userModel.id = _firebaseAuth.currentUser!.phoneNumber!;
+      userModel.id = _firebaseAuth.currentUser!.uid;
 
       String bodyJson = json.encode(userModel.toMap());
+      print("Body Json: $bodyJson");
       final response = await http.post(
-        Uri.parse("localhost:1323/user/add_user"),
+        Uri.parse("https://go-echo-server.onrender.com/user/add_user"),
         headers: {"Content-Type": "application/json"},
         body: bodyJson,
       );
+
+      print("Response: $response");
 
       // Kiểm tra trạng thái phản hồi
       if (response.statusCode == 200 || response.statusCode == 201) {

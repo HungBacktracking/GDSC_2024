@@ -52,18 +52,27 @@ class _PhoneInputLoginState extends State<PhoneInputLogin> {
     super.dispose();
   }
 
-  void onSubmitPhone(BuildContext context) {
-    if (_formKey.currentState!.validate()) {
-      final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
-      String phoneNumber = _phoneController.text.trim();
-      if (phoneNumber.startsWith('0')) {
-        String countryCode = '84';
-        phoneNumber = phoneNumber.substring(1);
-        phoneNumber = '+$countryCode$phoneNumber';
-      }
+  String formatPhoneNumber(String phoneNumber) {
+    if (phoneNumber.startsWith('0')) {
+      String countryCode = '84';
+      phoneNumber = phoneNumber.substring(1);
+      phoneNumber = '+$countryCode$phoneNumber';
+    }
+    return phoneNumber;
+  }
+
+  Future<void> onSubmitPhone(BuildContext context) async {
+    final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
+    String phoneNumber = _phoneController.text.trim();
+    phoneNumber = formatPhoneNumber(phoneNumber);
+    if (await authViewModel.checkExistingUser(phoneNumber) == true) {
       authViewModel.signInWithPhone(context, phoneNumber);
     }
+    else {
+      _validate = true;
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -187,7 +196,12 @@ class _PhoneInputLoginState extends State<PhoneInputLogin> {
                     margin: const EdgeInsets.only(left: 16, right: 16),
                     child: CustomFilledButton(
                       label: "Next",
-                      onPressed: () => onSubmitPhone(context),
+                      onPressed: () {
+                        _focusNode.unfocus();
+                        _formKey.currentState!.validate()
+                            ? onSubmitPhone(context)
+                            : null;
+                      },
                     ),
                   ),
                   const Spacer(),
