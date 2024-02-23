@@ -1,12 +1,15 @@
 import 'package:client/ui/greeting_screen.dart';
 import 'package:client/ui/phone_input_register_screen.dart';
+import 'package:client/view_model/auth_viewmodel.dart';
 import 'package:client/widgets/custom_filled_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:pinput/pinput.dart';
+import 'package:provider/provider.dart';
 
+import '../models/user_model.dart';
 import '../utils/strings.dart';
 import '../utils/styles.dart';
 import '../utils/themes.dart';
@@ -14,9 +17,18 @@ import '../widgets/custom_outline_button.dart';
 import 'main_screen.dart';
 
 class PinAuthenticationRegister extends StatefulWidget {
-  const PinAuthenticationRegister ( {super.key, required this.verificationId} );
+  const PinAuthenticationRegister ( {
+    super.key,
+    required this.verificationId,
+    required this.name,
+    required this.optionVolunteer,
+    required this.phoneNumber
+  } );
 
   final String verificationId;
+  final String name;
+  final int optionVolunteer;
+  final String phoneNumber;
 
   @override
   State<PinAuthenticationRegister> createState() => PinAuthenticationRegisterState();
@@ -47,20 +59,37 @@ class PinAuthenticationRegisterState extends State<PinAuthenticationRegister> {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) {
-          return const PhoneInputRegister();
+          return PhoneInputRegister(name: widget.name, optionVolunteer: widget.optionVolunteer);
         },
       ),
     );
   }
 
-  void handleCorrectPin(BuildContext context) {
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (context) {
-          return const MainScreen();
-        }
-      ),
-      (Route<dynamic> route) => false,
+  Future<void> handleValidPin(BuildContext context) async {
+    final authenViewModel = Provider.of<AuthViewModel>(context, listen: false);
+    await authenViewModel.verifyOtp(
+      context: context,
+      verificationId: widget.verificationId,
+      userOtp: pinController.text,
+      onSuccess: () async {
+        UserModel userModel = UserModel(
+          name: widget.name,
+          isVolunteer: (widget.optionVolunteer == 0 || widget.optionVolunteer == 2),
+          createdAt: "",
+          phoneNumber: "",
+          id: "",
+        );
+        await authenViewModel.saveUserDataToFirebase(context: context, userModel: userModel, onSuccess: () {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+                builder: (context) {
+                  return const MainScreen();
+                }
+            ),
+                (Route<dynamic> route) => false,
+          );
+        });
+      }
     );
   }
 
@@ -161,7 +190,7 @@ class PinAuthenticationRegisterState extends State<PinAuthenticationRegister> {
                             defaultPinTheme: defaultPinTheme,
                             separatorBuilder: (index) => const SizedBox(width: 8),
                             validator: (value) {
-                              return value == '222222' ? null : 'Wrong pin';
+                              return (value!.isNotEmpty && value.length == 6) ? null : 'Invalid pin!';
                             },
                             hapticFeedbackType: HapticFeedbackType.lightImpact,
                             onCompleted: (pin) {
@@ -245,7 +274,7 @@ class PinAuthenticationRegisterState extends State<PinAuthenticationRegister> {
                               onPressed: () {
                                 focusNode.unfocus();
                                 formKey.currentState!.validate()
-                                    ? handleCorrectPin(context)
+                                    ? handleValidPin(context)
                                     : null;
                               }),
                         ),

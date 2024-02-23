@@ -7,16 +7,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:pinput/pinput.dart';
+import 'package:provider/provider.dart';
 
+import '../models/user_model.dart';
 import '../utils/strings.dart';
 import '../utils/styles.dart';
 import '../utils/themes.dart';
+import '../view_model/auth_viewmodel.dart';
 import '../widgets/custom_outline_button.dart';
 import 'main_screen.dart';
 
 class PinAuthenticationLogin extends StatefulWidget {
-  const PinAuthenticationLogin ( {super.key, required this.phoneNumber} );
+  const PinAuthenticationLogin ( {
+    super.key,
+    required this.verificationId,
+    required this.phoneNumber
+  } );
 
+  final String verificationId;
   final String phoneNumber;
 
   @override
@@ -54,14 +62,22 @@ class PinAuthenticationLoginState extends State<PinAuthenticationLogin> {
     );
   }
 
-  void handleCorrectPin(BuildContext context) {
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-          builder: (context) {
-            return const MainScreen();
-          }
-      ),
-          (Route<dynamic> route) => false,
+  Future<void> handleValidPin(BuildContext context) async {
+    final authenViewModel = Provider.of<AuthViewModel>(context, listen: false);
+    await authenViewModel.verifyOtp(
+      context: context,
+      verificationId: widget.verificationId,
+      userOtp: pinController.text,
+      onSuccess: () async {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+              builder: (context) {
+                return const MainScreen();
+              }
+          ),
+              (Route<dynamic> route) => false,
+        );
+      }
     );
   }
 
@@ -162,7 +178,7 @@ class PinAuthenticationLoginState extends State<PinAuthenticationLogin> {
                             defaultPinTheme: defaultPinTheme,
                             separatorBuilder: (index) => const SizedBox(width: 8),
                             validator: (value) {
-                              return value == '222222' ? null : 'Wrong pin';
+                              return (value!.isNotEmpty && value.length == 6) ? null : 'Invalid pin!';
                             },
                             hapticFeedbackType: HapticFeedbackType.lightImpact,
                             onCompleted: (pin) {
@@ -246,7 +262,7 @@ class PinAuthenticationLoginState extends State<PinAuthenticationLogin> {
                               onPressed: () {
                                 focusNode.unfocus();
                                 formKey.currentState!.validate()
-                                    ? handleCorrectPin(context)
+                                    ? handleValidPin(context)
                                     : null;
                               }),
                         ),

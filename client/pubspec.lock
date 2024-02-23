@@ -600,6 +600,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.4"
+  libphonenumber:
+    dependency: "direct main"
+    description:
+      name: libphonenumber
+      sha256: "16612d08ccfdec024f038c582eb0b63e6b9a628230123ef37eb563f4d10ab214"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
   leak_tracker:
     dependency: transitive
     description:
@@ -825,7 +833,7 @@ packages:
     source: hosted
     version: "2.1.8"
   provider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: provider
       sha256: "9a96a0a19b594dbc5bf0f1f27d2bc67d5f95957359b461cd9feb44ed6ae75096"
@@ -849,7 +857,7 @@ packages:
     source: hosted
     version: "2.1.0"
   shared_preferences:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: shared_preferences
       sha256: "81429e4481e1ccfb51ede496e916348668fd0921627779233bd24cc3ff6abd02"

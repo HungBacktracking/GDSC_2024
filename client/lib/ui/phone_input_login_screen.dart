@@ -7,6 +7,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
+import 'package:provider/provider.dart';
+
+import '../view_model/auth_viewmodel.dart';
 
 class PhoneInputLogin extends StatefulWidget {
   const PhoneInputLogin({super.key});
@@ -49,13 +52,27 @@ class _PhoneInputLoginState extends State<PhoneInputLogin> {
     super.dispose();
   }
 
-  onSubmitPhone(BuildContext context) {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => PinAuthenticationLogin(phoneNumber: _phoneController.text),
-      ),
-    );
+  String formatPhoneNumber(String phoneNumber) {
+    if (phoneNumber.startsWith('0')) {
+      String countryCode = '84';
+      phoneNumber = phoneNumber.substring(1);
+      phoneNumber = '+$countryCode$phoneNumber';
+    }
+    return phoneNumber;
   }
+
+  Future<void> onSubmitPhone(BuildContext context) async {
+    final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
+    String phoneNumber = _phoneController.text.trim();
+    phoneNumber = formatPhoneNumber(phoneNumber);
+    if (await authViewModel.checkExistingUser(phoneNumber) == true) {
+      authViewModel.signInWithPhone(context, phoneNumber);
+    }
+    else {
+      _validate = true;
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -140,6 +157,9 @@ class _PhoneInputLoginState extends State<PhoneInputLogin> {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your phone number';
                           }
+                          if (value.length != 10) {
+                            return 'Invalid phone number!';
+                          }
                           return null;
                         },
                         style: const TextStyle(fontSize: 16, color: Colors.black),
@@ -176,7 +196,12 @@ class _PhoneInputLoginState extends State<PhoneInputLogin> {
                     margin: const EdgeInsets.only(left: 16, right: 16),
                     child: CustomFilledButton(
                       label: "Next",
-                      onPressed: () => onSubmitPhone(context),
+                      onPressed: () {
+                        _focusNode.unfocus();
+                        _formKey.currentState!.validate()
+                            ? onSubmitPhone(context)
+                            : null;
+                      },
                     ),
                   ),
                   const Spacer(),
