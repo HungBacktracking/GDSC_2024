@@ -2,6 +2,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../utils/spacer.dart';
+import '../utils/styles.dart';
+import '../utils/themes.dart';
+
 class ImageUploadScreen extends StatefulWidget {
   final String? oldTitle;
   final String? oldImageUrl;
@@ -11,7 +15,7 @@ class ImageUploadScreen extends StatefulWidget {
     this.oldTitle,
     this.oldImageUrl,
   }
-  );
+      );
 
   @override
   _ImageUploadScreenState createState() => _ImageUploadScreenState();
@@ -58,16 +62,22 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Get screen size
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    // Calculate padding dynamically based on screen size
+    double horizontalMargin = MySpacer.normalHorizontalMargin(context);
+
+    // Get the text scale factor
+    TextScaler textScaler = MyStyles.textScaler(context);
+
     return Scaffold(
-        resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
           title: Text(
               _titleController.text.isEmpty ? 'Upload Certificate' : 'Update Certificate',
-              style: const TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              )
+              style: MyStyles.largeBoldTextStyle(),
+            textScaler: textScaler,
           ),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios),
@@ -79,7 +89,9 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
           imageContainer(_oldImageUrl),
           ElevatedButton(
             onPressed: getImage,
-            child: const Text('Upload Image'),
+            child: Text(
+                'Upload Image',
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
@@ -93,13 +105,23 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
           ),
           const Spacer(),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(horizontalMargin),
             child: ElevatedButton(
               onPressed: saveChanges,
               style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 50),
+                minimumSize: Size(screenWidth, 50), // Ensure the button is wide enough
+                backgroundColor: MyTheme.submitBtnColor, // Set the background color
+                // You can also set the foreground (text) color, if needed
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder( // Set the button's shape
+                  borderRadius: BorderRadius.circular(MyStyles.cornerRadius), // Rounded corners
                 ),
-              child: const Text('Save Changes'),
+              ),
+              child: Text(
+                  'Save Changes',
+                  style: MyStyles.normalBoldTextStyle(color: Colors.white),
+                  textScaler: textScaler,
+              ),
             ),
           ),
         ],
@@ -113,8 +135,10 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
     double containerWidth = screenWidth - 32.0; // Subtracting 16.0 margin from both sides
     double containerHeight = (containerWidth / 16) * 9; // Maintaining 16:9 aspect ratio
 
+    double horizontalMargin = MySpacer.normalHorizontalMargin(context);
+
     return Padding(
-      padding: const EdgeInsets.all(16.0), // This adds the margin around the container
+      padding: EdgeInsets.all(horizontalMargin), // This adds the margin around the container
       child: Container(
         width: containerWidth,
         height: containerHeight,
@@ -123,12 +147,12 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
             color: Colors.black,
             width: 1,
           ),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(MyStyles.cornerRadius),
           color: Colors.grey[200],
         ),
         child: Expanded(
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(10), // Match the container's borderRadius
+            borderRadius: BorderRadius.circular(MyStyles.cornerRadius), // Match the container's borderRadius
             child: (){
               if (_image != null) {
                 return Image.file(
@@ -145,8 +169,12 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
                   fit: BoxFit.contain,
                 );
               } else {
-                return const Center(
-                  child: Text('No image selected.'),
+                return Center(
+                  child: Text(
+                    'No image selected',
+                    style: MyStyles.largeTextStyle(),
+                    textScaler: MyStyles.textScaler(context),
+                  ),
                 );
               }
             } (),

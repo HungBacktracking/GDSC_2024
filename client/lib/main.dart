@@ -8,9 +8,11 @@ import 'package:client/ui/leader_board_screen.dart';
 import 'package:client/ui/learning_firstaid_screen.dart';
 import 'package:client/ui/main_screen.dart';
 import 'package:client/ui/quiz_game_screen.dart';
+import 'package:client/ui/text_screen.dart';
 import 'package:client/ui/update_certificate_screen.dart';
 import 'package:client/ui/update_screen.dart';
 import 'package:client/ui/upload_image.dart';
+import 'package:client/utils/scaler.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -29,16 +31,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> certificatesTitles = ["CPR", "First Aid", "AED", "CPR", "First Aid", "AED"];
-    final List<String> certificatesImageUrls = [
-      "https://blogs.bournemouth.ac.uk/research/files/2014/07/Certificate-of-Merit2.jpg",
-      "https://blogs.bournemouth.ac.uk/research/files/2014/07/Certificate-of-Merit2.jpg",
-          "https://blogs.bournemouth.ac.uk/research/files/2014/07/Certificate-of-Merit2.jpg",
-      "https://blogs.bournemouth.ac.uk/research/files/2014/07/Certificate-of-Merit2.jpg",
-      "https://blogs.bournemouth.ac.uk/research/files/2014/07/Certificate-of-Merit2.jpg",
-      "https://blogs.bournemouth.ac.uk/research/files/2014/07/Certificate-of-Merit2.jpg",
-    ];
-    return MaterialApp(
+     return MaterialApp(
       title: 'FirstAid App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -48,7 +41,8 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.grey, // Set your desired color here
         ),
       ),
-      home: UpdateCertificateScreen(certificatesTitles: certificatesTitles, certificatesImageUrls: certificatesImageUrls),
+      home: QuizScreen(),
+      // home: UpdateCertificateScreen(certificatesTitles: certificatesTitles, certificatesImageUrls: certificatesImageUrls),
       // home: ContactUsScreen(),
     );
   }
