@@ -8,6 +8,7 @@ import 'package:gap/gap.dart';
 import '../utils/scaler.dart';
 import '../utils/themes.dart';
 import '../widgets/header_widget.dart';
+import 'home_screen.dart';
 import 'main_screen.dart';
 
 class LandingPage extends StatelessWidget {
@@ -32,7 +33,7 @@ class LandingPage extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData && snapshot.data != null) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const MainScreen()));
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const HomeScreen()));
             });
           } else {
             WidgetsBinding.instance.addPostFrameCallback((_) {

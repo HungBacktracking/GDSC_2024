@@ -83,7 +83,7 @@ class PinAuthenticationLoginState extends State<PinAuthenticationLogin> {
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
               builder: (context) {
-                return const MainScreen();
+                return const HomeScreen();
               }
           ),
               (Route<dynamic> route) => false,

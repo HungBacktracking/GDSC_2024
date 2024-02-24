@@ -16,6 +16,7 @@ import '../utils/strings.dart';
 import '../utils/styles.dart';
 import '../utils/themes.dart';
 import '../widgets/custom_outline_button.dart';
+import 'home_screen.dart';
 import 'main_screen.dart';
 
 class PinAuthenticationRegister extends StatefulWidget {
@@ -94,7 +95,7 @@ class PinAuthenticationRegisterState extends State<PinAuthenticationRegister> {
           Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
                 builder: (context) {
-                  return const MainScreen();
+                  return const HomeScreen();
                 }
             ),
                 (Route<dynamic> route) => false,
