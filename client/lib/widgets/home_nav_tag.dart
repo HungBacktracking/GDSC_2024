@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../utils/scaler.dart';
+
 class HomeNavigationTag extends StatelessWidget {
   const HomeNavigationTag({
     super.key,
@@ -16,18 +18,20 @@ class HomeNavigationTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+   Scaler().init(context); // Add this line (context is the BuildContext passed to this build method
+   Scaler scaler = Scaler();
    return Container(
         decoration: BoxDecoration(
           color: textColor.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(15 * scaler.widthScaleFactor),
         ),
      child: Padding(
-       padding: const EdgeInsets.only(left: 15.0),
+       padding: EdgeInsets.only(left: 15.0 * scaler.widthScaleFactor),
        child: Row(
          children: [
            Image.asset(assetUrl),
            Padding(
-             padding: const EdgeInsets.only(top: 15.0, left: 15.0),
+             padding: EdgeInsets.only(top: 15.0 * scaler.widthScaleFactor, left: 15.0 * scaler.widthScaleFactor),
              child: Column(
                crossAxisAlignment: CrossAxisAlignment.start,
                children: [
@@ -35,7 +39,7 @@ class HomeNavigationTag extends StatelessWidget {
                    tittle,
                    textAlign: TextAlign.left,
                    style: TextStyle(
-                     fontSize: 20,
+                     fontSize: 20 * scaler.widthScaleFactor / scaler.textScaleFactor,
                      color: textColor,
                      fontWeight: FontWeight.w600
                    ),
@@ -44,7 +48,7 @@ class HomeNavigationTag extends StatelessWidget {
                    subTittle,
                    textAlign: TextAlign.left,
                    style: TextStyle(
-                       fontSize: 15,
+                       fontSize: 15 * scaler.widthScaleFactor/ scaler.textScaleFactor,
                        color: textColor,
                        fontWeight: FontWeight.w500
                    ),

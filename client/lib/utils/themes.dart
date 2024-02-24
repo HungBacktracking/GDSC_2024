@@ -13,6 +13,7 @@ class MyTheme {
   static const blueBorder = Color(0xFF3164CE);
   static const Blue = Color(0xFF2A15AD);
   static const darkGreen = Color(0xFF017227);
+  static const bottomElevatedGreen = Color(0xFF1C9444);
   static const lightBlue = Color(0xFF4179E0);
   static const redBorder = Color(0xFFF14336);
   static const redLight = Color(0xFFFFF1F0);
@@ -23,7 +24,7 @@ class MyTheme {
   static const yellowBtn = Color.fromARGB(255, 243, 185, 37);
   static const redBtn = Color.fromARGB(255, 205, 50, 15);
   static const mistyrose = Color.fromARGB(255, 255, 228, 225);
-  static const submitBtn = Color(0xFFABD1C6);
+  static const submitBtn = Color(0xFF26C99A);
   static const correctBtn = Color(0xFF3EFC7E);
   static const wrongBtn = Color(0xFFE8AC9A);
   static const wrongBorder = Color(0xFFEB4D1D);

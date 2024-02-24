@@ -2,7 +2,7 @@ import 'package:client/api/firebase_api.dart';
 import 'package:client/firebase_options.dart';
 import 'package:client/ui/landing_page.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:client/model/quiz_category_model.dart';
+import 'package:client/models/quiz_category_model.dart';
 import 'package:client/ui/complete_quiz_screen.dart';
 import 'package:client/ui/frame_screen.dart';
 import 'package:client/ui/home_screen.dart';
@@ -76,9 +76,9 @@ class MyApp extends StatelessWidget {
             backgroundColor: Colors.grey, // Set your desired color here
           ),
         ),
-        home: LandingPage(),
+        home: HomeScreen(),
         routes: {
-          '/home': (context) => LandingPage(),
+          '/home': (context) => HomeScreen(),
           NotificationScreen.routeName: (context) => const NotificationScreen(),
           // '/main': (context) => const MainScreen(),
           // '/frame': (context) => const FrameScreen(),

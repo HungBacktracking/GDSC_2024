@@ -3,8 +3,10 @@ import 'package:client/widgets/header_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
+import 'package:nb_utils/nb_utils.dart';
 
 
+import '../utils/scaler.dart';
 import '../utils/strings.dart';
 import '../utils/themes.dart';
 import 'name_input_register.dart';
@@ -27,6 +29,8 @@ class GreetingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Scaler().init(context);
+    final scaler = Scaler();
     final Size screen_size = MediaQuery.of(context).size;
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(
@@ -55,67 +59,71 @@ class GreetingScreen extends StatelessWidget {
             child: Column(
               children: [
                 Container(
-                  margin: const EdgeInsets.only(left: 20.0, bottom: 20.0, top: 10.0),
+                  margin: EdgeInsets.only(left: 20.0 * scaler.widthScaleFactor, bottom: 20.0 * scaler.widthScaleFactor, top: 10.0 * scaler.widthScaleFactor),
                     child: const HeaderWidget()
                 ),
-                const Gap(15),
+                Gap(15 * scaler.widthScaleFactor),
                 Container(
                     height: screen_size.height / 3,
                     width: screen_size.width,
                     child: Image.asset('assets/images/greeting_image.png', fit: BoxFit.contain,)
                 ),
-                const Gap(20),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 30.0),
+                Gap(20 * scaler.widthScaleFactor),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 30.0 * scaler.widthScaleFactor),
                   child: Text(
                     MyStrings.greeting_text,
-                    style: MyStyles.tinyTextStyle,
+                    style: TextStyle(
+                        fontSize: 16 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                        color: Colors.grey),
                     textAlign: TextAlign.center,
                   ),
                 ),
                 const Gap(70),
                 Padding(
-                  padding: const EdgeInsets.only(left: 30.0, right: 30.0),
+                  padding: EdgeInsets.only(left: 30.0 * scaler.widthScaleFactor, right: 30.0 * scaler.widthScaleFactor),
                   child: SizedBox(
                     width: double.infinity,
                     child: FilledButton(
                       onPressed: () => onTapLogin(context),
                       style: FilledButton.styleFrom(
-                        elevation: 5,
+                        elevation: 5 * scaler.widthScaleFactor,
                         backgroundColor: Colors.deepOrangeAccent,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
+                          borderRadius: BorderRadius.circular(15.0 * scaler.widthScaleFactor),
                         ),
-                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        padding: EdgeInsets.symmetric(vertical: 12 * scaler.widthScaleFactor),
                       ),
-                      child: const Text(
+                      child: Text(
                           'Login',
-                          style: MyStyles.tinyBoldTextStyle,
+                          style: TextStyle(
+                              fontSize: 16 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                              fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
                 ),
-                const Gap(10),
+                Gap(10 * scaler.widthScaleFactor),
                 Padding(
-                  padding: const EdgeInsets.only(left: 30.0, right: 30.0),
+                  padding: EdgeInsets.only(left: 30.0 * scaler.widthScaleFactor, right: 30.0 * scaler.widthScaleFactor),
                   child: SizedBox(
                     width: double.infinity,
                     child: OutlinedButton(
                       onPressed: () => onTapSignup(context),
                       style: OutlinedButton.styleFrom(
-                        elevation: 5,
-                        side: const BorderSide(color: Colors.deepOrangeAccent, width: 1.0),
+                        elevation: 5 * scaler.widthScaleFactor,
+                        side: BorderSide(color: Colors.deepOrangeAccent, width: 1.0 * scaler.widthScaleFactor),
                         foregroundColor: Colors.deepOrangeAccent,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
+                          borderRadius: BorderRadius.circular(15.0 * scaler.widthScaleFactor),
                         ),
-                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        padding: EdgeInsets.symmetric(vertical: 12 * scaler.widthScaleFactor),
                       ),
-                      child: const Text(
+                      child: Text(
                         'Sign Up',
                         style: TextStyle(
                           color: Colors.deepOrangeAccent,
-                          fontSize: 16,
+                          fontSize: 16 * scaler.widthScaleFactor / scaler.textScaleFactor,
                           fontWeight: FontWeight.bold
                         ),
                       ),
@@ -124,14 +132,17 @@ class GreetingScreen extends StatelessWidget {
                 ),
                 const Spacer(),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16, right: 16, bottom: 0),
+                  padding: EdgeInsets.only(left: 16 * scaler.widthScaleFactor, right: 16 * scaler.widthScaleFactor, bottom: 0),
                   child: Align(
                     alignment: Alignment.center,
                     child: TextButton(
                       onPressed: () {},
-                      child: const Text(
+                      child: Text(
                         MyStrings.privacy,
-                        style: MyStyles.moreTinyTextStyle,
+                        style: TextStyle(
+                            fontSize: 14 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                            color: grey
+                        ),
                       ),
                     ),
                   ),

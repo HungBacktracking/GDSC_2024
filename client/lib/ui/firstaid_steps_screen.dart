@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
+import '../utils/scaler.dart';
 import '../utils/themes.dart';
 class StepScreen extends StatefulWidget {
   final String appBarTitle;
@@ -30,18 +31,21 @@ class _StepScreenState extends State<StepScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Scaler().init(context);
+    final scaler = Scaler();
     return Scaffold(
       appBar: AppBar(
         title: Text(
           widget.appBarTitle,
-          style: const TextStyle(
-            fontSize: 20.0,
+          style: TextStyle(
+            fontSize: 20.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
             fontWeight: FontWeight.w700,
             color: Colors.black,
           ),
         ),
+        centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
+          icon: Icon(Icons.arrow_back_ios, size: 25.0 * scaler.widthScaleFactor),
           onPressed: () => Navigator.of(context).pop(),
         ),
         backgroundColor: Colors.white, // Assuming your AppBar background is white
@@ -53,12 +57,13 @@ class _StepScreenState extends State<StepScreen> {
               controller: _controller,
               showVideoProgressIndicator: true,
             ),
-            const SizedBox(height: 20), // Replacing Gap(20) for standard SizedBox for spacing
+            SizedBox(height: 30 * scaler.widthScaleFactor), // Replacing Gap(20) for standard SizedBox for spacing
             ...widget.steps.asMap().entries.map((entry) {
               int index = entry.key;
               String step = entry.value;
               return StepTag(content: step, index: index);
             }).toList(),
+            SizedBox(height: 20 * scaler.widthScaleFactor), // Replacing Gap(20) for standard SizedBox for spacing
           ],
         ),
       ),
@@ -80,35 +85,52 @@ class StepTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: MyTheme.lightRedBackGround,
-      elevation: 2,
-      margin: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 7.0),
-      child: InkWell(
-        onTap: () {
-          // Handle the tap event for this category
-        },
-        child: Container(
-          padding: const EdgeInsets.only(top: 4.0, bottom: 4.0, left: 10.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Image.asset('assets/numbers/num_${index + 1}.png'),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10.0), // Add padding to left side for the text
+    Scaler().init(context);
+    Scaler scaler = Scaler();
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 20.0 * scaler.widthScaleFactor, vertical: 5.0 * scaler.widthScaleFactor),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0 * scaler.widthScaleFactor),
+        color : Colors.grey[300]?.withOpacity(0.3),
+      ),
+      child: Expanded(
+        child: InkWell(
+          onTap: () {
+            // Handle the tap event for this category
+          },
+          child: Container(
+            padding: EdgeInsets.only(top: 8.0 * scaler.widthScaleFactor, bottom: 8.0 * scaler.widthScaleFactor, left: 13.0 * scaler.widthScaleFactor),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                CircleAvatar(
+                  backgroundColor: Colors.deepOrangeAccent.withOpacity(0.8),
+                  radius: 18.0 * scaler.widthScaleFactor,
                   child: Text(
-                    content,
-                    style: const TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.w400,
+                    (index + 1).toString(),
+                    style: TextStyle(
+                      fontSize: 25.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
                     ),
-                    textAlign: TextAlign.left,
                   ),
                 ),
-              )
-            ],
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 13.0 * scaler.widthScaleFactor), // Add padding to left side for the text
+                    child: Text(
+                      content,
+                      style: TextStyle(
+                        fontSize: 20.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
