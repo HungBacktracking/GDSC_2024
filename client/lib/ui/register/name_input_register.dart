@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 
-import '../utils/scaler.dart';
+import '../../utils/scaler.dart';
 import 'volunteer_register.dart';
 
 class NameInputRegister extends StatefulWidget {

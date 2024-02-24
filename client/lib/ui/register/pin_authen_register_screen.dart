@@ -1,5 +1,5 @@
 import 'package:client/ui/greeting_screen.dart';
-import 'package:client/ui/phone_input_register_screen.dart';
+import 'package:client/ui/register/phone_input_register_screen.dart';
 import 'package:client/view_model/auth_viewmodel.dart';
 import 'package:client/widgets/custom_filled_button.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,15 +9,14 @@ import 'package:gap/gap.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 
-import '../models/user_model.dart';
-import '../utils/helper.dart';
-import '../utils/scaler.dart';
-import '../utils/strings.dart';
-import '../utils/styles.dart';
-import '../utils/themes.dart';
-import '../widgets/custom_outline_button.dart';
-import 'home_screen.dart';
-import 'main_screen.dart';
+import '../../models/user_model.dart';
+import '../../utils/helper.dart';
+import '../../utils/scaler.dart';
+import '../../utils/strings.dart';
+import '../../utils/styles.dart';
+import '../../utils/themes.dart';
+import '../../widgets/custom_outline_button.dart';
+import '../home_screen.dart';
 
 class PinAuthenticationRegister extends StatefulWidget {
   const PinAuthenticationRegister ( {

@@ -1,9 +1,9 @@
 import 'package:client/api/firebase_api.dart';
 import 'dart:convert';
-import 'package:client/ui/pin_authen_login_screen.dart';
+import 'package:client/ui/login/pin_authen_login_screen.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:client/ui/pin_authen_register_screen.dart';
+import 'package:client/ui/register/pin_authen_register_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';

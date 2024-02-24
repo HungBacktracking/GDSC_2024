@@ -12,8 +12,8 @@ import '../utils/scaler.dart';
 import '../utils/strings.dart';
 import '../utils/themes.dart';
 import '../view_model/auth_viewmodel.dart';
-import 'name_input_register.dart';
-import 'phone_input_login_screen.dart';
+import 'register/name_input_register.dart';
+import 'login/phone_input_login_screen.dart';
 
 class GreetingScreen extends StatefulWidget {
   const GreetingScreen({super.key});

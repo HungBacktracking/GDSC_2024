@@ -1,7 +1,7 @@
+import 'package:client/ui/login/pin_authen_login_screen.dart';
 import 'package:client/utils/strings.dart';
 import 'package:client/utils/styles.dart';
 import 'package:client/utils/themes.dart';
-import 'package:client/view_model/auth_viewmodel.dart';
 import 'package:client/widgets/custom_filled_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,20 +10,18 @@ import 'package:gap/gap.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
-import '../utils/helper.dart';
-import '../utils/scaler.dart';
+import '../../utils/helper.dart';
+import '../../utils/scaler.dart';
+import '../../view_model/auth_viewmodel.dart';
 
-class PhoneInputRegister extends StatefulWidget {
-  final String name;
-  final int optionVolunteer;
-
-  const PhoneInputRegister({super.key, required this.name, required this.optionVolunteer});
+class PhoneInputLogin extends StatefulWidget {
+  const PhoneInputLogin({super.key});
 
   @override
-  State<PhoneInputRegister> createState() => _PhoneInputRegisterState();
+  State<PhoneInputLogin> createState() => _PhoneInputLoginState();
 }
 
-class _PhoneInputRegisterState extends State<PhoneInputRegister> {
+class _PhoneInputLoginState extends State<PhoneInputLogin> {
   bool _validate = false;
   bool _isProcessing = false;
   final _formKey = GlobalKey<FormState>();
@@ -58,6 +56,7 @@ class _PhoneInputRegisterState extends State<PhoneInputRegister> {
     super.dispose();
   }
 
+
   Future<void> onSubmitPhone(BuildContext context) async {
     setState(() {
       _isProcessing = true;
@@ -68,23 +67,24 @@ class _PhoneInputRegisterState extends State<PhoneInputRegister> {
     phoneNumber = formatPhoneNumber(phoneNumber);
 
     bool userExists = await authViewModel.checkExistingUser(phoneNumber);
-    if (!userExists) {
+    if (userExists) {
       setState(() {
         _validate = false;
       });
-      authViewModel.signUpWithPhone(context, widget.name, widget.optionVolunteer, phoneNumber);
+      authViewModel.signInWithPhone(context, phoneNumber);
     }
     else {
       setState(() {
-        _validate = true;
+        _validate = true; // Đảm bảo bạn cập nhật UI để phản ánh trạng thái này
       });
-      getErrorSnackBarNew('The account is already exists.');
+      getErrorSnackBarNew('The account is not exists.');
     }
 
     setState(() {
       _isProcessing = false;
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -147,8 +147,7 @@ class _PhoneInputRegisterState extends State<PhoneInputRegister> {
                         style: TextStyle(
                             fontSize: 24 * scaler.widthScaleFactor / scaler.textScaleFactor,
                             fontWeight: FontWeight.bold
-                        )
-                        ,
+                        ),
                       ),
                     ),
                   ),
@@ -190,7 +189,10 @@ class _PhoneInputRegisterState extends State<PhoneInputRegister> {
                           }
                           return null;
                         },
-                        style: TextStyle(fontSize: 16 * scaler.widthScaleFactor, color: Colors.black),
+                        style: TextStyle(
+                            fontSize: 16 * scaler.widthScaleFactor/ scaler.textScaleFactor,
+                            color: Colors.black
+                        ),
                         cursorColor: Colors.black,
                         decoration: InputDecoration(
                           label: const Text('Mobile Number'),
@@ -202,9 +204,9 @@ class _PhoneInputRegisterState extends State<PhoneInputRegister> {
                               fontSize: 16 * scaler.widthScaleFactor / scaler.textScaleFactor,
                               color: Colors.grey[700]
                           ),
-                          contentPadding: EdgeInsets.all(12 * scaler.widthScaleFactor),
+                          contentPadding: EdgeInsets.all(12* scaler.widthScaleFactor),
                           border: InputBorder.none,
-                          errorText: _validate ? 'The account is already exists.' : null,
+                          errorText: _validate ? 'The account is not exists.' : null,
                         ),
                         keyboardType: TextInputType.phone,
                         // onChanged: (value) {
@@ -232,14 +234,14 @@ class _PhoneInputRegisterState extends State<PhoneInputRegister> {
                   Container(
                     margin: EdgeInsets.only(left: 16 * scaler.widthScaleFactor, right: 16 * scaler.widthScaleFactor),
                     child: CustomFilledButton(
-                        label: "Next",
-                        isLoading: _isProcessing,
-                        onPressed: _isProcessing ? () {} : () {
-                          _focusNode.unfocus();
-                          _formKey.currentState!.validate()
-                              ? onSubmitPhone(context)
-                              : null;
-                        }
+                      label: "Next",
+                      isLoading: _isProcessing,
+                      onPressed: _isProcessing ? () {} : () {
+                        _focusNode.unfocus();
+                        _formKey.currentState!.validate()
+                        ? onSubmitPhone(context)
+                        : null;
+                      },
                     ),
                   ),
                   const Spacer(),
@@ -250,9 +252,9 @@ class _PhoneInputRegisterState extends State<PhoneInputRegister> {
                       child: TextButton(
                         onPressed: () {},
                         child: Text(
-                          MyStrings.already_have_account,
+                          MyStrings.create_account,
                           style: TextStyle(
-                              fontSize: 16 * scaler.widthScaleFactor / scaler.textScaleFactor ,
+                              fontSize: 16 * scaler.widthScaleFactor / scaler.textScaleFactor,
                               color: Colors.deepOrangeAccent
                           ),
                         ),

@@ -1,14 +1,14 @@
-import 'package:client/ui/phone_input_register_screen.dart';
+import 'package:client/ui/register/phone_input_register_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 
-import '../utils/scaler.dart';
-import '../utils/strings.dart';
-import '../utils/styles.dart';
-import '../utils/themes.dart';
-import '../widgets/custom_filled_button.dart';
+import '../../utils/scaler.dart';
+import '../../utils/strings.dart';
+import '../../utils/styles.dart';
+import '../../utils/themes.dart';
+import '../../widgets/custom_filled_button.dart';
 
 
 class VolunteerRegister extends StatefulWidget {
