@@ -76,9 +76,9 @@ class MyApp extends StatelessWidget {
             backgroundColor: Colors.grey, // Set your desired color here
           ),
         ),
-        home: GreetingScreen(),
+        home: HomeScreen(),
         routes: {
-          '/home': (context) => GreetingScreen(),
+          '/home': (context) => HomeScreen(),
           NotificationScreen.routeName: (context) => const NotificationScreen(),
           // '/main': (context) => const MainScreen(),
           // '/frame': (context) => const FrameScreen(),
