@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 
+import '../utils/scaler.dart';
 import '../utils/themes.dart';
 import '../widgets/header_widget.dart';
 import 'main_screen.dart';
@@ -14,6 +15,9 @@ class LandingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Scaler().init(context);
+    final scaler = Scaler();
+
     final Size screen_size = MediaQuery.of(context).size;
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
@@ -44,10 +48,10 @@ class LandingPage extends StatelessWidget {
                     Column(
                       children: [
                         Container(
-                            margin: const EdgeInsets.only(left: 20.0, bottom: 20.0, top: 10.0),
+                            margin: EdgeInsets.only(left: 20.0 * scaler.widthScaleFactor, bottom: 20.0 * scaler.widthScaleFactor, top: 10.0 * scaler.widthScaleFactor),
                             child: const HeaderWidget()
                         ),
-                        const Gap(15),
+                        Gap(15 * scaler.widthScaleFactor),
                         Container(
                           height: screen_size.height / 3,
                           width: screen_size.width,

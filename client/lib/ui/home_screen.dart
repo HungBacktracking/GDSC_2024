@@ -75,8 +75,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final Size screen_size = MediaQuery.of(context).size;
     SystemChrome.setSystemUIOverlayStyle(
-        const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: GestureDetector(

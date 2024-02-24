@@ -76,9 +76,9 @@ class MyApp extends StatelessWidget {
             backgroundColor: Colors.grey, // Set your desired color here
           ),
         ),
-        home: HomeScreen(),
+        home: LandingPage(),
         routes: {
-          '/home': (context) => HomeScreen(),
+          '/home': (context) => LandingPage(),
           NotificationScreen.routeName: (context) => const NotificationScreen(),
           // '/main': (context) => const MainScreen(),
           // '/frame': (context) => const FrameScreen(),
