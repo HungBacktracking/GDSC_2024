@@ -1,6 +1,8 @@
+import 'package:client/utils/themes.dart';
 import 'package:flutter/material.dart';
 
 import '../models/quiz_category_model.dart';
+import '../utils/scaler.dart';
 import 'learning_firstaid_screen.dart';
 
 class CompleteScreen extends StatelessWidget {
@@ -20,18 +22,21 @@ class CompleteScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Scaler().init(context);
+    final scaler = Scaler();
     return Scaffold(
       appBar: AppBar(
         title: Text(
           title,
           style: TextStyle(
-            fontSize: 20.0,
+            fontSize: 20.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
         ),
+        centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -42,21 +47,33 @@ class CompleteScreen extends StatelessWidget {
         children: <Widget>[
           Image.network(
             imageUrl,
-            height: 200, // Adjust the size accordingly
+            height: 200 * scaler.widthScaleFactor, // Adjust the size accordingly
           ),
-          const SizedBox(height: 40),
+          SizedBox(height: 40 * scaler.widthScaleFactor),
           Text(
             'Complete',
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 30.0,
+              fontSize: 30.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 16),
+          SizedBox(height: 5 * scaler.widthScaleFactor),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children:[
+              Image.asset("assets/icons/ic_firework.png", height: 50 * scaler.widthScaleFactor, width: 50 * scaler.widthScaleFactor),
+              SizedBox(width: 8 * scaler.widthScaleFactor),
+              Image.asset("assets/icons/ic_firework.png", height: 50 * scaler.widthScaleFactor, width: 50 * scaler.widthScaleFactor),
+              SizedBox(width: 8 * scaler.widthScaleFactor),
+              Image.asset("assets/icons/ic_firework.png", height: 50 * scaler.widthScaleFactor, width: 50 * scaler.widthScaleFactor),
+              SizedBox(width: 8 * scaler.widthScaleFactor),
+              ],
+          ),
           Padding(
             // Wrap the Row in Padding
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            padding: EdgeInsets.symmetric(horizontal: 16.0 * scaler.widthScaleFactor, vertical: 40.0 * scaler.widthScaleFactor),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -64,7 +81,7 @@ class CompleteScreen extends StatelessWidget {
                   // Expanded widget
                   child: _buildInfoCard('Time', time, context),
                 ),
-                SizedBox(width: 16), // Spacing between cards
+                SizedBox(width: 16 * scaler.widthScaleFactor), // Spacing between cards
                 Expanded(
                   // Expanded widget
                   child: _buildInfoCard(
@@ -75,13 +92,16 @@ class CompleteScreen extends StatelessWidget {
           ),
           Spacer(), // Pushes the button to the bottom
           Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(16.0 * scaler.widthScaleFactor),
             child: ElevatedButton(
+
               style: ElevatedButton.styleFrom(
-                // primary: Colors.green, // background
-                // onPrimary: Colors.white, // foreground
-                minimumSize: Size(
-                    double.infinity, 50), // Set the button to take full width
+                //corner
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0 * scaler.widthScaleFactor),
+                ),
+                minimumSize: Size(double.infinity, 50 * scaler.widthScaleFactor), // Set the button to take full width
+                backgroundColor: MyTheme.bottomElevatedGreen,
               ),
               onPressed: () {
                 final List<QuizCategoryModel> challengeYouCategories = [
@@ -138,7 +158,14 @@ class CompleteScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: Text('OKAY'),
+              child: Text(
+                  'OKAY',
+                  style: TextStyle(
+                    fontSize: 20.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+            ),
             ),
           ),
         ],
@@ -147,59 +174,61 @@ class CompleteScreen extends StatelessWidget {
   }
 
   Widget _buildInfoCard(String title, String value, BuildContext context) {
+    Scaler().init(context);
+    final scaler = Scaler();
     Color color = title == 'Time' ? Colors.blue : Colors.green;
     // Get screen width
     double screenWidth = MediaQuery.of(context).size.width;
     // Calculate icon size as a proportion of screen width but with a reasonable max size
-    double iconSize = screenWidth * 0.1; // for example, 10% of screen width
-    iconSize = iconSize > 60.0 ? 60.0 : iconSize; // max size to 60, for example
+    double iconSize = screenWidth * 0.1 * scaler.widthScaleFactor; // for example, 10% of screen width
+    iconSize = iconSize > 60.0* scaler.widthScaleFactor ? 60.0* scaler.widthScaleFactor : iconSize; // max size to 60, for example
 
-    return Card(
-      elevation: 4.0,
-      child: Container(
-        width: double
-            .infinity, // Ensure the container fills the width of the Expanded widget
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment:
-                MainAxisAlignment.center, // Center along main axis
-            crossAxisAlignment:
-                CrossAxisAlignment.center, // Center along cross axis
-            children: <Widget>[
-              Row(
-                mainAxisSize:
-                    MainAxisSize.min, // Use the minimum space for the row
-                children: [
-                  Icon(
-                    title == 'Time'
-                        ? Icons.access_time
-                        : Icons.check_circle_outline,
-                    color: color,
-                    size: iconSize, // Set the icon size
-                  ),
-                  SizedBox(width: 8), // Spacing between icon and title
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 26.0,
-                      fontWeight: FontWeight.bold,
-                      color: color,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 8),
-              Text(
-                value,
-                style: TextStyle(
-                  fontSize: 30.0,
-                  fontWeight: FontWeight.bold,
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[300]?.withOpacity(0.3),
+        borderRadius: BorderRadius.circular(8.0 * scaler.widthScaleFactor),
+      ),
+      width: double.infinity, // Ensure the container fills the width of the Expanded widget
+      child: Padding(
+        padding: EdgeInsets.all(16.0 * scaler.widthScaleFactor),
+        child: Column(
+          mainAxisAlignment:
+              MainAxisAlignment.center, // Center along main axis
+          crossAxisAlignment:
+              CrossAxisAlignment.center, // Center along cross axis
+          children: <Widget>[
+            Row(
+              mainAxisSize:
+                  MainAxisSize.min, // Use the minimum space for the row
+              children: [
+                Icon(
+                  title == 'Time'
+                      ? Icons.access_time
+                      : Icons.check_circle_outline,
+                  color: color,
+                  size: iconSize, // Set the icon size
                 ),
+                SizedBox(width: 8 * scaler.widthScaleFactor), // Spacing between icon and title
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 26.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                    fontWeight: FontWeight.bold,
+                    color: color,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 8 * scaler.widthScaleFactor),
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: 30.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                fontWeight: FontWeight.bold,
               ),
-              SizedBox(height: iconSize * 0.5),
-            ],
-          ),
+            ),
+            SizedBox(height: iconSize * 0.5),
+          ],
         ),
       ),
     );

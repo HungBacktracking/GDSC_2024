@@ -75,9 +75,12 @@ class MyApp extends StatelessWidget {
             }
           ),
         ),
-        home: ProfileScreen(
-          avatarUrl: "https://www.pngkey.com/png/full/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png",
-          userName: "John Doe",
+        home: CompleteScreen(
+          imageUrl: "https://www.pngkey.com/png/full/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png",
+          time: "3:21",
+          correctQuestions: 7,
+          totalQuestions: 10,
+          title: "AED Quiz",
         ),
         routes: {
           '/home': (context) => HomeScreen(),
