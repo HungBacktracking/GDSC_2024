@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:client/utils/strings.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -24,6 +26,19 @@ class _SOSScreenState extends State<SOSScreen> {
 
   final FirebaseAuth auth = FirebaseAuth.instance;
 
+  static const LatLng sourceLocation = LatLng(37.33500926, -122.03272188);
+  static const LatLng destination = LatLng(37.33429383, -122.06600055);
+
+  BitmapDescriptor helperIcon = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor currentLocationIcon = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor victimIcon = BitmapDescriptor.defaultMarker;
+
+  void setCustomMarkerIcon() {
+    BitmapDescriptor.fromAssetImage(ImageConfiguration.empty, "assets/icons/green_plus.png").then((icon) {
+      helperIcon = icon;
+    });
+  }
+
   void onMapCreated(GoogleMapController controller) {
     mapController = controller;
   }
@@ -33,6 +48,8 @@ class _SOSScreenState extends State<SOSScreen> {
   @override
   void initState() {
     _getCurrentLocation();
+    setCustomMarkerIcon();
+    getPolyPoints();
     super.initState();
   }
 
@@ -69,17 +86,37 @@ class _SOSScreenState extends State<SOSScreen> {
         position: LatLng(position.latitude, position.longitude),
         infoWindow: const InfoWindow(title: 'Current Location'),
       ));
+
+      goToCurrentLocation();
     });
   }
 
   Future<void> goToCurrentLocation() async {
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     mapController?.animateCamera(CameraUpdate.newCameraPosition(
       CameraPosition(
-        target: LatLng(position.latitude, position.longitude),
-        zoom: 15.0,
+        target: LatLng(currentPosition!.latitude, currentPosition!.longitude),
+        zoom: 13.0,
       ),
     ));
+  }
+
+  List<LatLng> polylineCoordinates = [];
+  void getPolyPoints() async {
+    PolylinePoints polylinePoints = PolylinePoints();
+
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+      MyStrings.google_map_api_key,
+      PointLatLng(sourceLocation.latitude, sourceLocation.longitude),
+      PointLatLng(destination.latitude, destination.longitude),
+    );
+
+    if (result.points.isNotEmpty) {
+      for (PointLatLng point in result.points) {
+        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+      }
+
+      setState(() {});
+    }
   }
 
   @override
@@ -93,16 +130,48 @@ class _SOSScreenState extends State<SOSScreen> {
           : Stack(
         alignment: Alignment.bottomCenter,
         children: [
+          // GoogleMap(
+          //   initialCameraPosition: CameraPosition(
+          //     target: LatLng(
+          //       currentPosition!.latitude,
+          //       currentPosition!.longitude,
+          //     ),
+          //     zoom: 15,
+          //   ),
+          //   onMapCreated: onMapCreated,
+          //   markers: markers,
+          // ),
           GoogleMap(
             initialCameraPosition: CameraPosition(
-              target: LatLng(
-                currentPosition!.latitude,
-                currentPosition!.longitude,
-              ),
-              zoom: 15,
+                target: sourceLocation,
+                // target: LatLng(currentPosition!.latitude, currentPosition!.longitude),
+                zoom: 13
             ),
             onMapCreated: onMapCreated,
-            markers: markers,
+            markers: {
+              Marker(
+                markerId: const MarkerId('currentLocation'),
+                position: LatLng(currentPosition!.latitude, currentPosition!.longitude),
+                infoWindow: const InfoWindow(title: 'Current Location'),
+              ),
+              Marker(
+                  markerId: MarkerId("source"),
+                  icon: helperIcon,
+                  position: sourceLocation
+              ),
+              Marker(
+                  markerId: MarkerId("destination"),
+                  position: destination
+              )
+            },
+            polylines: {
+              Polyline(
+                polylineId: PolylineId("route"),
+                points: polylineCoordinates,
+                color: Colors.green,
+                width: 6,
+              )
+            },
           ),
           Container(
             decoration: BoxDecoration(

@@ -4,6 +4,7 @@ import 'package:client/ui/contact_us_screen.dart';
 import 'package:client/ui/landing_page.dart';
 import 'package:client/ui/name_input_register.dart';
 import 'package:client/ui/profile_screen.dart';
+import 'package:client/ui/sos_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:client/models/quiz_category_model.dart';
 import 'package:client/ui/complete_quiz_screen.dart';
@@ -77,9 +78,9 @@ class MyApp extends StatelessWidget {
             }
           ),
         ),
-        home: HomeScreen(),
+        home: const SOSScreen(),
         routes: {
-          '/home': (context) => LandingPage(),
+          '/home': (context) => const SOSScreen(),
           NotificationScreen.routeName: (context) => const NotificationScreen(),
           // '/main': (context) => const MainScreen(),
           // '/frame': (context) => const FrameScreen(),
