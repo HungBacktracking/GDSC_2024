@@ -27,7 +27,7 @@ class CustomFilledButtonState extends State<CustomFilledButton> {
       child: FilledButton(
         onPressed: widget.onPressed,
         style: FilledButton.styleFrom(
-          elevation: 3,
+          elevation: 0,
           backgroundColor: Colors.deepOrangeAccent,
           padding: const EdgeInsets.symmetric(vertical: 12),
         ),
