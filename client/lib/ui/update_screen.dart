@@ -79,8 +79,17 @@ class _UpdateInfoScreenState extends State<UpdateInfoScreen> {
               children: <Widget>[
                 for (var title in widget.titles)
                   TextFormField(
+                    style: TextStyle(
+                      fontSize: 18.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                    ),
                     controller: controllers[title],
-                    decoration: InputDecoration(labelText: title),
+                    decoration: InputDecoration(
+                        labelText: title,
+                        labelStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                        ),
+                    ),
                     validator: (value) {
                       // Simple validation: ensure the field is not empty
                       if (value == null || value.isEmpty) {

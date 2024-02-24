@@ -1,5 +1,6 @@
 import 'package:client/api/firebase_api.dart';
 import 'package:client/firebase_options.dart';
+import 'package:client/ui/contact_us_screen.dart';
 import 'package:client/ui/landing_page.dart';
 import 'package:client/ui/name_input_register.dart';
 import 'package:client/ui/profile_screen.dart';
@@ -76,7 +77,7 @@ class MyApp extends StatelessWidget {
             }
           ),
         ),
-        home: LandingPage(),
+        home: HomeScreen(),
         routes: {
           '/home': (context) => LandingPage(),
           NotificationScreen.routeName: (context) => const NotificationScreen(),

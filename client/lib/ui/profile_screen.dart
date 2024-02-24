@@ -1,4 +1,6 @@
 import 'package:client/ui/greeting_screen.dart';
+import 'package:client/ui/update_certificate_screen.dart';
+import 'package:client/ui/update_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../utils/scaler.dart';
 import '../utils/themes.dart';
 import '../view_model/auth_viewmodel.dart';
+import 'contact_us_screen.dart';
 
 class ProfileScreen extends StatelessWidget{
   final String avatarUrl;
@@ -117,10 +120,20 @@ class ProfileScreen extends StatelessWidget{
                   ),
                   InkWell(
                     onTap: (){
-                      //handle tap
+                      //Navigate to update information screen
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UpdateInfoScreen(
+                            titles: titles,
+                            contents: contents,
+                            appBarTitle: 'General Information',
+                          ),
+                        ),
+                      );
                     },
                     child: Text(
-                      'Update',
+                      'Edit',
                       style: TextStyle(
                         fontSize: 18.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
                         fontWeight: FontWeight.w400,
@@ -150,10 +163,20 @@ class ProfileScreen extends StatelessWidget{
                   ),
                   InkWell(
                     onTap: (){
-                      //handle tap
+                      //Navigate to update information screen
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UpdateInfoScreen(
+                            titles: skills,
+                            contents: skillContents,
+                            appBarTitle: 'Skills',
+                          ),
+                        ),
+                      );
                     },
                     child: Text(
-                      'Update',
+                      'Edit',
                       style: TextStyle(
                         fontSize: 18.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
                         fontWeight: FontWeight.w400,
@@ -203,10 +226,19 @@ class ProfileScreen extends StatelessWidget{
                   ),
                   InkWell(
                     onTap: (){
-                      //handle tap
+                      //Update Certificate
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UpdateCertificateScreen(
+                            certificatesTitles: certificatesTitles,
+                            certificatesImageUrls: certificatesImageUrls,
+                          ),
+                        ),
+                      );
                     },
                     child: Text(
-                      'Update',
+                      'Edit',
                       style: TextStyle(
                         fontSize: 18.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
                         fontWeight: FontWeight.w400,
@@ -223,7 +255,6 @@ class ProfileScreen extends StatelessWidget{
               ),
 
               SizedBox(height: 10 * scaler.widthScaleFactor),
-
               SizedBox(height: 10 * scaler.widthScaleFactor),
 
               //Support and Legal
@@ -241,11 +272,19 @@ class ProfileScreen extends StatelessWidget{
                   onPressed: null
               ),
               SizedBox(height: 8 * scaler.widthScaleFactor),
-              const FunctionTag(
+              FunctionTag(
                   icon: Icons.call,
                   title: "Contact us",
-                  onPressed: null
-              ),
+                  onPressed: () {
+                   //Navigate to Contact us screen
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ContactUsScreen(),
+                      ),
+                    );
+                  }
+                  ),
 
               SizedBox(height: 10 * scaler.widthScaleFactor),
               Row(
