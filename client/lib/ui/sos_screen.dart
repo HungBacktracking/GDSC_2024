@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../utils/scaler.dart';
 import '../utils/styles.dart';
 
 final GlobalKey<ScaffoldState> jcbHomekey = GlobalKey();
@@ -83,6 +84,8 @@ class _SOSScreenState extends State<SOSScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Scaler().init(context);
+    final scaler = Scaler();
     return Scaffold(
       key: jcbHomekey,
       body: currentPosition == null
@@ -102,33 +105,34 @@ class _SOSScreenState extends State<SOSScreen> {
             markers: markers,
           ),
           Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20))),
-            padding: const EdgeInsets.all(16),
+                    topLeft: Radius.circular(20 * scaler.widthScaleFactor),
+                    topRight: Radius.circular(20 * scaler.widthScaleFactor))),
+            padding: EdgeInsets.all(16 * scaler.widthScaleFactor),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
+                Text(
                   'Are you in an emergency?',
                   style: TextStyle(
-                    fontSize: 26,
+                    fontSize: 26 * scaler.widthScaleFactor / scaler.textScaleFactor,
                     color: Colors.black,
                     fontWeight: FontWeight.w900,
                   ),
                 ),
-                const SizedBox(height: 16),
-                const Text(
+                SizedBox(height: 16 * scaler.widthScaleFactor),
+                Text(
                   'Help will arrive shortly',
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.w900,
+                    fontSize: 18 * scaler.widthScaleFactor/ scaler.textScaleFactor,
                   ),
                 ),
-                const SizedBox(height: 25),
+                SizedBox(height: 25 * scaler.widthScaleFactor),
                 SizedBox(
                   width: double.infinity,
                   child: FilledButton(
@@ -136,25 +140,27 @@ class _SOSScreenState extends State<SOSScreen> {
                     style: FilledButton.styleFrom(
                       elevation: 0,
                       backgroundColor: Colors.red[600],
-                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      padding: EdgeInsets.symmetric(vertical: 12 * scaler.widthScaleFactor),
                     ),
-                    child: const Text(
+                    child: Text(
                       "Find help",
-                      style: MyStyles.tinyBoldTextStyle,
+                      style: TextStyle(
+                          fontSize: 16 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16 * scaler.widthScaleFactor),
               ],
             ),
           ),
           Positioned(
-            right: 16,
-            bottom: 200,
+            right: 16 * scaler.widthScaleFactor,
+            bottom: 200 * scaler.widthScaleFactor,
             child: Container(
                 decoration: BoxDecoration(
                   color: context.scaffoldBackgroundColor,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(8 * scaler.widthScaleFactor),
                 ),
                 child: IconButton(
                   icon: const Icon(
@@ -165,22 +171,22 @@ class _SOSScreenState extends State<SOSScreen> {
                 )),
           ),
           Positioned(
-            left: 16,
-            top: context.statusBarHeight + 16,
+            left: 16 * scaler.widthScaleFactor,
+            top: (context.statusBarHeight + 16) * scaler.widthScaleFactor ,
             child: Container(
                 decoration: BoxDecoration(
-                  borderRadius: radius(100),
+                  borderRadius: radius(100 * scaler.widthScaleFactor),
                   border: Border.all(
-                      color: context.scaffoldBackgroundColor, width: 2),
+                      color: context.scaffoldBackgroundColor, width: 2 * scaler.widthScaleFactor),
                 ),
                 child: Image.asset(
                   'assets/icons/ic_profile.png',
-                  height: 40,
-                  width: 40,
+                  height: 40 * scaler.widthScaleFactor,
+                  width: 40 * scaler.widthScaleFactor,
                   fit: BoxFit.cover,
-                ).cornerRadiusWithClipRRect(100).onTap(() {
+                ).cornerRadiusWithClipRRect(100 * scaler.widthScaleFactor).onTap(() {
                   jcbHomekey.currentState!.openDrawer();
-                }, borderRadius: radius(100))),
+                }, borderRadius: radius(100 * scaler.widthScaleFactor))),
           )
         ],
       ),

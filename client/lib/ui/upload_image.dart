@@ -2,6 +2,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../utils/scaler.dart';
+import '../utils/themes.dart';
+
 class ImageUploadScreen extends StatefulWidget {
   final String? oldTitle;
   final String? oldImageUrl;
@@ -58,48 +61,73 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Scaler().init(context);
+    final scaler = Scaler();
     return Scaffold(
         resizeToAvoidBottomInset: false,
       appBar: AppBar(
           title: Text(
               _titleController.text.isEmpty ? 'Upload Certificate' : 'Update Certificate',
-              style: const TextStyle(
-                fontSize: 20.0,
+              style: TextStyle(
+                fontSize: 20.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               )
           ),
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios),
+            icon: Icon(Icons.arrow_back_ios, size: 25 * scaler.widthScaleFactor),
             onPressed: () => Navigator.of(context).pop(),
           )
       ),
       body: Column(
         children: <Widget>[
-          imageContainer(_oldImageUrl),
+          imageContainer(_oldImageUrl, context),
           ElevatedButton(
             onPressed: getImage,
-            child: const Text('Upload Image'),
+            style: ElevatedButton.styleFrom(
+              minimumSize: Size(0, 50 * scaler.widthScaleFactor),
+              backgroundColor: MyTheme.orange,
+            ),
+            child: Text(
+                'Upload Image',
+                style: TextStyle(
+                  fontSize: 18.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+            ),
           ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(16.0 * scaler.widthScaleFactor),
             child: TextFormField(
               controller: _titleController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'First Aid Type',
+                labelStyle: TextStyle(
+                  fontSize: 16.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                  color: Colors.black,
+                ),
                 border: OutlineInputBorder(),
               ),
             ),
           ),
           const Spacer(),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(16.0 * scaler.widthScaleFactor),
             child: ElevatedButton(
               onPressed: saveChanges,
               style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 50),
-                ),
-              child: const Text('Save Changes'),
+                minimumSize: Size(double.infinity, 50 * scaler.widthScaleFactor),
+                backgroundColor: MyTheme.bottomElevatedGreen,
+              ),
+              child: const Text(
+                  'Save Changes',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+              ),
             ),
           ),
         ],
@@ -107,28 +135,30 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
     );
   }
 
-  Widget imageContainer(String? oldImageUrl) {
+  Widget imageContainer(String? oldImageUrl, BuildContext context) {
+    Scaler().init(context);
+    final scaler = Scaler();
 
     double screenWidth = MediaQuery.of(context).size.width;
     double containerWidth = screenWidth - 32.0; // Subtracting 16.0 margin from both sides
     double containerHeight = (containerWidth / 16) * 9; // Maintaining 16:9 aspect ratio
 
     return Padding(
-      padding: const EdgeInsets.all(16.0), // This adds the margin around the container
+      padding: EdgeInsets.all(16.0 * scaler.widthScaleFactor), // This adds the margin around the container
       child: Container(
         width: containerWidth,
         height: containerHeight,
         decoration: BoxDecoration(
           border: Border.all(
             color: Colors.black,
-            width: 1,
+            width: 1 * scaler.widthScaleFactor,
           ),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(10 * scaler.widthScaleFactor),
           color: Colors.grey[200],
         ),
         child: Expanded(
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(10), // Match the container's borderRadius
+            borderRadius: BorderRadius.circular(10 * scaler.widthScaleFactor), // Match the container's borderRadius
             child: (){
               if (_image != null) {
                 return Image.file(
@@ -145,8 +175,15 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
                   fit: BoxFit.contain,
                 );
               } else {
-                return const Center(
-                  child: Text('No image selected.'),
+                return Center(
+                  child: Text(
+                      'No image selected.',
+                      style: TextStyle(
+                        fontSize: 20.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                  ),
                 );
               }
             } (),

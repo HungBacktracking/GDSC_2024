@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 
+import '../utils/scaler.dart';
 import '../utils/strings.dart';
 import '../utils/styles.dart';
 import '../utils/themes.dart';
@@ -34,6 +35,8 @@ class VolunteerRegisterState extends State<VolunteerRegister> {
 
   @override
   Widget build(BuildContext context) {
+    Scaler().init(context);
+    final scaler = Scaler();
     final Size screen_size = MediaQuery.of(context).size;
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
@@ -63,48 +66,67 @@ class VolunteerRegisterState extends State<VolunteerRegister> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const Padding(
-                  padding: EdgeInsets.only(left: 0, top: 10),
+                Padding(
+                  padding: EdgeInsets.only(left: 0, top: 10 * scaler.widthScaleFactor),
                   child: Align(
                     alignment: Alignment.topLeft,
-                    child: CupertinoNavigationBarBackButton(
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.arrow_back_ios, // Cupertino uses 'Icons.arrow_back_ios_new' for newer iOS style
+                        size: 25 * scaler.widthScaleFactor, // Set your custom size
+                      ),
                       color: Colors.black,
+                      onPressed: () {
+                        Navigator.maybePop(context);
+                      },
                     ),
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 16, right: 16, top: 5),
+                Padding(
+                  padding: EdgeInsets.only(left: 16 * scaler.widthScaleFactor, right: 16 * scaler.widthScaleFactor, top: 5 * scaler.widthScaleFactor),
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: Text(
                       MyStrings.volunteer_register_title,
-                      style: MyStyles.headerTextStyle,
+                      style: TextStyle(
+                          fontSize: 24 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                          fontWeight: FontWeight.bold
+                      ),
                     ),
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 16, right: 16, top: 5),
+                Padding(
+                  padding: EdgeInsets.only(left: 16 * scaler.widthScaleFactor, right: 16 * scaler.widthScaleFactor, top: 5 * scaler.widthScaleFactor),
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: Text(
                       MyStrings.volunteer_register_guide,
-                      style: MyStyles.blackTinyTextStyle,
+                      style: TextStyle(
+                          fontSize: 16 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                          color: Colors.black
+                      ),
                     ),
                   ),
                 ),
-                const Gap(20),
+                Gap(20 * scaler.widthScaleFactor),
                 Card(
                   borderOnForeground: true,
                   shadowColor: Colors.deepOrange[200],
                   surfaceTintColor: Colors.white,
-                  margin: const EdgeInsets.only(left: 16, right: 16),
-                  elevation: 5,
+                  margin: EdgeInsets.only(left: 16 * scaler.widthScaleFactor, right: 16 * scaler.widthScaleFactor),
+                  elevation: 1 * scaler.widthScaleFactor,
                   child: Column(
                     children: [
                       RadioListTile<int>(
-                        contentPadding: const EdgeInsets.only(left: 16, right: 10),
+                        contentPadding: EdgeInsets.only(left: 16 * scaler.widthScaleFactor, right: 10 * scaler.widthScaleFactor),
                         controlAffinity: ListTileControlAffinity.trailing,
-                        title: const Text(MyStrings.volunteer_register_option_1),
+                        title: Text(
+                            MyStrings.volunteer_register_option_1,
+                            style: TextStyle(
+                                fontSize: 18 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                                fontWeight: FontWeight.w500
+                            )
+                        ),
                         value: 0,
                         groupValue: option,
                         onChanged: (int? value) {
@@ -114,13 +136,19 @@ class VolunteerRegisterState extends State<VolunteerRegister> {
                         },
                       ),
                       Divider(
-                        height: 1,
+                        height: 1 * scaler.widthScaleFactor,
                         color: Colors.grey[200],
                       ),
                       RadioListTile<int>(
-                        contentPadding: const EdgeInsets.only(left: 16, right: 10),
+                        contentPadding: EdgeInsets.only(left: 16 * scaler.widthScaleFactor, right: 10 * scaler.widthScaleFactor),
                         controlAffinity: ListTileControlAffinity.trailing,
-                        title: const Text(MyStrings.volunteer_register_option_2),
+                        title: Text(
+                            MyStrings.volunteer_register_option_2,
+                            style: TextStyle(
+                                fontSize: 18 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                                fontWeight: FontWeight.w500
+                            )
+                        ),
                         value: 1,
                         groupValue: option,
                         onChanged: (int? value) {
@@ -136,8 +164,20 @@ class VolunteerRegisterState extends State<VolunteerRegister> {
                       RadioListTile<int>(
                         contentPadding: const EdgeInsets.only(left: 16, right: 10),
                         controlAffinity: ListTileControlAffinity.trailing,
-                        title: const Text(MyStrings.volunteer_register_option_3),
-                        subtitle: const Text(MyStrings.volunteer_register_option_3_),
+                        title: Text(
+                            MyStrings.volunteer_register_option_3,
+                            style: TextStyle(
+                              fontSize: 18 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                                  fontWeight: FontWeight.w500
+                              ),
+                      ),
+                        subtitle: Text(
+                            MyStrings.volunteer_register_option_3_,
+                          style: TextStyle(
+                              fontSize: 16 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                              fontWeight: FontWeight.w400
+                          ),
+                        ),
                         value: 2,
                         groupValue: option,
                         onChanged: (int? value) {
@@ -149,9 +189,9 @@ class VolunteerRegisterState extends State<VolunteerRegister> {
                     ],
                   ),
                 ),
-                const Gap(30),
+                Gap(30 * scaler.widthScaleFactor),
                 Container(
-                  margin: const EdgeInsets.only(left: 16, right: 16),
+                  margin: EdgeInsets.only(left: 16 * scaler.widthScaleFactor, right: 16 * scaler.widthScaleFactor),
                   child: CustomFilledButton(
                     label: "Next",
                     onPressed: () => handleSubmit(context),
@@ -159,14 +199,17 @@ class VolunteerRegisterState extends State<VolunteerRegister> {
                 ),
                 const Spacer(),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16, right: 16, bottom: 5),
+                  padding: EdgeInsets.only(left: 16 * scaler.widthScaleFactor, right: 16 * scaler.widthScaleFactor, bottom: 5 * scaler.widthScaleFactor),
                   child: Align(
                     alignment: Alignment.center,
                     child: TextButton(
                       onPressed: () {},
-                      child: const Text(
+                      child: Text(
                         MyStrings.already_have_account,
-                        style: TextStyle(fontSize: 16, color: Colors.deepOrangeAccent),
+                        style: TextStyle(
+                            fontSize: 16 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                            color: Colors.deepOrangeAccent
+                        ),
                       ),
                     ),
                   ),

@@ -1,6 +1,7 @@
 import 'package:client/ui/upload_image.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/scaler.dart';
 import '../utils/themes.dart';
 
 class UpdateCertificateScreen extends StatelessWidget{
@@ -15,19 +16,21 @@ class UpdateCertificateScreen extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    Scaler().init(context);
+    final scaler = Scaler();
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Update Certificate',
           style: TextStyle(
-            fontSize: 20.0,
+            fontSize: 20.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
             fontWeight: FontWeight.w700,
             color: Colors.black,
           ),
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
+          icon: Icon(Icons.arrow_back_ios, size : 25.0 * scaler.widthScaleFactor),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -40,26 +43,26 @@ class UpdateCertificateScreen extends StatelessWidget{
         children: <Widget>[
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.only(top: 8.0, right: 16.0, left: 16.0),
+              padding: EdgeInsets.only(top: 8.0 * scaler.widthScaleFactor, right: 16.0 * scaler.widthScaleFactor, left: 16.0 * scaler.widthScaleFactor),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   // Space before the certificates
-                  const SizedBox(height: 25),
+                  SizedBox(height: 25 * scaler.widthScaleFactor),
                   // Certificates Block
                   CertificatesBlock(
                     certificatesTitles: certificatesTitles,
                     certificatesImgageUrls: certificatesImageUrls,
                   ),
                   // Space after the certificates
-                  const SizedBox(height: 25),
+                  SizedBox(height: 25 * scaler.widthScaleFactor),
                 ],
               ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(16.0 * scaler.widthScaleFactor),
             child: ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -69,10 +72,10 @@ class UpdateCertificateScreen extends StatelessWidget{
                   ),
                 );
               },
-              child: const Text(
+              child: Text(
                 'Upload Certificate',
                 style: TextStyle(
-                  fontSize: 20.0,
+                  fontSize: 20.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -96,14 +99,17 @@ class CertificatesBlock extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    Scaler().init(context);
+    final scaler = Scaler();
     return Container(
       decoration: BoxDecoration(
         color: MyTheme.lightRedBackGround,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(10 * scaler.widthScaleFactor),
       ),
       child: Padding(
-        padding: const EdgeInsets.only(
-            left: 20.0, top: 5.0, bottom: 5.0, right: 20.0),
+        padding: EdgeInsets.only(
+            left: 20.0 * scaler.widthScaleFactor, top: 5.0 * scaler.widthScaleFactor,
+            bottom: 5.0 * scaler.widthScaleFactor, right: 20.0 * scaler.widthScaleFactor),
         child: certificatesTitles.isNotEmpty?
             SingleChildScrollView(
               child: Column(
@@ -123,17 +129,17 @@ class CertificatesBlock extends StatelessWidget{
                                 children: [
                                   Text(
                                     certificatesTitles[index],
-                                    style: const TextStyle(
-                                      fontSize: 18.0,
+                                    style: TextStyle(
+                                      fontSize: 18.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  const SizedBox(height: 5),
+                                  SizedBox(height: 5 * scaler.widthScaleFactor),
                                   Container(
                                     decoration: BoxDecoration(
                                       border: Border.all(
                                         color: Colors.grey,
-                                        width: 1,
+                                        width: 1 * scaler.widthScaleFactor,
                                       ),
                                     ),
                                     child: Image.network(
@@ -141,11 +147,11 @@ class CertificatesBlock extends StatelessWidget{
                                       fit: BoxFit.cover, // Cover the width without distorting aspect ratio
                                     ),
                                   ),
-                                  const SizedBox(height: 15), // Adjusted for consistent spacing
+                                  SizedBox(height: 15 * scaler.widthScaleFactor), // Adjusted for consistent spacing
                                 ],
                                 ),
                             ),
-                            const SizedBox(width: 20),
+                            SizedBox(width: 20 * scaler.widthScaleFactor),
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -163,10 +169,10 @@ class CertificatesBlock extends StatelessWidget{
                                         ),
                                       );
                                     },
-                                    child: const Text(
+                                    child: Text(
                                       "Update",
                                       style: TextStyle(
-                                        fontSize: 20.0,
+                                        fontSize: 20.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     )
@@ -175,10 +181,10 @@ class CertificatesBlock extends StatelessWidget{
                                     onPressed: () {
                                       _showRemoveConfirmationDialog(context);
                                       },
-                                    child: const Text(
+                                    child: Text(
                                       "Remove",
                                       style: TextStyle(
-                                        fontSize: 20.0,
+                                        fontSize: 20.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     )
@@ -190,10 +196,10 @@ class CertificatesBlock extends StatelessWidget{
                         }).toList(),
                     ),
             )
-              : const Text(
+              : Text(
                 "There is no certificate to show.",
                 style: TextStyle(
-                  fontSize: 18.0,
+                  fontSize: 18.0 * scaler.widthScaleFactor / scaler.textScaleFactor ,
                   fontWeight: FontWeight.bold,
                   fontStyle: FontStyle.italic,
                 ),
@@ -235,127 +241,5 @@ class CertificatesBlock extends StatelessWidget{
   void _removeItem() {
     // Implement your item removal logic here
     print('Item removed');
-  }
-}
-
-class FunctionTag extends StatelessWidget{
-  final IconData icon;
-  final String title;
-  final VoidCallback? onPressed;
-
-  const FunctionTag({
-    Key? key,
-    required this.icon,
-    required this.title,
-    required this.onPressed,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context){
-    return Container(
-      decoration: BoxDecoration(
-        color: MyTheme.lightRedBackGround,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Expanded(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: InkWell(
-            onTap: onPressed,
-            child: Container(
-              decoration: BoxDecoration(
-                color: MyTheme.lightRedBackGround,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20.0, top: 5.0, bottom: 5.0, right: 20.0),
-                child: Row(
-                  children: [
-                    Icon(
-                      icon,
-                      size: 30,
-                      color: Colors.black,
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-class ContentContainer extends StatelessWidget {
-  final List<String> titles;
-  final List<String> contents;
-
-  const ContentContainer({
-    Key? key,
-    required this.titles,
-    required this.contents,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context){
-    return Container(
-      decoration: BoxDecoration(
-        color: MyTheme.lightRedBackGround,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 20.0, top: 5.0, bottom: 5.0, right: 20.0),
-            child:
-            contents.isEmpty ?
-            const Text(
-              "No data",
-              style: TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-                fontStyle: FontStyle.italic,
-              ),
-            ) :
-            Column(
-                children:
-                titles.asMap().entries.map((entry) {
-                  int index = entry.key;
-                  return
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "${titles[index]} : ",
-                          style: const TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          contents[index],
-                          style: const TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.normal,
-                          ),
-                          maxLines: 2,
-                        )
-                      ],
-                    );
-                }).toList()
-            ),
-          )
-      ),
-
-    );
   }
 }

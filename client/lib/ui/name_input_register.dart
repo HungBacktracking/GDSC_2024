@@ -181,7 +181,7 @@ class _NameInputRegisterState extends State<NameInputRegister> {
                                   controller: firstNameController,
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return 'Please enter your first name';
+                                      return 'Please enter your name';
                                     }
                                     return null;
                                   },
@@ -196,6 +196,10 @@ class _NameInputRegisterState extends State<NameInputRegister> {
                                     floatingLabelStyle: TextStyle(
                                         fontSize: 16 * scaler.widthScaleFactor / scaler.textScaleFactor,
                                         color: Colors.grey[700]
+                                    ),
+                                    errorStyle: TextStyle(
+                                      fontSize: 14 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                                      color: MyTheme.redBtn,
                                     ),
                                     contentPadding: EdgeInsets.all(6 * scaler.widthScaleFactor),
                                     border: InputBorder.none,
@@ -249,6 +253,10 @@ class _NameInputRegisterState extends State<NameInputRegister> {
                                     floatingLabelStyle: TextStyle(
                                         fontSize: 16 * scaler.widthScaleFactor / scaler.textScaleFactor,
                                         color: Colors.grey[700]
+                                    ),
+                                    errorStyle: TextStyle(
+                                        fontSize: 14 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                                        color: MyTheme.redBtn,
                                     ),
                                     contentPadding: EdgeInsets.all(6 * scaler.widthScaleFactor),
                                     border: InputBorder.none,

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../utils/scaler.dart';
+import '../utils/themes.dart';
+
 class UpdateInfoScreen extends StatefulWidget {
   final List<String> titles;
   final List<String> contents;
@@ -49,23 +52,25 @@ class _UpdateInfoScreenState extends State<UpdateInfoScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Scaler().init(context);
+    final scaler = Scaler();
     return Scaffold(
       appBar: AppBar(
         title: Text(
             'Update $_appBarTitle',
             style: TextStyle(
-              fontSize: 20.0,
+              fontSize: 20.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
               fontWeight: FontWeight.bold,
               color: Colors.black,
             )
         ),
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios),
+            icon: Icon(Icons.arrow_back_ios, size: 25 *  scaler.widthScaleFactor),
             onPressed: () => Navigator.of(context).pop(),
           )
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0 * scaler.widthScaleFactor),
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
@@ -84,10 +89,24 @@ class _UpdateInfoScreenState extends State<UpdateInfoScreen> {
                       return null;
                     },
                   ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20 * scaler.widthScaleFactor),
                 ElevatedButton(
                   onPressed: _submitForm,
-                  child: const Text('Update Information'),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size.fromHeight(50 * scaler.widthScaleFactor),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10 * scaler.widthScaleFactor),
+                    ),
+                    backgroundColor: MyTheme.bottomElevatedGreen,
+                  ),
+                  child: Text(
+                      'Update Information',
+                      style: TextStyle(
+                        fontSize: 18.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      )
+                  ),
                 ),
               ],
             ),
