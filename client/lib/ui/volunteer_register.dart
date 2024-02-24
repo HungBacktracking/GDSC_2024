@@ -109,12 +109,21 @@ class VolunteerRegisterState extends State<VolunteerRegister> {
                   ),
                 ),
                 Gap(20 * scaler.widthScaleFactor),
-                Card(
-                  borderOnForeground: true,
-                  shadowColor: Colors.deepOrange[200],
-                  surfaceTintColor: Colors.white,
+
+                Container(
                   margin: EdgeInsets.only(left: 16 * scaler.widthScaleFactor, right: 16 * scaler.widthScaleFactor),
-                  elevation: 1 * scaler.widthScaleFactor,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.deepOrange[200]!, // Adjust the color and opacity
+                        blurRadius: 0.001, // Blur radius
+                        offset: Offset(0, 0), // changes position of shadow
+                      ),
+                    ],
+                  ),
                   child: Column(
                     children: [
                       RadioListTile<int>(
