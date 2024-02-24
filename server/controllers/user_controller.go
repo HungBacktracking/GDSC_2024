@@ -116,6 +116,7 @@ func GetProfile(c echo.Context) error {
 }
 
 type AddUserRequest struct {
+	UID         string `json:"id"`
 	Name        string `json:"name"`
 	DisplayName string `json:"displayName"`
 	IsBanned    bool   `json:"isBanned"`
@@ -137,26 +138,26 @@ func AddUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "Invalid request payload"})
 	}
 
-	// Step 1: Create user in Firebase Authentication
-	authClient, err := bootstrap.FirebaseApp.Auth(context.Background())
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: "Failed to get Auth client"})
-	}
+	// // Step 1: Create user in Firebase Authentication
+	// authClient, err := bootstrap.FirebaseApp.Auth(context.Background())
+	// if err != nil {
+	// 	return c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: "Failed to get Auth client"})
+	// }
 
-	params := (&auth.UserToCreate{}).
-		PhoneNumber(req.PhoneNumber).
-		DisplayName(req.DisplayName)
+	// params := (&auth.UserToCreate{}).
+	// 	PhoneNumber(req.PhoneNumber).
+	// 	DisplayName(req.DisplayName)
 
-	u, err := authClient.CreateUser(context.Background(), params)
-	if err != nil {
-		log.Printf("Error creating user in Authentication: %v", err)
-		return c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: "Failed to create user in Authentication"})
-	}
+	// u, err := authClient.CreateUser(context.Background(), params)
+	// if err != nil {
+	// 	log.Printf("Error creating user in Authentication: %v", err)
+	// 	return c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: "Failed to create user in Authentication"})
+	// }
 
 	// Step 2: Create user document in Firestore
 	ctx := context.Background()
 	collectionName := "user"
-	userDoc := bootstrap.FirestoreClient.Collection(collectionName).Doc(u.UID)
+	userDoc := bootstrap.FirestoreClient.Collection(collectionName).Doc(req.UID)
 
 	// Check if the user already exists in Firestore
 	if doc, err := userDoc.Get(ctx); err == nil && doc.Exists() {
@@ -165,7 +166,7 @@ func AddUser(c echo.Context) error {
 
 	// Map AddUserRequest to Firestore document
 	userInfo := domain.UserInfo{
-		ID:          u.UID,
+		ID:          req.UID,
 		Name:        req.Name,
 		IsBanned:    req.IsBanned,
 		IsActive:    req.IsActive,
@@ -180,7 +181,7 @@ func AddUser(c echo.Context) error {
 	}
 
 	// Return the user ID
-	response := AddUserResponse{ID: u.UID}
+	response := AddUserResponse{ID: req.UID}
 	return c.JSON(http.StatusCreated, response)
 }
 

@@ -14,4 +14,5 @@ type UserInfo struct {
 	CreatedAt   time.Time `firestore:"createdAt"`
 	Avatar      string    `firestore:"avatar"`
 	FcmTokens   []string  `firestore:"fcm_tokens,omitempty"`
+	Location    GeoPoint  `firestore:"location,omitempty"`
 }

@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../utils/scaler.dart';
 import '../utils/themes.dart';
 import '../view_model/auth_viewmodel.dart';
+import '../widgets/bottom_bar.dart';
 import 'contact_us_screen.dart';
 
 class ProfileScreen extends StatelessWidget{
@@ -50,264 +51,270 @@ class ProfileScreen extends StatelessWidget{
           ),
         ),
         centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
       ),
 
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.only(top: 8.0 * scaler.widthScaleFactor, right: 16.0 * scaler.widthScaleFactor, left: 16.0 * scaler.widthScaleFactor, bottom: 100 * scaler.widthScaleFactor),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+      body: SafeArea(
+        child: Column(
+          children: [
+            Container(
+              color: Colors.transparent,
+              height: MediaQuery.of(context).size.height - 200 * scaler.widthScaleFactor,
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.only(top: 8.0 * scaler.widthScaleFactor, right: 16.0 * scaler.widthScaleFactor, left: 16.0 * scaler.widthScaleFactor, bottom: 100 * scaler.widthScaleFactor),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
 
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.grey,
-                            width: 1 * scaler.widthScaleFactor,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    width: 1 * scaler.widthScaleFactor,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey,
+                                      blurRadius: 5 * scaler.widthScaleFactor,
+                                      spreadRadius: 1 * scaler.widthScaleFactor,
+                                    ),
+                                  ],
+                                ),
+                                child: CircleAvatar(
+                                  radius: 70 * scaler.widthScaleFactor,
+                                  backgroundImage: NetworkImage(avatarUrl), // Use NetworkImage
+                                  backgroundColor: Colors.white,
+                                ),
+                              ),
+                              SizedBox(height: 8 * scaler.widthScaleFactor),
+                            Text(
+                              userName,
+                              style: TextStyle(
+                                fontSize: 20 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                                fontWeight: FontWeight.bold
+                              ),
+                            )
+                            ],
                           ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey,
-                              blurRadius: 5 * scaler.widthScaleFactor,
-                              spreadRadius: 1 * scaler.widthScaleFactor,
+                        ],
+                      ),
+
+                      SizedBox(height: 25 * scaler.widthScaleFactor),
+
+                      //General Information
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'General Information',
+                            style: TextStyle(
+                              fontSize: 22.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                              fontWeight: FontWeight.w600
                             ),
-                          ],
+                          ),
+                          InkWell(
+                            onTap: (){
+                              //Navigate to update information screen
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => UpdateInfoScreen(
+                                    titles: titles,
+                                    contents: contents,
+                                    appBarTitle: 'General Information',
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'Edit',
+                              style: TextStyle(
+                                fontSize: 18.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.blue,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 8 * scaler.widthScaleFactor),
+                      ContentContainer(titles: titles, contents: contents),
+
+                      SizedBox(height: 10 * scaler.widthScaleFactor),
+
+                      SizedBox(height: 10 * scaler.widthScaleFactor),
+
+                      //Skills
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Skills',
+                            style: TextStyle(
+                                fontSize: 22.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                                fontWeight: FontWeight.w600
+                            ),
+                          ),
+                          InkWell(
+                            onTap: (){
+                              //Navigate to update information screen
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => UpdateInfoScreen(
+                                    titles: skills,
+                                    contents: skillContents,
+                                    appBarTitle: 'Skills',
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'Edit',
+                              style: TextStyle(
+                                fontSize: 18.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.blue,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 8 * scaler.widthScaleFactor),
+                      ContentContainer(titles: skills, contents: skillContents),
+
+                      SizedBox(height: 10 * scaler.widthScaleFactor),
+
+                      SizedBox(height: 10 * scaler.widthScaleFactor),
+
+                      //Activity
+                      Text(
+                        'Your Activity',
+                        style: TextStyle(
+                            fontSize: 22.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                            fontWeight: FontWeight.w600
                         ),
-                        child: CircleAvatar(
-                          radius: 70 * scaler.widthScaleFactor,
-                          backgroundImage: NetworkImage(avatarUrl), // Use NetworkImage
-                          backgroundColor: Colors.white,
+                      ),
+
+                      SizedBox(height: 8 * scaler.widthScaleFactor),
+                      const FunctionTag(
+                          icon: Icons.history,
+                          title: "History",
+                          onPressed: null
+                      ),
+
+                      SizedBox(height: 10 * scaler.widthScaleFactor),
+
+                      SizedBox(height: 10 * scaler.widthScaleFactor),
+
+                      //Certificates
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Certificates',
+                            style: TextStyle(
+                                fontSize: 22.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                                fontWeight: FontWeight.w600
+                            ),
+                          ),
+                          InkWell(
+                            onTap: (){
+                              //Update Certificate
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => UpdateCertificateScreen(
+                                    certificatesTitles: certificatesTitles,
+                                    certificatesImageUrls: certificatesImageUrls,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'Edit',
+                              style: TextStyle(
+                                fontSize: 18.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.blue,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 8 * scaler.widthScaleFactor),
+                      CertificatesBlock(
+                        certificatesTitles: certificatesTitles,
+                        certificatesImgageUrls: certificatesImageUrls,
+                      ),
+
+                      SizedBox(height: 10 * scaler.widthScaleFactor),
+                      SizedBox(height: 10 * scaler.widthScaleFactor),
+
+                      //Support and Legal
+                      Text(
+                        'Support & Legal',
+                        style: TextStyle(
+                            fontSize: 22.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                            fontWeight: FontWeight.w600
                         ),
                       ),
                       SizedBox(height: 8 * scaler.widthScaleFactor),
-                    Text(
-                      userName,
-                      style: TextStyle(
-                        fontSize: 20 * scaler.widthScaleFactor / scaler.textScaleFactor,
-                        fontWeight: FontWeight.bold
+                      const FunctionTag(
+                          icon: Icons.privacy_tip,
+                          title: "Privacy Policy",
+                          onPressed: null
                       ),
-                    )
+                      SizedBox(height: 8 * scaler.widthScaleFactor),
+                      FunctionTag(
+                          icon: Icons.call,
+                          title: "Contact us",
+                          onPressed: () {
+                           //Navigate to Contact us screen
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ContactUsScreen(),
+                              ),
+                            );
+                          }
+                          ),
+
+                      SizedBox(height: 10 * scaler.widthScaleFactor),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          InkWell(
+                            onTap: () async {
+                              final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
+                              await authViewModel.signOut(context);
+                            },
+                            child: Text(
+                              'Log out',
+                              style: TextStyle(
+                                fontSize: 22.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.red,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
-                ],
-              ),
-
-              SizedBox(height: 25 * scaler.widthScaleFactor),
-
-              //General Information
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'General Information',
-                    style: TextStyle(
-                      fontSize: 22.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
-                      fontWeight: FontWeight.w600
-                    ),
-                  ),
-                  InkWell(
-                    onTap: (){
-                      //Navigate to update information screen
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => UpdateInfoScreen(
-                            titles: titles,
-                            contents: contents,
-                            appBarTitle: 'General Information',
-                          ),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      'Edit',
-                      style: TextStyle(
-                        fontSize: 18.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.blue,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(height: 8 * scaler.widthScaleFactor),
-              ContentContainer(titles: titles, contents: contents),
-
-              SizedBox(height: 10 * scaler.widthScaleFactor),
-
-              SizedBox(height: 10 * scaler.widthScaleFactor),
-
-              //Skills
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Skills',
-                    style: TextStyle(
-                        fontSize: 22.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
-                        fontWeight: FontWeight.w600
-                    ),
-                  ),
-                  InkWell(
-                    onTap: (){
-                      //Navigate to update information screen
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => UpdateInfoScreen(
-                            titles: skills,
-                            contents: skillContents,
-                            appBarTitle: 'Skills',
-                          ),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      'Edit',
-                      style: TextStyle(
-                        fontSize: 18.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.blue,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(height: 8 * scaler.widthScaleFactor),
-              ContentContainer(titles: skills, contents: skillContents),
-
-              SizedBox(height: 10 * scaler.widthScaleFactor),
-
-              SizedBox(height: 10 * scaler.widthScaleFactor),
-
-              //Activity
-              Text(
-                'Your Activity',
-                style: TextStyle(
-                    fontSize: 22.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
-                    fontWeight: FontWeight.w600
                 ),
               ),
-
-              SizedBox(height: 8 * scaler.widthScaleFactor),
-              const FunctionTag(
-                  icon: Icons.history,
-                  title: "History",
-                  onPressed: null
-              ),
-
-              SizedBox(height: 10 * scaler.widthScaleFactor),
-
-              SizedBox(height: 10 * scaler.widthScaleFactor),
-
-              //Certificates
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Certificates',
-                    style: TextStyle(
-                        fontSize: 22.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
-                        fontWeight: FontWeight.w600
-                    ),
-                  ),
-                  InkWell(
-                    onTap: (){
-                      //Update Certificate
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => UpdateCertificateScreen(
-                            certificatesTitles: certificatesTitles,
-                            certificatesImageUrls: certificatesImageUrls,
-                          ),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      'Edit',
-                      style: TextStyle(
-                        fontSize: 18.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.blue,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 8 * scaler.widthScaleFactor),
-              CertificatesBlock(
-                certificatesTitles: certificatesTitles,
-                certificatesImgageUrls: certificatesImageUrls,
-              ),
-
-              SizedBox(height: 10 * scaler.widthScaleFactor),
-              SizedBox(height: 10 * scaler.widthScaleFactor),
-
-              //Support and Legal
-              Text(
-                'Support & Legal',
-                style: TextStyle(
-                    fontSize: 22.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
-                    fontWeight: FontWeight.w600
-                ),
-              ),
-              SizedBox(height: 8 * scaler.widthScaleFactor),
-              const FunctionTag(
-                  icon: Icons.privacy_tip,
-                  title: "Privacy Policy",
-                  onPressed: null
-              ),
-              SizedBox(height: 8 * scaler.widthScaleFactor),
-              FunctionTag(
-                  icon: Icons.call,
-                  title: "Contact us",
-                  onPressed: () {
-                   //Navigate to Contact us screen
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ContactUsScreen(),
-                      ),
-                    );
-                  }
-                  ),
-
-              SizedBox(height: 10 * scaler.widthScaleFactor),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  InkWell(
-                    onTap: () async {
-                      final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
-                      await authViewModel.signOut(context);
-                    },
-                    child: Text(
-                      'Log out',
-                      style: TextStyle(
-                        fontSize: 22.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.red,
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
+            ),
+            const Spacer(),
+            CustomNavigationBar(indexes: [false, false, false, true],),
+          ],
         ),
       ),
     );

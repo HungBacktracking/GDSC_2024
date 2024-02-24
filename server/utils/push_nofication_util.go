@@ -1,4 +1,4 @@
-package main
+package utils
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"firebase.google.com/go/messaging"
 )
 
-func sendFCMMessage(deviceTokens []string, title, body string, data map[string]string) error {
+func SendFCMMessage(deviceTokens []string, title, body string, data map[string]string) error {
 	message := &messaging.MulticastMessage{
 		Notification: &messaging.Notification{
 			Title: title,
