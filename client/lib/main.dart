@@ -1,6 +1,7 @@
 import 'package:client/api/firebase_api.dart';
 import 'package:client/firebase_options.dart';
 import 'package:client/ui/landing_page.dart';
+import 'package:client/ui/profile_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:client/models/quiz_category_model.dart';
 import 'package:client/ui/complete_quiz_screen.dart';
@@ -30,7 +31,9 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   // await FirebaseAPI().initNotification(); // Add this line
   FirebaseAPI().initNotification(); // Add this line
-
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
   runApp(const MyApp());
 }
 
@@ -65,30 +68,16 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrangeAccent),
           useMaterial3: true,
-
           pageTransitionsTheme: const PageTransitionsTheme(
             builders: {
               TargetPlatform.android: CupertinoPageTransitionsBuilder(),
               TargetPlatform.iOS: CupertinoPageTransitionsBuilder()
             }
           ),
-          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-            backgroundColor: Colors.grey, // Set your desired color here
-          ),
         ),
-        home: LearningFirstAidScreen(
+        home: ProfileScreen(
+          avatarUrl: "https://www.pngkey.com/png/full/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png",
           userName: "John Doe",
-          avatarUrl: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
-          challengeYouCategories: [
-            QuizCategoryModel(title: "CPR", tag: "Challenge You", tagColor: Colors.red),
-            QuizCategoryModel(title: "First Aid", tag: "Challenge You", tagColor: Colors.blue),
-            QuizCategoryModel(title: "AED", tag: "Challenge You", tagColor: Colors.green),
-          ],
-          topicsCategories: [
-            QuizCategoryModel(title: "CPR", tag: "Topics", tagColor: Colors.red),
-            QuizCategoryModel(title: "First Aid", tag: "Topics", tagColor: Colors.blue),
-            QuizCategoryModel(title: "AED", tag: "Topics", tagColor: Colors.green),
-          ],
         ),
         routes: {
           '/home': (context) => HomeScreen(),
