@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 
-import '../model/quiz_category_model.dart';
-import '../model/sub_category_model.dart';
+import '../models/quiz_category_model.dart';
+import '../models/sub_category_model.dart';
 import '../utils/strings.dart';
 import '../widgets/header_widget.dart';
 import '../widgets/home_nav_tag.dart';
