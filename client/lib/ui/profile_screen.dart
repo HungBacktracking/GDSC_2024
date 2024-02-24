@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../utils/scaler.dart';
 import '../utils/themes.dart';
 import '../view_model/auth_viewmodel.dart';
 
@@ -18,6 +19,8 @@ class ProfileScreen extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    Scaler().init(context);
+    Scaler scaler = Scaler();
     final List<String> titles = ["Nhom mau", "Tuoi", "Tien su benh"];
     final List<String> contents = ["O", "40", "Khong co"];
 
@@ -31,11 +34,14 @@ class ProfileScreen extends StatelessWidget{
       "https://blogs.bournemouth.ac.uk/research/files/2014/07/Certificate-of-Merit2.jpg",
     ];
     return Scaffold(
+      backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        title: const Text(
+        surfaceTintColor: Colors.white,
+        backgroundColor: Colors.grey[100],
+        title: Text(
         'Profile',
           style: TextStyle(
-            fontSize: 20.0,
+            fontSize: 20.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
             fontWeight: FontWeight.w700,
             color: Colors.black,
           ),
@@ -51,7 +57,7 @@ class ProfileScreen extends StatelessWidget{
 
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(top: 8.0, right: 16.0, left: 16.0, bottom: 100),
+          padding: EdgeInsets.only(top: 8.0 * scaler.widthScaleFactor, right: 16.0 * scaler.widthScaleFactor, left: 16.0 * scaler.widthScaleFactor, bottom: 100 * scaler.widthScaleFactor),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -67,27 +73,27 @@ class ProfileScreen extends StatelessWidget{
                           shape: BoxShape.circle,
                           border: Border.all(
                             color: Colors.grey,
-                            width: 1,
+                            width: 1 * scaler.widthScaleFactor,
                           ),
-                          boxShadow: const [
+                          boxShadow: [
                             BoxShadow(
                               color: Colors.grey,
-                              blurRadius: 5,
-                              spreadRadius: 1,
+                              blurRadius: 5 * scaler.widthScaleFactor,
+                              spreadRadius: 1 * scaler.widthScaleFactor,
                             ),
                           ],
                         ),
                         child: CircleAvatar(
-                          radius: 70,
+                          radius: 70 * scaler.widthScaleFactor,
                           backgroundImage: NetworkImage(avatarUrl), // Use NetworkImage
                           backgroundColor: Colors.white,
                         ),
                       ),
-                    const SizedBox(height: 8),
+                      SizedBox(height: 8 * scaler.widthScaleFactor),
                     Text(
                       userName,
-                      style: const TextStyle(
-                        fontSize: 20,
+                      style: TextStyle(
+                        fontSize: 20 * scaler.widthScaleFactor / scaler.textScaleFactor,
                         fontWeight: FontWeight.bold
                       ),
                     )
@@ -96,16 +102,16 @@ class ProfileScreen extends StatelessWidget{
                 ],
               ),
 
-              const SizedBox(height: 25),
+              SizedBox(height: 25 * scaler.widthScaleFactor),
 
               //General Information
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'General Information',
                     style: TextStyle(
-                      fontSize: 22.0,
+                      fontSize: 22.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
                       fontWeight: FontWeight.w600
                     ),
                   ),
@@ -113,29 +119,32 @@ class ProfileScreen extends StatelessWidget{
                     onTap: (){
                       //handle tap
                     },
-                    child: const Text(
+                    child: Text(
                       'Update',
                       style: TextStyle(
-                        fontSize: 22.0,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 18.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                        fontWeight: FontWeight.w400,
                         color: Colors.blue,
                       ),
                     ),
                   )
                 ],
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8 * scaler.widthScaleFactor),
               ContentContainer(titles: titles, contents: contents),
 
-            //Skills
-            const SizedBox(height: 25),
+              SizedBox(height: 10 * scaler.widthScaleFactor),
+
+              SizedBox(height: 10 * scaler.widthScaleFactor),
+
+              //Skills
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'Skills',
                     style: TextStyle(
-                        fontSize: 22.0,
+                        fontSize: 22.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
                         fontWeight: FontWeight.w600
                     ),
                   ),
@@ -143,46 +152,52 @@ class ProfileScreen extends StatelessWidget{
                     onTap: (){
                       //handle tap
                     },
-                    child: const Text(
+                    child: Text(
                       'Update',
                       style: TextStyle(
-                        fontSize: 22.0,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 18.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                        fontWeight: FontWeight.w400,
                         color: Colors.blue,
                       ),
                     ),
                   )
                 ],
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8 * scaler.widthScaleFactor),
               ContentContainer(titles: skills, contents: skillContents),
 
-              const SizedBox(height: 25),
+              SizedBox(height: 10 * scaler.widthScaleFactor),
+
+              SizedBox(height: 10 * scaler.widthScaleFactor),
+
               //Activity
-              const Text(
+              Text(
                 'Your Activity',
                 style: TextStyle(
-                    fontSize: 22.0,
+                    fontSize: 22.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
                     fontWeight: FontWeight.w600
                 ),
               ),
 
-              const SizedBox(height: 8),
+              SizedBox(height: 8 * scaler.widthScaleFactor),
               const FunctionTag(
                   icon: Icons.history,
                   title: "History",
                   onPressed: null
               ),
 
+              SizedBox(height: 10 * scaler.widthScaleFactor),
+
+              SizedBox(height: 10 * scaler.widthScaleFactor),
+
               //Certificates
-              const SizedBox(height: 25),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'Certificates',
                     style: TextStyle(
-                        fontSize: 22.0,
+                        fontSize: 22.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
                         fontWeight: FontWeight.w600
                     ),
                   ),
@@ -190,46 +205,49 @@ class ProfileScreen extends StatelessWidget{
                     onTap: (){
                       //handle tap
                     },
-                    child: const Text(
+                    child: Text(
                       'Update',
                       style: TextStyle(
-                        fontSize: 22.0,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 18.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                        fontWeight: FontWeight.w400,
                         color: Colors.blue,
                       ),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8 * scaler.widthScaleFactor),
               CertificatesBlock(
                 certificatesTitles: certificatesTitles,
                 certificatesImgageUrls: certificatesImageUrls,
               ),
 
+              SizedBox(height: 10 * scaler.widthScaleFactor),
+
+              SizedBox(height: 10 * scaler.widthScaleFactor),
+
               //Support and Legal
-              const SizedBox(height: 25),
-              const Text(
+              Text(
                 'Support & Legal',
                 style: TextStyle(
-                    fontSize: 22.0,
+                    fontSize: 22.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
                     fontWeight: FontWeight.w600
                 ),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8 * scaler.widthScaleFactor),
               const FunctionTag(
                   icon: Icons.privacy_tip,
                   title: "Privacy Policy",
                   onPressed: null
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8 * scaler.widthScaleFactor),
               const FunctionTag(
                   icon: Icons.call,
                   title: "Contact us",
                   onPressed: null
               ),
 
-              const SizedBox(height: 10),
+              SizedBox(height: 10 * scaler.widthScaleFactor),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -238,10 +256,10 @@ class ProfileScreen extends StatelessWidget{
                       final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
                       await authViewModel.signOut(context);
                     },
-                    child: const Text(
+                    child: Text(
                       'Log out',
                       style: TextStyle(
-                        fontSize: 22.0,
+                        fontSize: 22.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
                         fontWeight: FontWeight.w600,
                         color: Colors.red,
                       ),
@@ -269,19 +287,22 @@ class CertificatesBlock extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    Scaler().init(context);
+    Scaler scaler = Scaler();
     return Container(
       decoration: BoxDecoration(
-        color: MyTheme.lightRedBackGround,
-        borderRadius: BorderRadius.circular(10),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10 * scaler.widthScaleFactor),
       ),
       child: Padding(
-        padding: const EdgeInsets.only(
-            left: 20.0, top: 5.0, bottom: 5.0, right: 20.0),
+        padding:  EdgeInsets.only(
+            left: 20.0 * scaler.widthScaleFactor, top: 5.0 * scaler.widthScaleFactor,
+            bottom: 5.0 * scaler.widthScaleFactor, right: 20.0 * scaler.widthScaleFactor),
         child: certificatesTitles.isEmpty
-            ? const Text(
-          "No data",
+            ? Text(
+          "No certificate update yet!",
           style: TextStyle(
-            fontSize: 18.0,
+            fontSize: 18.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
             fontWeight: FontWeight.bold,
             fontStyle: FontStyle.italic,
           ),
@@ -299,17 +320,17 @@ class CertificatesBlock extends StatelessWidget{
               children: [
                 Text(
                   certificatesTitles[index],
-                  style: const TextStyle(
-                    fontSize: 18.0,
+                  style: TextStyle(
+                    fontSize: 18.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 5),
+                SizedBox(height: 5 * scaler.widthScaleFactor),
                 Container(
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: Colors.grey,
-                      width: 1,
+                      width: 1 * scaler.widthScaleFactor,
                     ),
                   ),
                   child: Image.network(
@@ -318,7 +339,7 @@ class CertificatesBlock extends StatelessWidget{
                     fit: BoxFit.cover, // Cover the width without distorting aspect ratio
                   ),
                 ),
-                const SizedBox(height: 15), // Adjusted for consistent spacing
+                SizedBox(height: 15 * scaler.widthScaleFactor), // Adjusted for consistent spacing
               ],
             );
           }).toList(),
@@ -342,35 +363,37 @@ class FunctionTag extends StatelessWidget{
 
   @override
   Widget build(BuildContext context){
+    Scaler().init(context);
+    Scaler scaler = Scaler();
     return Container(
       decoration: BoxDecoration(
-        color: MyTheme.lightRedBackGround,
-        borderRadius: BorderRadius.circular(10),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10* scaler.widthScaleFactor),
       ),
       child: Expanded(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(8.0 * scaler.widthScaleFactor),
           child: InkWell(
             onTap: onPressed,
             child: Container(
               decoration: BoxDecoration(
-                color: MyTheme.lightRedBackGround,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(10 * scaler.widthScaleFactor),
               ),
               child: Padding(
-                padding: const EdgeInsets.only(left: 20.0, top: 5.0, bottom: 5.0, right: 20.0),
+                padding: EdgeInsets.only(left: 20.0 * scaler.widthScaleFactor, top: 5.0 * scaler.widthScaleFactor,
+                    bottom: 5.0 * scaler.widthScaleFactor, right: 20.0 * scaler.widthScaleFactor),
                 child: Row(
                   children: [
                     Icon(
                       icon,
-                      size: 30,
+                      size: 30* scaler.widthScaleFactor,
                       color: Colors.black,
                     ),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10 * scaler.widthScaleFactor),
                     Text(
                       title,
-                      style: const TextStyle(
-                        fontSize: 20.0,
+                      style: TextStyle(
+                        fontSize: 20.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
                         fontWeight: FontWeight.w500,
                         color: Colors.black,
                       ),
@@ -397,20 +420,23 @@ class ContentContainer extends StatelessWidget {
 
     @override
     Widget build(BuildContext context){
+      Scaler().init(context);
+      Scaler scaler = Scaler();
       return Container(
         decoration: BoxDecoration(
-          color: MyTheme.lightRedBackGround,
-          borderRadius: BorderRadius.circular(10),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10 * scaler.widthScaleFactor),
         ),
         child: Expanded(
          child: Padding(
-            padding: const EdgeInsets.only(left: 20.0, top: 5.0, bottom: 5.0, right: 20.0),
+            padding: EdgeInsets.only(left: 20.0 * scaler.widthScaleFactor, top: 5.0 * scaler.widthScaleFactor,
+                bottom: 5.0 * scaler.widthScaleFactor, right: 20.0 * scaler.widthScaleFactor),
             child:
             contents.isEmpty ?
-            const Text(
+            Text(
               "No data",
               style: TextStyle(
-                fontSize: 18.0,
+                fontSize: 18.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
                 fontWeight: FontWeight.bold,
                 fontStyle: FontStyle.italic,
               ),
@@ -426,15 +452,15 @@ class ContentContainer extends StatelessWidget {
                       children: [
                         Text(
                         "${titles[index]} : ",
-                        style: const TextStyle(
-                          fontSize: 18.0,
+                        style: TextStyle(
+                          fontSize: 18.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
                           fontWeight: FontWeight.bold,
                         ),
                         ),
                         Text(
                           contents[index],
-                          style: const TextStyle(
-                              fontSize: 18.0,
+                          style: TextStyle(
+                              fontSize: 18.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
                               fontWeight: FontWeight.normal,
                           ),
                           maxLines: 2,

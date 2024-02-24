@@ -1,6 +1,7 @@
 import 'package:client/api/firebase_api.dart';
 import 'package:client/firebase_options.dart';
 import 'package:client/ui/landing_page.dart';
+import 'package:client/ui/profile_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:client/models/quiz_category_model.dart';
 import 'package:client/ui/complete_quiz_screen.dart';
@@ -30,7 +31,9 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   // await FirebaseAPI().initNotification(); // Add this line
   FirebaseAPI().initNotification(); // Add this line
-
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
   runApp(const MyApp());
 }
 
@@ -65,20 +68,19 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrangeAccent),
           useMaterial3: true,
-
           pageTransitionsTheme: const PageTransitionsTheme(
             builders: {
               TargetPlatform.android: CupertinoPageTransitionsBuilder(),
               TargetPlatform.iOS: CupertinoPageTransitionsBuilder()
             }
           ),
-          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-            backgroundColor: Colors.grey, // Set your desired color here
-          ),
         ),
-        home: LandingPage(),
+        home: ProfileScreen(
+          avatarUrl: "https://www.pngkey.com/png/full/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png",
+          userName: "John Doe",
+        ),
         routes: {
-          '/home': (context) => LandingPage(),
+          '/home': (context) => HomeScreen(),
           NotificationScreen.routeName: (context) => const NotificationScreen(),
           // '/main': (context) => const MainScreen(),
           // '/frame': (context) => const FrameScreen(),

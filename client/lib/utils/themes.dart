@@ -11,6 +11,7 @@ class MyTheme {
   static const darkGreyColor = Color(0xFFD9D9D9);
   static const greenGray = Color(0xFFE7EAEA);
   static const blueBorder = Color(0xFF3164CE);
+  static const challengeYouBlue = Color(0xFF157EAD);
   static const Blue = Color(0xFF2A15AD);
   static const darkGreen = Color(0xFF017227);
   static const bottomElevatedGreen = Color(0xFF1C9444);
