@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 
+import '../utils/helper.dart';
 import '../view_model/auth_viewmodel.dart';
 
 class PhoneInputLogin extends StatefulWidget {
@@ -20,6 +21,7 @@ class PhoneInputLogin extends StatefulWidget {
 
 class _PhoneInputLoginState extends State<PhoneInputLogin> {
   bool _validate = false;
+  bool _isProcessing = false;
   final _formKey = GlobalKey<FormState>();
   final FocusNode _focusNode = FocusNode();
   Color inputBorderColor = Colors.grey[300]!;
@@ -52,33 +54,33 @@ class _PhoneInputLoginState extends State<PhoneInputLogin> {
     super.dispose();
   }
 
-  String formatPhoneNumber(String phoneNumber) {
-    if (phoneNumber.startsWith('0')) {
-      String countryCode = '84';
-      phoneNumber = phoneNumber.substring(1);
-      phoneNumber = '+$countryCode$phoneNumber';
-    }
-    return phoneNumber;
-  }
 
   Future<void> onSubmitPhone(BuildContext context) async {
+    setState(() {
+      _isProcessing = true;
+    });
+
     final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
     String phoneNumber = _phoneController.text.trim();
     phoneNumber = formatPhoneNumber(phoneNumber);
 
     bool userExists = await authViewModel.checkExistingUser(phoneNumber);
     if (userExists) {
+      setState(() {
+        _validate = false;
+      });
       authViewModel.signInWithPhone(context, phoneNumber);
     }
     else {
       setState(() {
         _validate = true; // Đảm bảo bạn cập nhật UI để phản ánh trạng thái này
       });
-      // Hiển thị thông báo lỗi cho người dùng
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('The account is not exists.')),
-      );
+      getErrorSnackBarNew('The account is not exists.');
     }
+
+    setState(() {
+      _isProcessing = false;
+    });
   }
 
 
@@ -204,11 +206,12 @@ class _PhoneInputLoginState extends State<PhoneInputLogin> {
                     margin: const EdgeInsets.only(left: 16, right: 16),
                     child: CustomFilledButton(
                       label: "Next",
-                      onPressed: () {
+                      isLoading: _isProcessing,
+                      onPressed: _isProcessing ? () {} : () {
                         _focusNode.unfocus();
                         _formKey.currentState!.validate()
-                            ? onSubmitPhone(context)
-                            : null;
+                        ? onSubmitPhone(context)
+                        : null;
                       },
                     ),
                   ),

@@ -23,7 +23,7 @@ class LandingPage extends StatelessWidget {
     );
 
     return FutureBuilder(
-      future: Future.delayed(const Duration(seconds: 2), () => FirebaseAuth.instance.currentUser),
+      future: Future.delayed(const Duration(seconds: 1), () => FirebaseAuth.instance.currentUser),
       builder: (context, AsyncSnapshot<User?> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(

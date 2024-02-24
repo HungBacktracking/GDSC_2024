@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 
+import '../utils/helper.dart';
 import 'pin_authen_register_screen.dart';
 
 class PhoneInputRegister extends StatefulWidget {
@@ -23,6 +24,7 @@ class PhoneInputRegister extends StatefulWidget {
 
 class _PhoneInputRegisterState extends State<PhoneInputRegister> {
   bool _validate = false;
+  bool _isProcessing = false;
   final _formKey = GlobalKey<FormState>();
   final FocusNode _focusNode = FocusNode();
   Color inputBorderColor = Colors.grey[300]!;
@@ -55,32 +57,32 @@ class _PhoneInputRegisterState extends State<PhoneInputRegister> {
     super.dispose();
   }
 
-  String formatPhoneNumber(String phoneNumber) {
-    if (phoneNumber.startsWith('0')) {
-      String countryCode = '84';
-      phoneNumber = phoneNumber.substring(1);
-      phoneNumber = '+$countryCode$phoneNumber';
-    }
-    return phoneNumber;
-  }
-
   Future<void> onSubmitPhone(BuildContext context) async {
+    setState(() {
+      _isProcessing = true;
+    });
+
     final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
     String phoneNumber = _phoneController.text.trim();
     phoneNumber = formatPhoneNumber(phoneNumber);
 
     bool userExists = await authViewModel.checkExistingUser(phoneNumber);
     if (!userExists) {
+      setState(() {
+        _validate = false;
+      });
       authViewModel.signUpWithPhone(context, widget.name, widget.optionVolunteer, phoneNumber);
     }
     else {
       setState(() {
         _validate = true;
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('The account is already exists.')),
-      );
+      getErrorSnackBarNew('The account is already exists.');
     }
+
+    setState(() {
+      _isProcessing = false;
+    });
   }
 
   @override
@@ -205,7 +207,8 @@ class _PhoneInputRegisterState extends State<PhoneInputRegister> {
                     margin: const EdgeInsets.only(left: 16, right: 16),
                     child: CustomFilledButton(
                       label: "Next",
-                      onPressed: () {
+                      isLoading: _isProcessing,
+                      onPressed: _isProcessing ? () {} : () {
                         _focusNode.unfocus();
                         _formKey.currentState!.validate()
                         ? onSubmitPhone(context)

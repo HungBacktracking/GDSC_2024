@@ -57,3 +57,12 @@ Future<File?> pickImage(BuildContext context) async {
 
   return image;
 }
+
+String formatPhoneNumber(String phoneNumber) {
+  if (phoneNumber.startsWith('0')) {
+    String countryCode = '84';
+    phoneNumber = phoneNumber.substring(1);
+    phoneNumber = '+$countryCode$phoneNumber';
+  }
+  return phoneNumber;
+}
