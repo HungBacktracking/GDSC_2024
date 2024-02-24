@@ -185,7 +185,7 @@ class _NameInputRegisterState extends State<NameInputRegister> {
                                     }
                                     return null;
                                   },
-                                  style: TextStyle(fontSize: 16 * scaler.widthScaleFactor, color: Colors.black),
+                                  style: TextStyle(fontSize: 16 * scaler.widthScaleFactor / scaler.textScaleFactor, color: Colors.black),
                                   cursorColor: Colors.black,
                                   decoration: InputDecoration(
                                     label: const Text('First name'),

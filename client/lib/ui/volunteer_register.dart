@@ -132,7 +132,7 @@ class VolunteerRegisterState extends State<VolunteerRegister> {
                         title: Text(
                             MyStrings.volunteer_register_option_1,
                             style: TextStyle(
-                                fontSize: 18 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                                fontSize: 17 * scaler.widthScaleFactor / scaler.textScaleFactor,
                                 fontWeight: FontWeight.w500
                             )
                         ),
@@ -154,7 +154,7 @@ class VolunteerRegisterState extends State<VolunteerRegister> {
                         title: Text(
                             MyStrings.volunteer_register_option_2,
                             style: TextStyle(
-                                fontSize: 18 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                                fontSize: 17 * scaler.widthScaleFactor / scaler.textScaleFactor,
                                 fontWeight: FontWeight.w500
                             )
                         ),
@@ -176,7 +176,7 @@ class VolunteerRegisterState extends State<VolunteerRegister> {
                         title: Text(
                             MyStrings.volunteer_register_option_3,
                             style: TextStyle(
-                              fontSize: 18 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                              fontSize: 17 * scaler.widthScaleFactor / scaler.textScaleFactor,
                                   fontWeight: FontWeight.w500
                               ),
                       ),

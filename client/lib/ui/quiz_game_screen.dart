@@ -60,7 +60,7 @@ class _QuizScreenState extends State<QuizScreen> {
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
               builder: (context) => CompleteScreen(
-                imageUrl: 'https://raw.githubusercontent.com/BaoNinh2808/Jetpack-Compose/main/images/cpr%20(1)%201.png?token=GHSAT0AAAAAACJ6YV2UULTBIV7XLUZ7NNMIZOTLGWQ',
+                imageUrl: 'https://mabustudio.com/wp-content/uploads/2020/02/chup-anh-beauty-7-scaled.jpg',
                 time: '3:21',
                 correctQuestions: correctQuestions,
                 totalQuestions: totalQuestions,

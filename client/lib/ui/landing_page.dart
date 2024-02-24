@@ -29,50 +29,56 @@ class LandingPage extends StatelessWidget {
     return FutureBuilder(
       future: Future.delayed(const Duration(seconds: 2), () => FirebaseAuth.instance.currentUser),
       builder: (context, AsyncSnapshot<User?> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Scaffold(
-            body: Container(
-              height: screen_size.height,
-              width: screen_size.width,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: MyTheme.defaultGradientColors
-                  // colors: MyTheme.orangeGiftGradientColors,
-                ),
-              ),
-              child: SafeArea(
-                child: Stack(
-                  children: [
-                    Column(
-                      children: [
-                        Container(
-                            margin: EdgeInsets.only(left: 20.0 * scaler.widthScaleFactor, bottom: 20.0 * scaler.widthScaleFactor, top: 10.0 * scaler.widthScaleFactor),
-                            child: const HeaderWidget()
-                        ),
-                        Gap(15 * scaler.widthScaleFactor),
-                        Container(
-                          height: screen_size.height / 3,
-                          width: screen_size.width,
-                          child: Image.asset('assets/images/greeting_image.png', fit: BoxFit.contain,)
-                        ),
-                      ],
-                    ),
-                    const Expanded(
-                        child: Center(child: CircularProgressIndicator())
-                    )
-                  ]
-                )
-              ),
-            ),
-          );
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasData && snapshot.data != null) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const MainScreen()));
+            });
+          } else {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const GreetingScreen()));
+            });
+          }
         }
 
-        if (snapshot.hasData && snapshot.data != null) {
-          return const MainScreen();
-        }
-        return const GreetingScreen();
+
+        return Scaffold(
+          body: Container(
+            height: screen_size.height,
+            width: screen_size.width,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: MyTheme.defaultGradientColors
+                // colors: MyTheme.orangeGiftGradientColors,
+              ),
+            ),
+            child: SafeArea(
+              child: Stack(
+                children: [
+                  Column(
+                    children: [
+                      Container(
+                          margin: EdgeInsets.only(left: 20.0 * scaler.widthScaleFactor, bottom: 20.0 * scaler.widthScaleFactor, top: 10.0 * scaler.widthScaleFactor),
+                          child: const HeaderWidget()
+                      ),
+                      Gap(15 * scaler.widthScaleFactor),
+                      Container(
+                        height: screen_size.height / 3,
+                        width: screen_size.width,
+                        child: Image.asset('assets/images/greeting_image.png', fit: BoxFit.contain,)
+                      ),
+                    ],
+                  ),
+                  const Expanded(
+                      child: Center(child: CircularProgressIndicator())
+                  )
+                ]
+              )
+            ),
+          ),
+        );
       },
     );
   }
