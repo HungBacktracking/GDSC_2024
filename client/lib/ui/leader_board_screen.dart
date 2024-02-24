@@ -2,6 +2,7 @@ import 'package:client/utils/themes.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/scaler.dart';
+import '../widgets/bottom_bar.dart';
 import '../widgets/nav_bar.dart';
 
 class LeaderboardScreen extends StatelessWidget {
@@ -30,12 +31,7 @@ class LeaderboardScreen extends StatelessWidget {
     users.sort((a, b) => a.rank.compareTo(b.rank));
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, size: 25.0 * scaler.widthScaleFactor),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
+        surfaceTintColor: Colors.white,
         title: Text(
           'Leader board',
           style: TextStyle(
@@ -55,54 +51,62 @@ class LeaderboardScreen extends StatelessWidget {
         ],
       ),
       body:
-      Padding(
-        padding: EdgeInsets.only(left: 16.0 * scaler.widthScaleFactor, right: 16.0 * scaler.widthScaleFactor),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.end,
-                children:
-                  [
-                    TopUserWidget(user: users[1], size: 40 * scaler.widthScaleFactor, numberBackgroundColor: MyTheme.lightBlue),
-                    TopUserWidget(user: users[0], size: 60 * scaler.widthScaleFactor, numberBackgroundColor: MyTheme.orangeColor),
-                    TopUserWidget(user: users[2], size: 40 * scaler.widthScaleFactor, numberBackgroundColor: MyTheme.darkGreen),
-                  ]
-          ),
-            SizedBox(height: 30 * scaler.widthScaleFactor),
-          Expanded(
-            child: ListView.builder(
-              itemCount: users.length - 3,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        // Handle user tap
-                      },
-                      child: CustomListTile(
-                        rank: users[index+3].rank,
-                        name: users[index+3].name,
-                        score: users[index+3].score,
-                        avatarUrl: users[index+3].avatar,
-                      ),
-                    ),
-                    Divider(
-                      color: Colors.grey[400],
-                    ),
-                  ],
-                );
-              },
+      Column(
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.height - 200 * scaler.widthScaleFactor,
+            child: Padding(
+              padding: EdgeInsets.only(left: 16.0 * scaler.widthScaleFactor, right: 16.0 * scaler.widthScaleFactor),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                      children:
+                        [
+                          TopUserWidget(user: users[1], size: 40 * scaler.widthScaleFactor, numberBackgroundColor: MyTheme.lightBlue),
+                          TopUserWidget(user: users[0], size: 60 * scaler.widthScaleFactor, numberBackgroundColor: MyTheme.orangeColor),
+                          TopUserWidget(user: users[2], size: 40 * scaler.widthScaleFactor, numberBackgroundColor: MyTheme.darkGreen),
+                        ]
+                ),
+                  SizedBox(height: 30 * scaler.widthScaleFactor),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: users.length - 3,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              // Handle user tap
+                            },
+                            child: CustomListTile(
+                              rank: users[index+3].rank,
+                              name: users[index+3].name,
+                              score: users[index+3].score,
+                              avatarUrl: users[index+3].avatar,
+                            ),
+                          ),
+                          Divider(
+                            color: Colors.grey[400],
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+                  SizedBox(height: 10 * scaler.widthScaleFactor),
+                  Image.asset('assets/icons/ic_3dot.png', fit: BoxFit.cover),
+                  SizedBox(height: 10 * scaler.widthScaleFactor),
+                  CustomListTile(rank: you.rank, name: you.name, score: you.score, avatarUrl: you.avatar, backgroundColor: Colors.grey[300]?.withOpacity(0.3)),
+                ]
+              ),
             ),
           ),
-            SizedBox(height: 10 * scaler.widthScaleFactor),
-            Image.asset('assets/icons/ic_3dot.png', fit: BoxFit.cover),
-            SizedBox(height: 10 * scaler.widthScaleFactor),
-            CustomListTile(rank: you.rank, name: you.name, score: you.score, avatarUrl: you.avatar, backgroundColor: Colors.grey[300]?.withOpacity(0.3)),
-            SizedBox(height: 100 * scaler.widthScaleFactor),
-          ]
-        ),
+          Spacer(),
+          CustomNavigationBar(indexes: [false, false, true, false],),
+        ],
       ),
     );
   }
