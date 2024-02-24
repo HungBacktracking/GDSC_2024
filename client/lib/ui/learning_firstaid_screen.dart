@@ -3,6 +3,8 @@ import 'package:client/ui/quiz_game_screen.dart';
 import 'package:client/utils/themes.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/scaler.dart';
+
 class LearningFirstAidScreen extends StatelessWidget {
   final String userName;
   final String avatarUrl;
@@ -18,113 +20,132 @@ class LearningFirstAidScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Scaler().init(context);
+    final scaler = Scaler();
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
+          icon: Icon(Icons.arrow_back_ios, size: 25.0 * scaler.widthScaleFactor),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
-        title: const Text(
+        title: Text(
             'LEARNING FIRST AID',
             style: TextStyle(
+              fontSize: 20.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
               color: MyTheme.blueBorder,
               fontWeight: FontWeight.w500,
             ),
         ),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 4.0, bottom: 8.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: RichText(
-                      text: const TextSpan(
-                        style: TextStyle(fontSize: 26, color: Colors.black, fontWeight: FontWeight.w600), // Default text style
-                        children: <TextSpan>[
-                          TextSpan(text: 'Hi '),
-                          TextSpan(text: 'Rohan'),
-                          TextSpan(text: ','),
-                        ],
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Padding(
+          padding: EdgeInsets.only(left: 16.0 * scaler.widthScaleFactor, right: 16.0 * scaler.widthScaleFactor, top: 4.0 * scaler.widthScaleFactor, bottom: 8.0 * scaler.widthScaleFactor),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: RichText(
+                        text: TextSpan(
+                          style: TextStyle(
+                              fontSize: 35 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(text: 'Hi '),
+                            TextSpan(text: 'Rohan'),
+                            TextSpan(text: ','),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(avatarUrl), // Use the passed avatar URL
-                    radius: 20, // Adjust the size as needed
-                  ),
-                ],
-              ),
-              const Padding(
-                padding: EdgeInsets.only(top: 4.0),
-                child: Text(
-                  'What do you want to learn today?',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.black,
-                  )
+                    CircleAvatar(
+                      backgroundImage: NetworkImage(avatarUrl), // Use the passed avatar URL
+                      radius: 20 * scaler.widthScaleFactor, // Adjust the size as needed
+                    ),
+                  ],
                 ),
-              ),
-              SizedBox(height: 20),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search',
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide.none,
+                Padding(
+                  padding: EdgeInsets.only(top: 4.0 * scaler.widthScaleFactor),
+                  child: Text(
+                    'What do you want to learn today?',
+                    style: TextStyle(
+                      fontSize: 20 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                      color: Colors.black,
+                    )
                   ),
-                  filled: true,
-                  fillColor: Colors.grey[200],
                 ),
-              ),
+                SizedBox(height: 20 * scaler.widthScaleFactor),
+                Container(
+                  height: 60.0 * scaler.widthScaleFactor,
+                  width: double.infinity,
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Search',
+                      prefixIcon: const Icon(Icons.search),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15.0 * scaler.widthScaleFactor),
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                      contentPadding: EdgeInsets.symmetric(vertical: 10.0 * scaler.widthScaleFactor),
+                    ),
+                    style: TextStyle(
+                      fontSize: 18.0 * scaler.widthScaleFactor / scaler.textScaleFactor, // Specify the font size of the text
+                    ),
+                  ),
+                ),
 
-
-              //challenge you
-              Padding(
-                padding: const EdgeInsets.only(top: 25.0, bottom: 8.0),
-                child: Row(
-                  children: [
-                    Image.asset('assets/icons/ic_challenge_you.png', width: 38, height: 38), // Adjust the size as needed
-                    const SizedBox(width: 8),
-                    const Text(
-                      'Challenge You',
-                      style: TextStyle(
-                          fontSize: 22,
+                //challenge you
+                Padding(
+                  padding: EdgeInsets.only(top: 25.0 * scaler.widthScaleFactor, bottom: 8.0 * scaler.widthScaleFactor),
+                  child: Row(
+                    children: [
+                      Image.asset('assets/icons/ic_challenge_you.png', width: 38 * scaler.widthScaleFactor, height: 38 * scaler.widthScaleFactor), // Adjust the size as needed
+                      SizedBox(width: 8 * scaler.widthScaleFactor),
+                      Text(
+                        'Challenge You',
+                        style: TextStyle(
+                            fontSize: 26 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                            fontWeight: FontWeight.bold,
+                            color: MyTheme.challengeYouBlue,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                CategoryGrid(challengeYouCategories),
+                Padding(
+                  padding: EdgeInsets.only(top: 25.0 * scaler.widthScaleFactor, bottom: 8.0 * scaler.widthScaleFactor),
+                  child: Row(
+                    children: [
+                      Image.asset('assets/icons/ic_topic.png', width: 38 * scaler.widthScaleFactor, height: 38 * scaler.widthScaleFactor), // Adjust the size as needed
+                      SizedBox(width: 8 * scaler.widthScaleFactor),
+                      Text(
+                        'Topics',
+                        style: TextStyle(
+                          fontSize: 26 * scaler.widthScaleFactor / scaler.textScaleFactor,
                           fontWeight: FontWeight.bold,
-                          color: MyTheme.blueBorder,
+                          color: MyTheme.challengeYouBlue,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              CategoryGrid(challengeYouCategories),
-              Padding(
-                padding: const EdgeInsets.only(top: 25.0, bottom: 8.0),
-                child: Row(
-                  children: [
-                    Image.asset('assets/icons/ic_topic.png', width: 38, height: 38), // Adjust the size as needed
-                    const SizedBox(width: 8),
-                    const Text(
-                      'Topics',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: MyTheme.blueBorder,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              CategoryGrid(topicsCategories),
-            ],
+                CategoryGrid(topicsCategories),
+              ],
+            ),
           ),
         ),
       ),
@@ -139,15 +160,18 @@ class CategoryGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Scaler().init(context);
+    Scaler scaler = Scaler();
+
     // Calculate the aspect ratio based on desired item width and height
-    double itemWidth = 170; // Desired item width
-    double itemHeight = 90; // Desired item height
+    double itemWidth = 170 * scaler.widthScaleFactor; // Desired item width
+    double itemHeight = 90 * scaler.widthScaleFactor; // Desired item height
     double screenWidth = MediaQuery.of(context).size.width; // Get screen width
-    double crossAxisSpacing = 16; // Adjust as needed
-    double mainAxisSpacing = 16; // Adjust as needed
+    double crossAxisSpacing = 16 * scaler.widthScaleFactor;  // Adjust as needed
+    double mainAxisSpacing = 16 * scaler.widthScaleFactor; // Adjust as needed
     int crossAxisCount = 2; // Number of items per row
-    double totalHorizontalPadding = 32; // Adjust as needed
-    double totalCrossAxisSpacing = (crossAxisCount - 1) * crossAxisSpacing;
+    double totalHorizontalPadding = 32 * scaler.widthScaleFactor; // Adjust as needed
+    double totalCrossAxisSpacing = (crossAxisCount - 1) * crossAxisSpacing * scaler.widthScaleFactor;
 
     // Calculate the aspect ratio of each item
     double childAspectRatio = (itemWidth / itemHeight) *
@@ -200,13 +224,15 @@ class QuizCategoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Scaler().init(context);
+    Scaler scaler = Scaler();
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.all(8),
+        padding: EdgeInsets.only(left: 24 * scaler.widthScaleFactor, top: 8 * scaler.widthScaleFactor, right: 8 * scaler.widthScaleFactor, bottom: 8 * scaler.widthScaleFactor),
         decoration: BoxDecoration(
-          color: MyTheme.lightRedBackGround,
-          borderRadius: BorderRadius.circular(16),
+          color: Colors.grey[300]?.withOpacity(0.3),
+          borderRadius: BorderRadius.circular(16 * scaler.widthScaleFactor),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -214,21 +240,26 @@ class QuizCategoryItem extends StatelessWidget {
           children: [
             Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 18,
+                  fontSize: 18 * scaler.widthScaleFactor / scaler.textScaleFactor,
                   color: Colors.black
               ),
             ),
+            SizedBox(height: 4 * scaler.widthScaleFactor),
             Container(
-              padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+              padding: EdgeInsets.symmetric(vertical: 4 * scaler.widthScaleFactor, horizontal: 8 * scaler.widthScaleFactor),
               decoration: BoxDecoration(
                 color: tagColor.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(10 * scaler.widthScaleFactor),
               ),
               child: Text(
                 tag,
-                style: TextStyle(color: tagColor, fontWeight: FontWeight.normal),
+                style: TextStyle(
+                    color: tagColor,
+                    fontSize: 14 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                    fontWeight: FontWeight.normal
+                ),
               ),
             ),
           ],

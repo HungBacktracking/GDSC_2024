@@ -76,9 +76,22 @@ class MyApp extends StatelessWidget {
             backgroundColor: Colors.grey, // Set your desired color here
           ),
         ),
-        home: LeaderboardScreen(),
+        home: LearningFirstAidScreen(
+          userName: "John Doe",
+          avatarUrl: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
+          challengeYouCategories: [
+            QuizCategoryModel(title: "CPR", tag: "Challenge You", tagColor: Colors.red),
+            QuizCategoryModel(title: "First Aid", tag: "Challenge You", tagColor: Colors.blue),
+            QuizCategoryModel(title: "AED", tag: "Challenge You", tagColor: Colors.green),
+          ],
+          topicsCategories: [
+            QuizCategoryModel(title: "CPR", tag: "Topics", tagColor: Colors.red),
+            QuizCategoryModel(title: "First Aid", tag: "Topics", tagColor: Colors.blue),
+            QuizCategoryModel(title: "AED", tag: "Topics", tagColor: Colors.green),
+          ],
+        ),
         routes: {
-          '/home': (context) => LeaderboardScreen(),
+          '/home': (context) => HomeScreen(),
           NotificationScreen.routeName: (context) => const NotificationScreen(),
           // '/main': (context) => const MainScreen(),
           // '/frame': (context) => const FrameScreen(),
