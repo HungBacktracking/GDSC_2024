@@ -37,6 +37,7 @@ class PinAuthenticationLoginState extends State<PinAuthenticationLogin> {
   final pinController = TextEditingController();
   final focusNode = FocusNode();
   final formKey = GlobalKey<FormState>();
+  bool isProcessing = false;
 
   @override
   void dispose() {
@@ -64,12 +65,19 @@ class PinAuthenticationLoginState extends State<PinAuthenticationLogin> {
   }
 
   Future<void> handleValidPin(BuildContext context) async {
+    setState(() {
+      isProcessing = true;
+    });
+
     final authenViewModel = Provider.of<AuthViewModel>(context, listen: false);
     await authenViewModel.verifyOtp(
       context: context,
       verificationId: widget.verificationId,
       userOtp: pinController.text,
       onSuccess: () async {
+        setState(() {
+          isProcessing = false;
+        });
         getSuccessSnackBar("Successfully logged in!");
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
@@ -81,6 +89,10 @@ class PinAuthenticationLoginState extends State<PinAuthenticationLogin> {
         );
       }
     );
+
+    setState(() {
+      isProcessing = false;
+    });
   }
 
   @override
@@ -261,7 +273,8 @@ class PinAuthenticationLoginState extends State<PinAuthenticationLogin> {
                           margin: const EdgeInsets.only(left: 16, right: 16),
                           child: CustomFilledButton(
                               label: 'Next',
-                              onPressed: () {
+                              isLoading: isProcessing,
+                              onPressed: isProcessing ? () {} : () {
                                 focusNode.unfocus();
                                 formKey.currentState!.validate()
                                     ? handleValidPin(context)

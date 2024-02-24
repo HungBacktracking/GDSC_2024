@@ -40,6 +40,7 @@ class PinAuthenticationRegisterState extends State<PinAuthenticationRegister> {
   final pinController = TextEditingController();
   final focusNode = FocusNode();
   final formKey = GlobalKey<FormState>();
+  bool isProcessing = false;
 
   @override
   void dispose() {
@@ -67,6 +68,10 @@ class PinAuthenticationRegisterState extends State<PinAuthenticationRegister> {
   }
 
   Future<void> handleValidPin(BuildContext context) async {
+    setState(() {
+      isProcessing = true;
+    });
+
     final authenViewModel = Provider.of<AuthViewModel>(context, listen: false);
     await authenViewModel.verifyOtp(
       context: context,
@@ -81,6 +86,9 @@ class PinAuthenticationRegisterState extends State<PinAuthenticationRegister> {
           id: "",
         );
         await authenViewModel.saveUserDataToFirebase(context: context, userModel: userModel, onSuccess: () {
+          setState(() {
+            isProcessing = false;
+          });
           getSuccessSnackBar("Successfully signed up!");
           Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
@@ -93,6 +101,10 @@ class PinAuthenticationRegisterState extends State<PinAuthenticationRegister> {
         });
       }
     );
+
+    setState(() {
+      isProcessing = false;
+    });
   }
 
   @override
@@ -273,7 +285,8 @@ class PinAuthenticationRegisterState extends State<PinAuthenticationRegister> {
                           margin: const EdgeInsets.only(left: 16, right: 16),
                           child: CustomFilledButton(
                               label: 'Next',
-                              onPressed: () {
+                              isLoading: isProcessing,
+                              onPressed: isProcessing ? () {} : () {
                                 focusNode.unfocus();
                                 formKey.currentState!.validate()
                                     ? handleValidPin(context)
