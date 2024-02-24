@@ -1,6 +1,7 @@
 import 'package:client/utils/themes.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/scaler.dart';
 import '../widgets/nav_bar.dart';
 
 class LeaderboardScreen extends StatelessWidget {
@@ -24,23 +25,26 @@ class LeaderboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Scaler().init(context);
+    final scaler = Scaler();
     users.sort((a, b) => a.rank.compareTo(b.rank));
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
+          icon: Icon(Icons.arrow_back_ios, size: 25.0 * scaler.widthScaleFactor),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
-        title: const Text(
+        title: Text(
           'Leader board',
           style: TextStyle(
-            fontSize: 20.0,
+            fontSize: 20.0  * scaler.widthScaleFactor/ scaler.textScaleFactor,
             fontWeight: FontWeight.w700,
             color: Colors.black,
         ),
       ),
+        centerTitle: true,
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -52,7 +56,7 @@ class LeaderboardScreen extends StatelessWidget {
       ),
       body:
       Padding(
-        padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+        padding: EdgeInsets.only(left: 16.0 * scaler.widthScaleFactor, right: 16.0 * scaler.widthScaleFactor),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -61,12 +65,12 @@ class LeaderboardScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
                 children:
                   [
-                    TopUserWidget(user: users[1], size: 40, numberBackgroundColor: MyTheme.lightBlue),
-                    TopUserWidget(user: users[0], size: 60, numberBackgroundColor: MyTheme.orangeColor),
-                    TopUserWidget(user: users[2], size: 40, numberBackgroundColor: MyTheme.darkGreen),
+                    TopUserWidget(user: users[1], size: 40 * scaler.widthScaleFactor, numberBackgroundColor: MyTheme.lightBlue),
+                    TopUserWidget(user: users[0], size: 60 * scaler.widthScaleFactor, numberBackgroundColor: MyTheme.orangeColor),
+                    TopUserWidget(user: users[2], size: 40 * scaler.widthScaleFactor, numberBackgroundColor: MyTheme.darkGreen),
                   ]
           ),
-          const SizedBox(height: 30),
+            SizedBox(height: 30 * scaler.widthScaleFactor),
           Expanded(
             child: ListView.builder(
               itemCount: users.length - 3,
@@ -84,17 +88,19 @@ class LeaderboardScreen extends StatelessWidget {
                         avatarUrl: users[index+3].avatar,
                       ),
                     ),
-                    const Divider(),
+                    Divider(
+                      color: Colors.grey[400],
+                    ),
                   ],
                 );
               },
             ),
           ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10 * scaler.widthScaleFactor),
             Image.asset('assets/icons/ic_3dot.png', fit: BoxFit.cover),
-            const SizedBox(height: 10),
-            CustomListTile(rank: you.rank, name: you.name, score: you.score, avatarUrl: you.avatar, backgroundColor: Colors.grey[200]),
-            const SizedBox(height: 100),
+            SizedBox(height: 10 * scaler.widthScaleFactor),
+            CustomListTile(rank: you.rank, name: you.name, score: you.score, avatarUrl: you.avatar, backgroundColor: Colors.grey[300]?.withOpacity(0.3)),
+            SizedBox(height: 100 * scaler.widthScaleFactor),
           ]
         ),
       ),
@@ -120,36 +126,38 @@ class CustomListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Scaler().init(context);
+    final scaler = Scaler();
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(10.0 * scaler.widthScaleFactor),
         color: backgroundColor ?? Colors.transparent,
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+        padding: EdgeInsets.symmetric(vertical: 8.0 * scaler.widthScaleFactor, horizontal: 16.0 * scaler.widthScaleFactor),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                   '$rank',
-                  style: const TextStyle(
-                      fontSize: 15.0,
+                  style: TextStyle(
+                      fontSize: 15.0 * scaler.widthScaleFactor/ scaler.textScaleFactor,
                       fontWeight: FontWeight.w400
                   )
               ),
-              const SizedBox(width: 16.0),
+              SizedBox(width: 16.0 * scaler.widthScaleFactor),
               CircleAvatar(
                 backgroundImage: NetworkImage(avatarUrl),
                 // If you want to add a border around the CircleAvatar:
-                radius: 20.0,
+                radius: 20.0 * scaler.widthScaleFactor,
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
+                  padding: EdgeInsets.only(left: 16.0 * scaler.widthScaleFactor),
                   child: Text(
                       name,
-                      style: const TextStyle(
-                          fontSize: 18.0,
+                      style: TextStyle(
+                          fontSize: 18.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
                           fontWeight: FontWeight.bold,
                       )
                   ),
@@ -157,8 +165,8 @@ class CustomListTile extends StatelessWidget {
               ),
               Text(
                   score,
-                  style: const TextStyle(
-                      fontSize: 16.0,
+                  style: TextStyle(
+                      fontSize: 16.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
                       fontWeight: FontWeight.w600,
                   )
               ),
@@ -183,6 +191,8 @@ class TopUserWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Scaler().init(context);
+    final scaler = Scaler();
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -191,19 +201,19 @@ class TopUserWidget extends StatelessWidget {
           children: [
             Column(
               children: [
-                const SizedBox(height: 8),
+                SizedBox(height: 8 * scaler.widthScaleFactor),
                 Container(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
                       color: numberBackgroundColor.withOpacity(0.5),
-                      width: 2,
+                      width: 2 * scaler.widthScaleFactor,
                     ),
-                    boxShadow: const [
+                    boxShadow: [
                       BoxShadow(
                         color: Colors.grey,
-                        blurRadius: 5,
-                        spreadRadius: 2,
+                        blurRadius: 5 * scaler.widthScaleFactor,
+                        spreadRadius: 2 * scaler.widthScaleFactor,
                       ),
                     ],
                   ),
@@ -221,7 +231,7 @@ class TopUserWidget extends StatelessWidget {
                 shape: BoxShape.circle,
                 border: Border.all(
                   color: Colors.white,
-                  width: 2,
+                  width: 2 * scaler.widthScaleFactor,
                 ),
               ),
               child: CircleAvatar(
@@ -238,12 +248,21 @@ class TopUserWidget extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: 8),
+        SizedBox(height: 8 * scaler.widthScaleFactor),
         Text(
           user.name,
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontSize: 18.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
+              fontWeight: FontWeight.bold
+          ),
         ),
-        Text(user.score),
+        Text(
+            user.score,
+            style: TextStyle(
+                fontSize: 16.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                fontWeight: FontWeight.w400
+            ),
+        ),
       ],
     );
   }
