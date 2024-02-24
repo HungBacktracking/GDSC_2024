@@ -268,7 +268,12 @@ class PinAuthenticationRegisterState extends State<PinAuthenticationRegister> {
                                         fontSize: 16 * scaler.widthScaleFactor / scaler.textScaleFactor
                                     ),
                                   ),
-                                  Text('Resend code via SMS in 01:30'),
+                                  Text(
+                                    'Resend code via SMS in 01:30',
+                                    style: TextStyle(
+                                        fontSize: 16 * scaler.widthScaleFactor / scaler.textScaleFactor
+                                    ),
+                                  ),
                                 ],
                               ),
                               ElevatedButton(

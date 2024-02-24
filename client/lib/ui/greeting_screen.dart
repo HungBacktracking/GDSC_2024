@@ -1,19 +1,28 @@
 import 'package:client/utils/styles.dart';
 import 'package:client/widgets/header_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:provider/provider.dart';
 
 
 import '../utils/scaler.dart';
 import '../utils/strings.dart';
 import '../utils/themes.dart';
+import '../view_model/auth_viewmodel.dart';
 import 'name_input_register.dart';
 import 'phone_input_login_screen.dart';
 
-class GreetingScreen extends StatelessWidget {
+class GreetingScreen extends StatefulWidget {
   const GreetingScreen({super.key});
+
+  @override
+  State<GreetingScreen> createState() => _GreetingScreenState();
+}
+
+class _GreetingScreenState extends State<GreetingScreen> {
 
   onTapLogin(BuildContext context) {
     Navigator.of(context).push(
@@ -38,6 +47,7 @@ class GreetingScreen extends StatelessWidget {
           statusBarIconBrightness: Brightness.dark,
         ),
     );
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
