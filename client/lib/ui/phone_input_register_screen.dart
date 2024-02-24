@@ -7,10 +7,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
 import '../utils/helper.dart';
-import 'pin_authen_register_screen.dart';
+import '../utils/scaler.dart';
 
 class PhoneInputRegister extends StatefulWidget {
   final String name;
@@ -87,6 +88,8 @@ class _PhoneInputRegisterState extends State<PhoneInputRegister> {
 
   @override
   Widget build(BuildContext context) {
+    Scaler().init(context);
+    final scaler = Scaler();
     final Size screen_size = MediaQuery.of(context).size;
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
@@ -119,47 +122,61 @@ class _PhoneInputRegisterState extends State<PhoneInputRegister> {
               width: screen_size.width,
               child: Column(
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 0, top: 10),
+                  Padding(
+                    padding: EdgeInsets.only(left: 0, top: 10 * scaler.widthScaleFactor),
                     child: Align(
                       alignment: Alignment.topLeft,
-                      child: CupertinoNavigationBarBackButton(
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.arrow_back_ios, // Cupertino uses 'Icons.arrow_back_ios_new' for newer iOS style
+                          size: 25 * scaler.widthScaleFactor, // Set your custom size
+                        ),
                         color: Colors.black,
+                        onPressed: () {
+                          Navigator.maybePop(context);
+                        },
                       ),
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 16, right: 16, top: 5),
+                  Padding(
+                    padding: EdgeInsets.only(left: 16 * scaler.widthScaleFactor, right: 16 * scaler.widthScaleFactor, top: 5 * scaler.widthScaleFactor),
                     child: Align(
                       alignment: Alignment.topLeft,
                       child: Text(
                         MyStrings.phone_input_title,
-                        style: MyStyles.headerTextStyle,
+                        style: TextStyle(
+                            fontSize: 24 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                            fontWeight: FontWeight.bold
+                        )
+                        ,
                       ),
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 16, right: 16, top: 5),
+                  Padding(
+                    padding: EdgeInsets.only(left: 16 * scaler.widthScaleFactor, right: 16 * scaler.widthScaleFactor, top: 5 * scaler.widthScaleFactor),
                     child: Align(
                       alignment: Alignment.topLeft,
                       child: Text(
                         MyStrings.phone_input_guide,
-                        style: MyStyles.blackTinyTextStyle,
+                        style: TextStyle(
+                            fontSize: 16 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                            color: Colors.black
+                        ),
                       ),
                     ),
                   ),
-                  const Gap(10),
+                  Gap(10 * scaler.widthScaleFactor),
                   Form(
                     key: _formKey,
                     child: Container(
-                      margin: const EdgeInsets.all(16),
+                      margin: EdgeInsets.all(16 * scaler.widthScaleFactor),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         border: Border.all(
                           color: inputBorderColor,
-                          width: 1.0,
+                          width: 1.0 * scaler.widthScaleFactor,
                         ),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8 * scaler.widthScaleFactor),
                       ),
                       child: TextFormField(
                         focusNode: _focusNode,
@@ -173,13 +190,19 @@ class _PhoneInputRegisterState extends State<PhoneInputRegister> {
                           }
                           return null;
                         },
-                        style: const TextStyle(fontSize: 16, color: Colors.black),
+                        style: TextStyle(fontSize: 16 * scaler.widthScaleFactor, color: Colors.black),
                         cursorColor: Colors.black,
                         decoration: InputDecoration(
                           label: const Text('Mobile Number'),
-                          labelStyle: TextStyle(fontSize: 16, color: Colors.grey[300]),
-                          floatingLabelStyle: TextStyle(fontSize: 16, color: Colors.grey[700]),
-                          contentPadding: const EdgeInsets.all(12),
+                          labelStyle: TextStyle(
+                              fontSize: 16 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                              color: Colors.grey[300]
+                          ),
+                          floatingLabelStyle: TextStyle(
+                              fontSize: 16 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                              color: Colors.grey[700]
+                          ),
+                          contentPadding: EdgeInsets.all(12 * scaler.widthScaleFactor),
                           border: InputBorder.none,
                           errorText: _validate ? 'The account is already exists.' : null,
                         ),
@@ -192,40 +215,46 @@ class _PhoneInputRegisterState extends State<PhoneInputRegister> {
                       ),
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 16, right: 16, top: 5),
+                  Padding(
+                    padding: EdgeInsets.only(left: 16 * scaler.widthScaleFactor, right: 16 * scaler.widthScaleFactor, top: 5 * scaler.widthScaleFactor),
                     child: Align(
                       alignment: Alignment.topLeft,
                       child: Text(
                         MyStrings.phone_input_sms_notice,
-                        style: MyStyles.moreTinyTextStyle,
+                        style: TextStyle(
+                            fontSize: 14 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                            color: grey
+                        ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 28),
+                  SizedBox(height: 28 * scaler.widthScaleFactor),
                   Container(
-                    margin: const EdgeInsets.only(left: 16, right: 16),
+                    margin: EdgeInsets.only(left: 16 * scaler.widthScaleFactor, right: 16 * scaler.widthScaleFactor),
                     child: CustomFilledButton(
-                      label: "Next",
-                      isLoading: _isProcessing,
-                      onPressed: _isProcessing ? () {} : () {
-                        _focusNode.unfocus();
-                        _formKey.currentState!.validate()
-                        ? onSubmitPhone(context)
-                        : null;
-                      }
+                        label: "Next",
+                        isLoading: _isProcessing,
+                        onPressed: _isProcessing ? () {} : () {
+                          _focusNode.unfocus();
+                          _formKey.currentState!.validate()
+                              ? onSubmitPhone(context)
+                              : null;
+                        }
                     ),
                   ),
                   const Spacer(),
                   Padding(
-                    padding: const EdgeInsets.only(left: 16, right: 16, bottom: 5),
+                    padding: EdgeInsets.only(left: 16 * scaler.widthScaleFactor, right: 16 * scaler.widthScaleFactor, bottom: 5 * scaler.widthScaleFactor),
                     child: Align(
                       alignment: Alignment.center,
                       child: TextButton(
                         onPressed: () {},
-                        child: const Text(
+                        child: Text(
                           MyStrings.already_have_account,
-                          style: TextStyle(fontSize: 16, color: Colors.deepOrangeAccent),
+                          style: TextStyle(
+                              fontSize: 16 * scaler.widthScaleFactor / scaler.textScaleFactor ,
+                              color: Colors.deepOrangeAccent
+                          ),
                         ),
                       ),
                     ),

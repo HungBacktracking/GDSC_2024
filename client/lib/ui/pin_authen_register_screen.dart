@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 import '../models/user_model.dart';
 import '../utils/helper.dart';
+import '../utils/scaler.dart';
 import '../utils/strings.dart';
 import '../utils/styles.dart';
 import '../utils/themes.dart';
@@ -109,20 +110,22 @@ class PinAuthenticationRegisterState extends State<PinAuthenticationRegister> {
 
   @override
   Widget build(BuildContext context) {
+    Scaler().init(context);
+    final scaler = Scaler();
     const focusedBorderColor = Color.fromRGBO(21, 101, 192, 1);
     final Size screen_size = MediaQuery.of(context).size;
     const fillColor = Color.fromRGBO(243, 246, 249, 0);
     const borderColor = _accent;
 
     final defaultPinTheme = PinTheme(
-      width: 48,
-      height: 48,
-      textStyle: const TextStyle(
-        fontSize: 22,
+      width: 48 * scaler.widthScaleFactor,
+      height: 48 * scaler.widthScaleFactor,
+      textStyle: TextStyle(
+        fontSize: 22 * scaler.widthScaleFactor / scaler.textScaleFactor,
         color: Color.fromRGBO(30, 60, 87, 1),
       ),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(10 * scaler.widthScaleFactor),
         border: Border.all(color: borderColor),
       ),
     );
@@ -159,7 +162,7 @@ class PinAuthenticationRegisterState extends State<PinAuthenticationRegister> {
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 0, top: 10),
+                    padding: EdgeInsets.only(left: 0, top: 10 * scaler.widthScaleFactor),
                     child: Align(
                       alignment: Alignment.topLeft,
                       child: IconButton(
@@ -168,27 +171,33 @@ class PinAuthenticationRegisterState extends State<PinAuthenticationRegister> {
                       ),
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 16.0, right: 16, top: 5),
+                  Padding(
+                    padding: EdgeInsets.only(left: 16.0 * scaler.widthScaleFactor, right: 16 * scaler.widthScaleFactor, top: 5 * scaler.widthScaleFactor),
                     child: Align(
                       alignment: Alignment.topLeft,
                       child: Text(
                         MyStrings.pin_authentication_title,
-                        style: MyStyles.headerTextStyle,
+                        style: TextStyle(
+                            fontSize: 24 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                            fontWeight: FontWeight.bold
+                        ),
                       ),
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 16, right: 16, top: 5),
+                  Padding(
+                    padding: EdgeInsets.only(left: 16 * scaler.widthScaleFactor, right: 16 * scaler.widthScaleFactor, top: 5 * scaler.widthScaleFactor),
                     child: Align(
                       alignment: Alignment.topLeft,
                       child: Text(
                         MyStrings.pin_authentication_guide,
-                        style: MyStyles.blackTinyTextStyle,
+                        style: TextStyle(
+                            fontSize: 16 * scaler.widthScaleFactor/ scaler.textScaleFactor,
+                            color: Colors.black
+                        ),
                       ),
                     ),
                   ),
-                  const Gap(20),
+                  Gap(20 * scaler.widthScaleFactor),
                   Form(
                     key: formKey,
                     child: Column(
@@ -202,7 +211,7 @@ class PinAuthenticationRegisterState extends State<PinAuthenticationRegister> {
                             controller: pinController,
                             focusNode: focusNode,
                             defaultPinTheme: defaultPinTheme,
-                            separatorBuilder: (index) => const SizedBox(width: 8),
+                            separatorBuilder: (index) => SizedBox(width: 8 * scaler.widthScaleFactor),
                             validator: (value) {
                               return (value!.isNotEmpty && value.length == 6) ? null : 'Invalid pin!';
                             },
@@ -217,25 +226,25 @@ class PinAuthenticationRegisterState extends State<PinAuthenticationRegister> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 Container(
-                                  margin: const EdgeInsets.only(bottom: 9),
-                                  width: 22,
-                                  height: 1,
+                                  margin: EdgeInsets.only(bottom: 9 * scaler.widthScaleFactor),
+                                  width: 22 * scaler.widthScaleFactor,
+                                  height: 1 * scaler.widthScaleFactor,
                                   color: focusedBorderColor,
                                 ),
                               ],
                             ),
                             focusedPinTheme: defaultPinTheme.copyWith(
-                              height: 52,
-                              width: 52,
+                              height: 52 * scaler.widthScaleFactor,
+                              width: 52 * scaler.widthScaleFactor,
                               decoration: defaultPinTheme.decoration!.copyWith(
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8 * scaler.widthScaleFactor),
                                 border: Border.all(color: focusedBorderColor),
                               ),
                             ),
                             submittedPinTheme: defaultPinTheme.copyWith(
                               decoration: defaultPinTheme.decoration!.copyWith(
                                 color: fillColor,
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(10 * scaler.widthScaleFactor),
                               ),
                             ),
                             errorPinTheme: defaultPinTheme.copyBorderWith(
@@ -243,19 +252,21 @@ class PinAuthenticationRegisterState extends State<PinAuthenticationRegister> {
                             ),
                           ),
                         ),
-                        const Gap(30),
+                        Gap(30 * scaler.widthScaleFactor),
                         Container(
-                          margin: const EdgeInsets.only(left: 16, right: 16),
+                          margin: EdgeInsets.only(left: 16 * scaler.widthScaleFactor, right: 16 * scaler.widthScaleFactor),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Column(
+                              Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     'You didn\'t get the code?',
                                     style: TextStyle(
-                                        fontWeight: FontWeight.bold, fontSize: 16),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16 * scaler.widthScaleFactor / scaler.textScaleFactor
+                                    ),
                                   ),
                                   Text('Resend code via SMS in 01:30'),
                                 ],
@@ -264,14 +275,15 @@ class PinAuthenticationRegisterState extends State<PinAuthenticationRegister> {
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.deepOrange[900],
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                                    borderRadius: BorderRadius.circular(8 * scaler.widthScaleFactor),
                                   ),
-                                  minimumSize: const Size(0, 40),
+                                  minimumSize: Size(0, 40 * scaler.widthScaleFactor),
                                 ),
                                 onPressed: () {},
-                                child: const Text(
+                                child: Text(
                                   'Resend code',
                                   style: TextStyle(
+                                    fontSize: 16 * scaler.widthScaleFactor / scaler.textScaleFactor,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
                                   ),
@@ -280,9 +292,9 @@ class PinAuthenticationRegisterState extends State<PinAuthenticationRegister> {
                             ],
                           ),
                         ),
-                        const SizedBox(height: 28),
+                        SizedBox(height: 28 * scaler.widthScaleFactor),
                         Container(
-                          margin: const EdgeInsets.only(left: 16, right: 16),
+                          margin: EdgeInsets.only(left: 16 * scaler.widthScaleFactor, right: 16 * scaler.widthScaleFactor),
                           child: CustomFilledButton(
                               label: 'Next',
                               isLoading: isProcessing,
@@ -296,9 +308,9 @@ class PinAuthenticationRegisterState extends State<PinAuthenticationRegister> {
                       ],
                     ),
                   ),
-                  const Gap(10),
+                  Gap(10 * scaler.widthScaleFactor),
                   Container(
-                    margin: const EdgeInsets.only(left: 16, right: 16),
+                    margin: EdgeInsets.only(left: 16 * scaler.widthScaleFactor, right: 16 * scaler.widthScaleFactor),
                     child: CustomOutlinedButton(
                       label: "Change mobile number",
                       onPressed: () => onTapChangePhone(context),

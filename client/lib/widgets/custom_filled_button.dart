@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/scaler.dart';
 import '../utils/styles.dart';
 
 class CustomFilledButton extends StatefulWidget {
@@ -22,6 +23,9 @@ class CustomFilledButton extends StatefulWidget {
 class CustomFilledButtonState extends State<CustomFilledButton> {
   @override
   Widget build(BuildContext context) {
+    Scaler().init(context);
+    final scaler = Scaler();
+
     return SizedBox(
       width: double.infinity,
       child: FilledButton(
@@ -29,20 +33,23 @@ class CustomFilledButtonState extends State<CustomFilledButton> {
         style: FilledButton.styleFrom(
           elevation: 0,
           backgroundColor: Colors.deepOrangeAccent,
-          padding: const EdgeInsets.symmetric(vertical: 12),
+          padding: EdgeInsets.symmetric(vertical: 12 * scaler.widthScaleFactor),
         ),
         child: widget.isLoading
-        ? const SizedBox(
-          height: 20,
-          width: 20,
+        ? SizedBox(
+          height: 20 * scaler.widthScaleFactor,
+          width: 20 * scaler.widthScaleFactor,
           child: CircularProgressIndicator(
-            strokeWidth: 2,
+            strokeWidth: 2 * scaler.widthScaleFactor,
             valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
           ),
         )
         : Text(
           widget.label,
-          style: MyStyles.tinyBoldTextStyle,
+          style: TextStyle(
+              fontSize: 16 * scaler.widthScaleFactor / scaler.textScaleFactor,
+              fontWeight: FontWeight.bold
+          ),
         ),
       ),
     );
