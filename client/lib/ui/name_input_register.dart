@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 
+import '../utils/scaler.dart';
 import 'volunteer_register.dart';
 
 class NameInputRegister extends StatefulWidget {
@@ -82,6 +83,8 @@ class _NameInputRegisterState extends State<NameInputRegister> {
 
   @override
   Widget build(BuildContext context) {
+    Scaler().init(context);
+    final scaler = Scaler();
     final Size screen_size = MediaQuery.of(context).size;
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
@@ -114,126 +117,159 @@ class _NameInputRegisterState extends State<NameInputRegister> {
               width: screen_size.width,
               child: Column(
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 0, top: 10),
+                  Padding(
+                    padding: EdgeInsets.only(left: 0, top: 10 * scaler.widthScaleFactor),
                     child: Align(
                       alignment: Alignment.topLeft,
-                      child: CupertinoNavigationBarBackButton(
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.arrow_back_ios, // Cupertino uses 'Icons.arrow_back_ios_new' for newer iOS style
+                          size: 25 * scaler.widthScaleFactor, // Set your custom size
+                        ),
                         color: Colors.black,
+                        onPressed: () {
+                          Navigator.maybePop(context);
+                        },
                       ),
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 16, right: 16, top: 5),
+                  Padding(
+                    padding: EdgeInsets.only(left: 16 * scaler.widthScaleFactor, right: 16 * scaler.widthScaleFactor, top: 5 * scaler.widthScaleFactor),
                     child: Align(
                       alignment: Alignment.topLeft,
                       child: Text(
                         MyStrings.name_input_register_title,
-                        style: MyStyles.headerTextStyle,
+                        style: TextStyle(
+                            fontSize: 24 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                            fontWeight: FontWeight.bold
+                        ),
                       ),
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 16, right: 16, top: 5),
+                  Padding(
+                    padding: EdgeInsets.only(left: 16 * scaler.widthScaleFactor, right: 16 * scaler.widthScaleFactor, top: 5 * scaler.widthScaleFactor),
                     child: Align(
                       alignment: Alignment.topLeft,
                       child: Text(
                         MyStrings.name_input_register_guide,
-                        style: MyStyles.blackTinyTextStyle,
+                        style: TextStyle(
+                            fontSize: 16 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                            color: Colors.black
+                        ),
                       ),
                     ),
                   ),
-                  const Gap(10),
+                  Gap(10 * scaler.widthScaleFactor),
                   Form(
                     key: _formKey,
                     child: Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: EdgeInsets.all(16.0 * scaler.widthScaleFactor),
                       child: Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(
-                                  color: firstInputBorderColor,
-                                  width: 1.0,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                    color: firstInputBorderColor,
+                                    width: 1.0 * scaler.widthScaleFactor,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8 * scaler.widthScaleFactor),
                                 ),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: TextFormField(
-                                focusNode: firstFocusNode,
-                                controller: firstNameController,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter your first name';
-                                  }
-                                  return null;
-                                },
-                                style: const TextStyle(fontSize: 16, color: Colors.black),
-                                cursorColor: Colors.black,
-                                decoration: InputDecoration(
-                                  label: const Text('First name'),
-                                  labelStyle: TextStyle(fontSize: 16, color: Colors.grey[300]),
-                                  floatingLabelStyle: TextStyle(fontSize: 16, color: Colors.grey[700]),
-                                  contentPadding: const EdgeInsets.all(8),
-                                  border: InputBorder.none,
-                                  errorText: firstValidate ? 'Invalid name!' : null,
+                                child: TextFormField(
+                                  focusNode: firstFocusNode,
+                                  controller: firstNameController,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter your first name';
+                                    }
+                                    return null;
+                                  },
+                                  style: TextStyle(fontSize: 16 * scaler.widthScaleFactor, color: Colors.black),
+                                  cursorColor: Colors.black,
+                                  decoration: InputDecoration(
+                                    label: const Text('First name'),
+                                    labelStyle: TextStyle(
+                                        fontSize: 16 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                                        color: Colors.grey[300]
+                                    ),
+                                    floatingLabelStyle: TextStyle(
+                                        fontSize: 16 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                                        color: Colors.grey[700]
+                                    ),
+                                    contentPadding: EdgeInsets.all(6 * scaler.widthScaleFactor),
+                                    border: InputBorder.none,
+                                    errorText: firstValidate ? 'Invalid name!' : null,
+                                  ),
+                                  keyboardType: TextInputType.name,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      firstNameController.text = value;
+                                    });
+                                  },
                                 ),
-                                keyboardType: TextInputType.name,
-                                onChanged: (value) {
-                                  setState(() {
-                                    firstNameController.text = value;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                          const Gap(12),
-                          Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(
-                                  color: lastInputBorderColor,
-                                  width: 1.0,
-                                ),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: TextFormField(
-                                focusNode: lastFocusNode,
-                                controller: lastNameController,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter your name';
-                                  }
-                                  return null;
-                                },
-                                style: const TextStyle(fontSize: 16, color: Colors.black),
-                                cursorColor: Colors.black,
-                                decoration: InputDecoration(
-                                  label: const Text('Last name'),
-                                  labelStyle: TextStyle(fontSize: 16, color: Colors.grey[300]),
-                                  floatingLabelStyle: TextStyle(fontSize: 16, color: Colors.grey[700]),
-                                  contentPadding: const EdgeInsets.all(8),
-                                  border: InputBorder.none,
-                                  errorText: secondValidate ? 'Invalid name!' : null,
-                                ),
-                                keyboardType: TextInputType.name,
-                                onChanged: (value) {
-                                  setState(() {
-                                    lastNameController.text = value;
-                                  });
-                                },
                               ),
                             ),
-                          ),
-                        ]
+                            Gap(12 * scaler.widthScaleFactor),
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                    color: lastInputBorderColor,
+                                    width: 1.0 * scaler.widthScaleFactor,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8 * scaler.widthScaleFactor),
+                                ),
+                                child: TextFormField(
+                                  focusNode: lastFocusNode,
+                                  controller: lastNameController,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter your name';
+                                    }
+                                    return null;
+                                  },
+                                  style: TextStyle(
+                                      fontSize: 16 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                                      color: Colors.black
+                                  ),
+                                  cursorColor: Colors.black,
+                                  decoration: InputDecoration(
+                                    label: Text(
+                                      'Last name',
+                                      style: TextStyle(
+                                          fontSize: 16.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                                      ),
+                                    ),
+                                    labelStyle: TextStyle(
+                                        fontSize: 16 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                                        color: Colors.grey[300]
+                                    ),
+                                    floatingLabelStyle: TextStyle(
+                                        fontSize: 16 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                                        color: Colors.grey[700]
+                                    ),
+                                    contentPadding: EdgeInsets.all(6 * scaler.widthScaleFactor),
+                                    border: InputBorder.none,
+                                    errorText: secondValidate ? 'Invalid name!' : null,
+                                  ),
+                                  keyboardType: TextInputType.name,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      lastNameController.text = value;
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
+                          ]
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10 * scaler.widthScaleFactor),
                   Container(
-                    margin: const EdgeInsets.only(left: 16, right: 16),
+                    margin: EdgeInsets.only(left: 16 * scaler.widthScaleFactor, right: 16 * scaler.widthScaleFactor),
                     child: CustomFilledButton(
                       label: "Next",
                       onPressed: () => onSubmitPhone(context),
@@ -241,14 +277,17 @@ class _NameInputRegisterState extends State<NameInputRegister> {
                   ),
                   const Spacer(),
                   Padding(
-                    padding: const EdgeInsets.only(left: 16, right: 16, bottom: 5),
+                    padding: EdgeInsets.only(left: 16 * scaler.widthScaleFactor, right: 16 * scaler.widthScaleFactor, bottom: 5 * scaler.widthScaleFactor),
                     child: Align(
                       alignment: Alignment.center,
                       child: TextButton(
                         onPressed: () {},
-                        child: const Text(
+                        child: Text(
                           MyStrings.already_have_account,
-                          style: TextStyle(fontSize: 16, color: Colors.deepOrangeAccent),
+                          style: TextStyle(
+                              fontSize: 16 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                              color: Colors.deepOrangeAccent
+                          ),
                         ),
                       ),
                     ),
