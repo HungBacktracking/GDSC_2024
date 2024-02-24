@@ -71,7 +71,7 @@ class _NameInputRegisterState extends State<NameInputRegister> {
 
   void onSubmitPhone(BuildContext context) {
     if (_formKey.currentState!.validate()) {
-      String name = firstNameController.text + lastNameController.text;
+      String name = "$firstNameController.text $lastNameController.text";
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => VolunteerRegister(name: name),
