@@ -35,6 +35,7 @@ class _StepScreenState extends State<StepScreen> {
     final scaler = Scaler();
     return Scaffold(
       appBar: AppBar(
+        surfaceTintColor: Colors.white,
         title: Text(
           widget.appBarTitle,
           style: TextStyle(
