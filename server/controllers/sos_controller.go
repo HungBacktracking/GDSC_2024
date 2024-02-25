@@ -8,7 +8,6 @@ import (
 	"server/bootstrap"
 	"server/domain"
 	"server/utils"
-	"strconv"
 	"time"
 
 	"cloud.google.com/go/firestore"
@@ -179,29 +178,15 @@ func cosRadians(angle float64) float64 {
 
 // getNewRoomID generates a new room ID by finding the maximum existing ID and incrementing it
 // getNewRoomID generates a new room ID by finding the maximum existing ID and incrementing it
+// getNewRoomID generates a new room ID using the current time as a string
 func getNewRoomID(ctx context.Context) (string, error) {
-	// Find the maximum room ID in Firestore
-	query := bootstrap.FirestoreClient.Collection("room").OrderBy("ID", firestore.Desc).Limit(1)
-	iter := query.Documents(ctx)
-	doc, err := iter.Next()
-	if err != nil && err != iterator.Done {
-		return "", err
-	}
+	// Use current time as a string
+	timestamp := time.Now().Format("20060102150405") // Format: YYYYMMDDHHMMSS
 
-	// If no documents found, start with ID 1
-	if doc == nil {
-		return "1", nil
-	}
+	// You can append additional information to the timestamp if needed
+	// Example: timestamp = timestamp + "-someAdditionalInfo"
 
-	// Increment the maximum ID
-	var maxID int
-	err = doc.DataTo(&maxID)
-	if err != nil {
-		return "", err
-	}
-	newID := maxID + 1
-
-	return strconv.Itoa(newID), nil
+	return timestamp, nil
 }
 
 type CloseRoomRequest struct {
