@@ -11,10 +11,6 @@ class AuthViewModel extends ChangeNotifier {
 
   bool _isSignedIn = false;
   bool get isSignedIn => _isSignedIn;
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
-  UserModel? _userModel;
-  UserModel get userModel => _userModel!;
 
   AuthViewModel() {
     checkSign();
@@ -47,19 +43,14 @@ class AuthViewModel extends ChangeNotifier {
     required String userOtp,
     required Function onSuccess,
   }) async {
-    _isLoading = true;
-    notifyListeners();
-
     try {
       await _authRepository.verifyOtp(context: context,
           verificationId: verificationId,
           userOtp: userOtp,
           onSuccess: onSuccess);
-      _isLoading = false;
       notifyListeners();
     } catch (e) {
       getErrorSnackBar("Verification failed!", e);
-      _isLoading = false;
       notifyListeners();
     }
   }
@@ -81,13 +72,10 @@ class AuthViewModel extends ChangeNotifier {
     required UserModel userModel,
     required Function onSuccess,
   }) async {
-    _isLoading = true;
-    notifyListeners();
     try {
       await _authRepository.saveUserDataToFirebase(context: context, userModel: userModel, onSuccess: onSuccess);
     } catch (e) {
       getErrorSnackBar("Saving user failed!", e);
-      _isLoading = false;
       notifyListeners();
     }
   }
