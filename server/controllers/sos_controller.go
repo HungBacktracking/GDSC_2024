@@ -8,6 +8,7 @@ import (
 	"server/bootstrap"
 	"server/domain"
 	"server/utils"
+	"strconv"
 	"time"
 
 	"cloud.google.com/go/firestore"
@@ -89,7 +90,9 @@ func notifyUsersInVicinity(ctx context.Context, location domain.GeoPoint, roomID
 	body := "Go help right now"
 	data := map[string]string{
 		"roomID":     roomID,
-		"image_link": imageLink, // Include the image link in the notification data
+		"image_link": imageLink,                                      // Include the image link in the notification data
+		"lat":        strconv.FormatFloat(location.Lat, 'f', -1, 64), // Convert float64 to string
+		"lng":        strconv.FormatFloat(location.Lng, 'f', -1, 64), // Convert float64 to string
 	}
 
 	if err := utils.SendFCMMessage(tokens, title, body, data); err != nil {
