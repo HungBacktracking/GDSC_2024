@@ -1,7 +1,10 @@
+import 'package:camera/camera.dart';
 import 'package:client/ui/home_screen.dart';
 import 'package:client/ui/leader_board_screen.dart';
 import 'package:client/ui/learning_firstaid_screen.dart';
 import 'package:client/ui/profile_screen.dart';
+import 'package:client/ui/sos_screen.dart';
+import 'package:client/ui/victim_capture_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../models/quiz_category_model.dart';
@@ -24,7 +27,7 @@ class CustomNavigationBar extends StatelessWidget{
             children: [
               Container(
                 height: 20.0 * scaler.widthScaleFactor,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.transparent,
                 ),
               ),
@@ -38,8 +41,17 @@ class CustomNavigationBar extends StatelessWidget{
                 radius: 40.0 * scaler.widthScaleFactor,
                 backgroundColor: Colors.grey[200],
                 child: InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(context, '/update');
+                  onTap: () async {
+                    // Obtain a list of the available cameras on the device.
+                    final cameras = await availableCameras();
+
+                    // Get a specific camera from the list of available cameras.
+                    final firstCamera = cameras.first;
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => VictimCaptureScreen(camera: firstCamera)),
+                    );
                   },
                   child: Image.asset(
                     'assets/icons/ic_sos.png',
@@ -90,7 +102,7 @@ class BottomBar extends StatelessWidget {
               onPressed: () {
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                  MaterialPageRoute(builder: (context) => const HomeScreen()),
                       (Route<dynamic> route) => false,
                 );
               },
@@ -102,7 +114,7 @@ class BottomBar extends StatelessWidget {
               onPressed: () {
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => ProfileScreen(avatarUrl: 'https://i1-giaitri.vnecdn.net/2022/06/25/lan-nha-1-JPG-2518-1656130984.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=KG41XneV1XWJx66-iZtinA', userName: 'Nguyen Tan')),
+                  MaterialPageRoute(builder: (context) => const ProfileScreen(avatarUrl: 'https://i1-giaitri.vnecdn.net/2022/06/25/lan-nha-1-JPG-2518-1656130984.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=KG41XneV1XWJx66-iZtinA', userName: 'Nguyen Tan')),
                       (Route<dynamic> route) => false,
                 );
               },
@@ -129,7 +141,7 @@ class BottomBar extends StatelessWidget {
               onPressed: () {
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => ProfileScreen(avatarUrl: 'https://i1-giaitri.vnecdn.net/2022/06/25/lan-nha-1-JPG-2518-1656130984.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=KG41XneV1XWJx66-iZtinA', userName: 'Nguyen Tan')),
+                  MaterialPageRoute(builder: (context) => const ProfileScreen(avatarUrl: 'https://i1-giaitri.vnecdn.net/2022/06/25/lan-nha-1-JPG-2518-1656130984.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=KG41XneV1XWJx66-iZtinA', userName: 'Nguyen Tan')),
                       (Route<dynamic> route) => false,
                 );
               },

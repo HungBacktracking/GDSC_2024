@@ -77,9 +77,9 @@ class MyApp extends StatelessWidget {
             }
           ),
         ),
-        home: LandingPage(),
+        home: HomeScreen(),
         routes: {
-          '/home': (context) => const LandingPage(),
+          '/home': (context) => const HomeScreen(),
           NotificationScreen.routeName: (context) => const NotificationScreen(),
           // '/main': (context) => const MainScreen(),
           // '/frame': (context) => const FrameScreen(),
