@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
@@ -10,13 +11,18 @@ import '../../utils/themes.dart';
 import 'helper_accept_sos_screen.dart';
 
 class HelperNotificationScreen extends StatelessWidget{
-  final String imageUrl;
-  final LatLng victimLocation;
 
-  const HelperNotificationScreen({Key? key, required this.imageUrl, required this.victimLocation}) : super(key: key);
+
+  static const routeName = '/helper_notification';
+  const HelperNotificationScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final message = ModalRoute.of(context)!.settings.arguments as RemoteMessage;
+    print("Message: $message");
+    final String imageUrl = "adsdfsd";
+    final LatLng victimLocation = LatLng(100, 100);
+
     Scaler().init(context);
     final scaler = Scaler();
     final currentLocation = LatLng(37.33500926, -122.03272188);

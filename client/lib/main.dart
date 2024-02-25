@@ -78,10 +78,11 @@ class MyApp extends StatelessWidget {
             }
           ),
         ),
-        home: HomeScreen(),
+        home: LandingPage(),
         routes: {
-          '/home': (context) => const HomeScreen(),
+          '/home': (context) => const LandingPage(),
           NotificationScreen.routeName: (context) => const NotificationScreen(),
+          HelperNotificationScreen.routeName: (context) => HelperNotificationScreen(),
           // '/main': (context) => const MainScreen(),
           // '/frame': (context) => const FrameScreen(),
           // '/quiz': (context) => const QuizGameScreen(),

@@ -4,7 +4,7 @@ import 'package:client/ui/leader_board_screen.dart';
 import 'package:client/ui/learning_firstaid_screen.dart';
 import 'package:client/ui/profile_screen.dart';
 import 'package:client/ui/sos_screen.dart';
-import 'package:client/ui/victim_capture_screen.dart';
+import 'package:client/ui/sos/victim_capture_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../models/quiz_category_model.dart';

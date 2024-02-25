@@ -1,4 +1,5 @@
 import "package:client/ui/notification_screen.dart";
+import "package:client/ui/sos/helper_notification_screen.dart";
 import "package:firebase_messaging/firebase_messaging.dart";
 import "package:nb_utils/nb_utils.dart";
 // import 'package:shared_preferences/shared_preferences.dart';
@@ -115,7 +116,7 @@ Future<void> handleNotificationOpenedApp(RemoteMessage? message) async {
   }
 
   navigatorKey.currentState!.pushNamed(
-    NotificationScreen.routeName,
+    HelperNotificationScreen.routeName,
     arguments: message,
   );
 
