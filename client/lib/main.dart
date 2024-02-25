@@ -2,8 +2,8 @@ import 'package:client/api/firebase_api.dart';
 import 'package:client/firebase_options.dart';
 import 'package:client/ui/contact_us_screen.dart';
 import 'package:client/ui/landing_page.dart';
-import 'package:client/ui/register/name_input_register.dart';
-import 'package:client/ui/profile_screen.dart';
+import 'package:client/ui/sos/helper_accept_sos_screen.dart';
+import 'package:client/ui/sos/helper_notification_screen.dart';
 import 'package:client/ui/sos_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:client/models/quiz_category_model.dart';
@@ -21,6 +21,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:client/ui/notification_screen.dart';
 
@@ -77,7 +78,10 @@ class MyApp extends StatelessWidget {
             }
           ),
         ),
-        home: LandingPage(),
+        home: HelperNotificationScreen(
+          imageUrl: "https://i.pinimg.com/originals/4a/2c/65/4a2c657041ac5b0e910a2697ca21e914.jpg",
+          victimLocation: const LatLng(37.33429383, -122.06600055),
+        ),
         routes: {
           '/home': (context) => const LandingPage(),
           NotificationScreen.routeName: (context) => const NotificationScreen(),
