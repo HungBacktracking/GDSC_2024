@@ -11,17 +11,15 @@ import '../../utils/themes.dart';
 import 'helper_accept_sos_screen.dart';
 
 class HelperNotificationScreen extends StatelessWidget{
-
+  final String imageUrl;
+  final LatLng victimLocation;
 
   static const routeName = '/helper_notification';
-  const HelperNotificationScreen({Key? key}) : super(key: key);
+  const HelperNotificationScreen({Key? key, required this.imageUrl, required this.victimLocation}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final message = ModalRoute.of(context)!.settings.arguments as RemoteMessage;
-    print("Message: $message");
-    final String imageUrl = "adsdfsd";
-    final LatLng victimLocation = LatLng(100, 100);
+
 
     Scaler().init(context);
     final scaler = Scaler();
@@ -77,7 +75,7 @@ class HelperNotificationScreen extends StatelessWidget{
                 child: Column(
                   children: [
                     Text(
-                      'Distance to victim: $distanceInMeters meters',
+                      'Distance to victim: 484 meters',
                       style: TextStyle(
                         fontSize: 24 * scaler.widthScaleFactor / scaler.textScaleFactor,
                         fontWeight: FontWeight.w700,

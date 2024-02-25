@@ -6,6 +6,7 @@ import 'package:client/ui/contact_us_screen.dart';
 import 'package:client/ui/landing_page.dart';
 // import 'package:client/ui/name_input_register.dart';
 import 'package:client/ui/profile_screen.dart';
+import 'package:client/ui/sos/helper_notification_screen.dart';
 import 'package:client/ui/sos_screen.dart';
 import 'package:client/utils/location_helper.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -25,6 +26,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:client/ui/notification_screen.dart';
@@ -36,7 +38,6 @@ final NavigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  FirebaseAPI().initNotification(); // Add this line
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
@@ -57,6 +58,10 @@ class MyApp extends StatelessWidget {
       LocationData location = await backgroundLocationService.getLocation();
       print("Location: $location");
       backgroundLocationService.sendLocationToServer(location);
+    }();
+
+    () async{
+      FirebaseAPI().initNotification(context); // Add this line
     }();
 
     final List<String> certificatesTitles = [
@@ -98,7 +103,10 @@ class MyApp extends StatelessWidget {
                 TargetPlatform.iOS: CupertinoPageTransitionsBuilder()
               }),
             ),
-            home: LandingPage(),
+            home: HelperNotificationScreen(
+              imageUrl: 'https://firebasestorage.googleapis.com/v0/b/firstaid-b3f79.appspot.com/o/images%2F1708850057728.png?alt=media&token=a2916aeb-5d4e-4255-bbdc-2b09f0cb0111',
+              victimLocation: LatLng(10.7756515, 106.6649603),
+            ),
             routes: {
               '/home': (context) => const LandingPage(),
               NotificationScreen.routeName: (context) =>
@@ -111,22 +119,22 @@ class MyApp extends StatelessWidget {
               // '/learning': (context) => const LearningFirstAidScreen(),
             }
           ),
-        ),
-        home: LandingPage(),
-        routes: {
-          '/home': (context) => const LandingPage(),
-          NotificationScreen.routeName: (context) => const NotificationScreen(),
-          HelperNotificationScreen.routeName: (context) => HelperNotificationScreen(),
-          // '/main': (context) => const MainScreen(),
-          // '/frame': (context) => const FrameScreen(),
-          // '/quiz': (context) => const QuizGameScreen(),
-          // '/complete': (context) => const CompleteQuizScreen(),
-          // '/leaderboard': (context) => const LeaderBoardScreen(),
-          // '/learning': (context) => const LearningFirstAidScreen(),
-        }
-        // home: MainScreen(),
-      )
-    );
+        );
+    //     home: LandingPage(),
+    //     routes: {
+    //       '/home': (context) => const LandingPage(),
+    //       NotificationScreen.routeName: (context) => const NotificationScreen(),
+    //       HelperNotificationScreen.routeName: (context) => HelperNotificationScreen(),
+    //       // '/main': (context) => const MainScreen(),
+    //       // '/frame': (context) => const FrameScreen(),
+    //       // '/quiz': (context) => const QuizGameScreen(),
+    //       // '/complete': (context) => const CompleteQuizScreen(),
+    //       // '/leaderboard': (context) => const LeaderBoardScreen(),
+    //       // '/learning': (context) => const LearningFirstAidScreen(),
+    // //     }
+    // //     // home: MainScreen(),
+    // //   )
+    // );
   }
 }
 

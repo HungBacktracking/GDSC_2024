@@ -1,20 +1,23 @@
 import "package:client/ui/notification_screen.dart";
 import "package:client/ui/sos/helper_notification_screen.dart";
 import "package:firebase_messaging/firebase_messaging.dart";
+import "package:flutter/cupertino.dart";
+import "package:flutter/material.dart";
+import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:nb_utils/nb_utils.dart";
 // import 'package:shared_preferences/shared_preferences.dart';
 
 class FirebaseAPI {
   final _firebaseMessaging = FirebaseMessaging.instance;
 
-  Future<void> initNotification() async {
+  Future<void> initNotification(BuildContext context) async {
     await askForPushNotificationPermission();
 
     final fcmToken = await getFirebaseToken();
     print("FCM Token $fcmToken");
     // save token to shared preferences
 
-    registerPushNotificationHandling();
+    registerPushNotificationHandling(context);
   }
 
   Future<void> askForPushNotificationPermission() async {
@@ -44,7 +47,7 @@ class FirebaseAPI {
   //   return prefs.getString('token');
   // }
 
-  Future<void> registerPushNotificationHandling() async {
+  Future<void> registerPushNotificationHandling(BuildContext context) async {
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
       alert: true,
@@ -58,12 +61,14 @@ class FirebaseAPI {
     // open app in terminated state when notification is clicked
     FirebaseMessaging.instance.getInitialMessage().then((message) {
       if (message != null) {
-        handleNotificationOpenedApp(message);
+        handleNotificationOpenedApp(message, context);
       }
     });
 
     // open app in background state when notification is clicked
-    FirebaseMessaging.onMessageOpenedApp.listen(handleNotificationOpenedApp);
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      handleNotificationOpenedApp(message, context);
+    });
 
     // handle notification when app is in background
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
@@ -110,15 +115,23 @@ Future<void> handleForegroundMessage(RemoteMessage message) async {
 
 void handleForegroundData(Map<String, dynamic> data) {}
 
-Future<void> handleNotificationOpenedApp(RemoteMessage? message) async {
+Future<void> handleNotificationOpenedApp(RemoteMessage? message, BuildContext context) async {
   if (message == null) {
     return;
   }
 
-  navigatorKey.currentState!.pushNamed(
-    HelperNotificationScreen.routeName,
-    arguments: message,
-  );
+  print("navigator to ${HelperNotificationScreen.routeName}");
+  // navigatorKey.currentState!.pushNamed(
+  //   HelperNotificationScreen.routeName,
+  //   arguments: message,
+  // );
+  //
+
+  Navigator.push(context,
+      MaterialPageRoute(builder: (context) => HelperNotificationScreen(
+              imageUrl: message.data['image_link'], victimLocation: LatLng(10.7756515, 106.6649603))
+      ));
+
 
   print("Handling a notification opened app");
 

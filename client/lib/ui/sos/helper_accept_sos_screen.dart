@@ -29,7 +29,7 @@ class _HelperSOSScreenState extends State<HelperSOSScreen> {
 
   final FirebaseAuth auth = FirebaseAuth.instance;
 
-  static const LatLng victimLocation = LatLng(37.33500926, -122.03272188);
+  static const LatLng victimLocation = LatLng(10.78, 106.6649603);
 
   BitmapDescriptor helperIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor currentLocationIcon = BitmapDescriptor.defaultMarker;
