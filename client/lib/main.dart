@@ -103,10 +103,7 @@ class MyApp extends StatelessWidget {
                 TargetPlatform.iOS: CupertinoPageTransitionsBuilder()
               }),
             ),
-            home: HelperNotificationScreen(
-              imageUrl: 'https://firebasestorage.googleapis.com/v0/b/firstaid-b3f79.appspot.com/o/images%2F1708850057728.png?alt=media&token=a2916aeb-5d4e-4255-bbdc-2b09f0cb0111',
-              victimLocation: LatLng(10.7756515, 106.6649603),
-            ),
+            home: LandingPage(),
             routes: {
               '/home': (context) => const LandingPage(),
               NotificationScreen.routeName: (context) =>
