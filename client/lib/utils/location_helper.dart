@@ -1,5 +1,3 @@
-import 'dart:html';
-import 'dart:js';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -19,7 +17,7 @@ class LocationHelper {
 
   LocationHelper(this.context);
 
-  Future<bool> _handleLocationPermission() async {
+  Future<bool> handleLocationPermission() async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -52,7 +50,7 @@ class LocationHelper {
   Future<Location2D?> myLocation() async {
     // return the location of the user
     // Check location permission
-    bool permission = await _handleLocationPermission();
+    bool permission = await handleLocationPermission();
 
     if (permission) {
       // Permission granted, proceed to get the location
@@ -63,7 +61,7 @@ class LocationHelper {
         double latitude = position.latitude;
         double longitude = position.longitude;
         // Use the latitude and longitude values as needed
-        print('Latitude: $latitude, Longitude: $longitude');
+        print('LocationHelper: Latitude: $latitude, Longitude: $longitude');
         return Location2D(
             latitude: latitude, longitude: longitude, position: position);
       } catch (e) {

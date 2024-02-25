@@ -33,10 +33,12 @@ dependencies:
   firebase_core: ^2.25.4
   firebase_auth: ^4.17.4
   cloud_firestore: ^4.15.4
+  firebase_storage: ^11.6.6
   google_maps_flutter: ^2.5.3
   geolocator: ^10.1.0
   geocoding: ^2.0.4
   location: ^5.0.3
+  background_location: ^0.13.0
   get: ^4.6.6
   get_it: ^7.6.7
   flutter_bloc: ^8.1.3
