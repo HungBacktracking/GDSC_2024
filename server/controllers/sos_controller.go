@@ -59,7 +59,7 @@ func CreateRoom(c echo.Context) error {
 	}
 
 	// Notify users in the vicinity
-	if err := notifyUsersInVicinity(ctx, req.Location, roomID, req.ImageLink); err != nil {
+	if err := notifyUsersInVicinity(ctx, req.Location, roomID, req.ImageLink, req.UID); err != nil {
 		return c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 	}
 
@@ -69,17 +69,20 @@ func CreateRoom(c echo.Context) error {
 }
 
 // notifyUsersInVicinity sends push notifications to users within 500m of the specified location
-func notifyUsersInVicinity(ctx context.Context, location domain.GeoPoint, roomID string, imageLink string) error {
+// notifyUsersInVicinity sends push notifications to users within 500m of the specified location
+func notifyUsersInVicinity(ctx context.Context, location domain.GeoPoint, roomID string, imageLink string, roomCreatorID string) error {
 	// Find users within 500m of the specified location
 	users, err := findUsersInVicinity(ctx, location, 500)
 	if err != nil {
 		return err
 	}
 
-	// Collect FCM tokens from users
+	// Collect FCM tokens from users, excluding the room creator
 	var tokens []string
 	for _, user := range users {
-		tokens = append(tokens, user.FcmTokens...)
+		if user.ID != roomCreatorID {
+			tokens = append(tokens, user.FcmTokens...)
+		}
 	}
 
 	// Send push notification to collected tokens
@@ -104,16 +107,20 @@ func findUsersInVicinity(ctx context.Context, location domain.GeoPoint, radius f
 	collectionName := "user"
 
 	// Query users in Firestore collection "user" with location within the radius
-	query := bootstrap.FirestoreClient.Collection(collectionName).
-		Where("location.lat", ">=", location.Lat-radius/111.32). // Assuming 1 degree latitude is approximately 111.32 km
-		Where("location.lat", "<=", location.Lat+radius/111.32).
+	latQuery := bootstrap.FirestoreClient.Collection(collectionName).
+		Where("location.lat", ">=", location.Lat-radius/111.32).
+		Where("location.lat", "<=", location.Lat+radius/111.32)
+
+	lngQuery := bootstrap.FirestoreClient.Collection(collectionName).
 		Where("location.lng", ">=", location.Lng-radius/(111.32*cosRadians(location.Lat))).
 		Where("location.lng", "<=", location.Lng+radius/(111.32*cosRadians(location.Lat)))
 
 	var users []domain.UserInfo
-	iter := query.Documents(ctx)
+
+	// Combine the results of both queries
+	latIter := latQuery.Documents(ctx)
 	for {
-		doc, err := iter.Next()
+		doc, err := latIter.Next()
 		if err == iterator.Done {
 			break
 		}
@@ -129,6 +136,38 @@ func findUsersInVicinity(ctx context.Context, location domain.GeoPoint, radius f
 
 		users = append(users, user)
 	}
+
+	lngIter := lngQuery.Documents(ctx)
+	for {
+		doc, err := lngIter.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			return nil, err
+		}
+
+		// Map Firestore document to UserInfo struct
+		var user domain.UserInfo
+		if err := doc.DataTo(&user); err != nil {
+			return nil, err
+		}
+
+		// Ensure the user is not duplicated in the results
+		duplicate := false
+		for _, existingUser := range users {
+			if existingUser.ID == user.ID {
+				duplicate = true
+				break
+			}
+		}
+
+		if !duplicate {
+			users = append(users, user)
+		}
+	}
+
+	print("hello", users)
 
 	return users, nil
 }
