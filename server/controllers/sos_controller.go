@@ -90,6 +90,7 @@ func notifyUsersInVicinity(ctx context.Context, location domain.GeoPoint, roomID
 	data := map[string]string{
 		"roomID":     roomID,
 		"image_link": imageLink, // Include the image link in the notification data
+		"location":   location.String(),
 	}
 
 	if err := utils.SendFCMMessage(tokens, title, body, data); err != nil {
