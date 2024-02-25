@@ -173,7 +173,7 @@ class _SOSScreenState extends State<SOSScreen> {
               )
             },
           ),
-          Container(
+           Container(
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -240,23 +240,22 @@ class _SOSScreenState extends State<SOSScreen> {
                 )),
           ),
           Positioned(
-            left: 16 * scaler.widthScaleFactor,
-            top: (context.statusBarHeight + 16) * scaler.widthScaleFactor ,
-            child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: radius(100 * scaler.widthScaleFactor),
-                  border: Border.all(
-                      color: context.scaffoldBackgroundColor, width: 2 * scaler.widthScaleFactor),
+              right: 16 * scaler.widthScaleFactor,
+              top: (context.statusBarHeight + 16) * scaler.widthScaleFactor ,
+              child: InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'Cancel',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 17 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-                child: Image.asset(
-                  'assets/icons/ic_profile.png',
-                  height: 40 * scaler.widthScaleFactor,
-                  width: 40 * scaler.widthScaleFactor,
-                  fit: BoxFit.cover,
-                ).cornerRadiusWithClipRRect(100 * scaler.widthScaleFactor).onTap(() {
-                  jcbHomekey.currentState!.openDrawer();
-                }, borderRadius: radius(100 * scaler.widthScaleFactor))),
-          )
+              )
+          ),
         ],
       ),
     );
