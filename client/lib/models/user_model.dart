@@ -6,7 +6,7 @@ class UserModel {
   String name;
   String? profilePic;
   String? createdAt;
-  AddressModel? address;
+  AddressModel? location;
   String phoneNumber;
   bool isBanned;
   bool isActive;
@@ -19,7 +19,7 @@ class UserModel {
     required this.createdAt,
     required this.phoneNumber,
     required this.id,
-    this.address,
+    this.location,
     this.isBanned = false,
     this.isActive = true,
     this.isVolunteer = false,
@@ -32,6 +32,7 @@ class UserModel {
       id: map['id'] ?? '',
       phoneNumber: map['phoneNumber'] ?? '',
       createdAt: map['createdAt'] ?? '',
+      location: AddressModel.fromJson(map),
       profilePic: map['avatar'] ?? '',
       isBanned: map['isBanned'] ?? false,
       isActive: map['isActive'] ?? true,
@@ -49,6 +50,7 @@ class UserModel {
       "isActive": isActive,
       "isBanned": isBanned,
       "isVolunteer": isVolunteer,
+      "location": location!.toJson(),
       "phoneNumber": phoneNumber,
       "createdAt": createdAt,
     };
