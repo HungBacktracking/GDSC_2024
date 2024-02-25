@@ -3,12 +3,12 @@ import 'package:gap/gap.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../utils/scaler.dart';
-import '../utils/themes.dart';
 class StepScreen extends StatefulWidget {
   final String appBarTitle;
   final List<String> steps;
+  final String youtubeId;
 
-  StepScreen({Key? key, required this.appBarTitle, required this.steps}) : super(key: key);
+  StepScreen({Key? key, required this.appBarTitle, required this.steps, required this.youtubeId}) : super(key: key);
 
   @override
   _StepScreenState createState() => _StepScreenState();
@@ -21,7 +21,7 @@ class _StepScreenState extends State<StepScreen> {
   void initState() {
     super.initState();
     _controller = YoutubePlayerController(
-      initialVideoId: 'kGI7Kj3n9o4', // Id of the video to be played.
+      initialVideoId: widget.youtubeId, // Id of the video to be played.
       flags: const YoutubePlayerFlags(
         autoPlay: false,
         mute: false,

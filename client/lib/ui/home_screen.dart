@@ -139,9 +139,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 return InkWell(
                                   onTap: () {
                                     List<CategoryItem> cprCategories = [
-                                      CategoryItem(title: 'Adult', iconPath: 'assets/icons/ic_adult.png'),
-                                      CategoryItem(title: 'Child', iconPath: 'assets/icons/ic_child.png'),
-                                      CategoryItem(title: 'Baby', iconPath: 'assets/icons/ic_baby.png'),
+                                      CategoryItem(title: 'Adult', iconPath: 'assets/icons/ic_adult.png', steps_name: "CPR for Adult", youtubeId: "-NodDRTsV88"),
+                                      CategoryItem(title: 'Child', iconPath: 'assets/icons/ic_child.png', steps_name: "CPR for Child", youtubeId: "lDFN1bgdAqM"),
+                                      CategoryItem(title: 'Baby', iconPath: 'assets/icons/ic_baby.png', steps_name: "CPR for Baby", youtubeId: "gHZdBY-CkGw"),
                                     ];
 
                                     Navigator.push(
