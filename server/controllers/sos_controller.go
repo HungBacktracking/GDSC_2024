@@ -8,7 +8,6 @@ import (
 	"server/bootstrap"
 	"server/domain"
 	"server/utils"
-	"strconv"
 	"time"
 
 	"cloud.google.com/go/firestore"
@@ -22,9 +21,9 @@ type CreateRoomRequest struct {
 	PatientID   string          `json:"patientId"`
 	EmergencyID []int           `json:"emergencyId"`
 	Location    domain.GeoPoint `json:"location"`
+	ImageLink   string          `json:"image_link"`
 }
 
-// CreateRoom creates a new SOS room in Firestore
 // CreateRoom creates a new SOS room in Firestore
 func CreateRoom(c echo.Context) error {
 	req := new(CreateRoomRequest)
@@ -59,8 +58,8 @@ func CreateRoom(c echo.Context) error {
 	}
 
 	// Notify users in the vicinity
-	if err := notifyUsersInVicinity(ctx, req.Location, roomID); err != nil {
-		return c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: "Failed to notify users"})
+	if err := notifyUsersInVicinity(ctx, req.Location, roomID, req.ImageLink, req.UID); err != nil {
+		return c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: err.Error()})
 	}
 
 	// Return the created Room ID
@@ -69,23 +68,29 @@ func CreateRoom(c echo.Context) error {
 }
 
 // notifyUsersInVicinity sends push notifications to users within 500m of the specified location
-func notifyUsersInVicinity(ctx context.Context, location domain.GeoPoint, roomID string) error {
+// notifyUsersInVicinity sends push notifications to users within 500m of the specified location
+func notifyUsersInVicinity(ctx context.Context, location domain.GeoPoint, roomID string, imageLink string, roomCreatorID string) error {
 	// Find users within 500m of the specified location
 	users, err := findUsersInVicinity(ctx, location, 500)
 	if err != nil {
 		return err
 	}
 
-	// Collect FCM tokens from users
+	// Collect FCM tokens from users, excluding the room creator
 	var tokens []string
 	for _, user := range users {
-		tokens = append(tokens, user.FcmTokens...)
+		if user.ID != roomCreatorID {
+			tokens = append(tokens, user.FcmTokens...)
+		}
 	}
 
 	// Send push notification to collected tokens
 	title := "SOS at " + location.String()
 	body := "Go help right now"
-	data := map[string]string{"roomID": roomID}
+	data := map[string]string{
+		"roomID":     roomID,
+		"image_link": imageLink, // Include the image link in the notification data
+	}
 
 	if err := utils.SendFCMMessage(tokens, title, body, data); err != nil {
 		return err
@@ -101,16 +106,20 @@ func findUsersInVicinity(ctx context.Context, location domain.GeoPoint, radius f
 	collectionName := "user"
 
 	// Query users in Firestore collection "user" with location within the radius
-	query := bootstrap.FirestoreClient.Collection(collectionName).
-		Where("location.lat", ">=", location.Lat-radius/111.32). // Assuming 1 degree latitude is approximately 111.32 km
-		Where("location.lat", "<=", location.Lat+radius/111.32).
+	latQuery := bootstrap.FirestoreClient.Collection(collectionName).
+		Where("location.lat", ">=", location.Lat-radius/111.32).
+		Where("location.lat", "<=", location.Lat+radius/111.32)
+
+	lngQuery := bootstrap.FirestoreClient.Collection(collectionName).
 		Where("location.lng", ">=", location.Lng-radius/(111.32*cosRadians(location.Lat))).
 		Where("location.lng", "<=", location.Lng+radius/(111.32*cosRadians(location.Lat)))
 
 	var users []domain.UserInfo
-	iter := query.Documents(ctx)
+
+	// Combine the results of both queries
+	latIter := latQuery.Documents(ctx)
 	for {
-		doc, err := iter.Next()
+		doc, err := latIter.Next()
 		if err == iterator.Done {
 			break
 		}
@@ -127,6 +136,38 @@ func findUsersInVicinity(ctx context.Context, location domain.GeoPoint, radius f
 		users = append(users, user)
 	}
 
+	lngIter := lngQuery.Documents(ctx)
+	for {
+		doc, err := lngIter.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			return nil, err
+		}
+
+		// Map Firestore document to UserInfo struct
+		var user domain.UserInfo
+		if err := doc.DataTo(&user); err != nil {
+			return nil, err
+		}
+
+		// Ensure the user is not duplicated in the results
+		duplicate := false
+		for _, existingUser := range users {
+			if existingUser.ID == user.ID {
+				duplicate = true
+				break
+			}
+		}
+
+		if !duplicate {
+			users = append(users, user)
+		}
+	}
+
+	print("hello", users)
+
 	return users, nil
 }
 
@@ -136,29 +177,16 @@ func cosRadians(angle float64) float64 {
 }
 
 // getNewRoomID generates a new room ID by finding the maximum existing ID and incrementing it
+// getNewRoomID generates a new room ID by finding the maximum existing ID and incrementing it
+// getNewRoomID generates a new room ID using the current time as a string
 func getNewRoomID(ctx context.Context) (string, error) {
-	// Find the maximum room ID in Firestore
-	query := bootstrap.FirestoreClient.Collection("room").OrderBy("id", firestore.Desc).Limit(1)
-	iter := query.Documents(ctx)
-	doc, err := iter.Next()
-	if err != nil && err != iterator.Done {
-		return "", err
-	}
+	// Use current time as a string
+	timestamp := time.Now().Format("20060102150405") // Format: YYYYMMDDHHMMSS
 
-	// If no documents found, start with ID 1
-	if doc == nil {
-		return "1", nil
-	}
+	// You can append additional information to the timestamp if needed
+	// Example: timestamp = timestamp + "-someAdditionalInfo"
 
-	// Increment the maximum ID
-	var maxID int
-	err = doc.DataTo(&maxID)
-	if err != nil {
-		return "", err
-	}
-	newID := maxID + 1
-
-	return strconv.Itoa(newID), nil
+	return timestamp, nil
 }
 
 type CloseRoomRequest struct {

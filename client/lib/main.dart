@@ -1,10 +1,13 @@
+import 'package:background_location/background_location.dart';
+import 'package:client/api/background_locatin.dart';
 import 'package:client/api/firebase_api.dart';
 import 'package:client/firebase_options.dart';
 import 'package:client/ui/contact_us_screen.dart';
 import 'package:client/ui/landing_page.dart';
-import 'package:client/ui/sos/helper_accept_sos_screen.dart';
-import 'package:client/ui/sos/helper_notification_screen.dart';
+// import 'package:client/ui/name_input_register.dart';
+import 'package:client/ui/profile_screen.dart';
 import 'package:client/ui/sos_screen.dart';
+import 'package:client/utils/location_helper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:client/models/quiz_category_model.dart';
 import 'package:client/ui/complete_quiz_screen.dart';
@@ -12,6 +15,7 @@ import 'package:client/ui/frame_screen.dart';
 import 'package:client/ui/home_screen.dart';
 import 'package:client/ui/leader_board_screen.dart';
 import 'package:client/ui/learning_firstaid_screen.dart';
+// import 'package:client/ui/main_screen.dart';
 import 'package:client/ui/quiz_game_screen.dart';
 import 'package:client/ui/update_certificate_screen.dart';
 import 'package:client/ui/update_screen.dart';
@@ -21,7 +25,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:client/ui/notification_screen.dart';
 
@@ -32,11 +36,11 @@ final NavigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  // await FirebaseAPI().initNotification(); // Add this line
   FirebaseAPI().initNotification(); // Add this line
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
+
   runApp(const MyApp());
 }
 
@@ -45,11 +49,28 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> certificatesTitles = ["CPR", "First Aid", "AED", "CPR", "First Aid", "AED"];
+    () async {
+      print('Background Location Service Initialized');
+      BackgroundLocationService backgroundLocationService =
+          BackgroundLocationService();
+      backgroundLocationService.initialize();
+      LocationData location = await backgroundLocationService.getLocation();
+      print("Location: $location");
+      backgroundLocationService.sendLocationToServer(location);
+    }();
+
+    final List<String> certificatesTitles = [
+      "CPR",
+      "First Aid",
+      "AED",
+      "CPR",
+      "First Aid",
+      "AED"
+    ];
     final List<String> certificatesImageUrls = [
       "https://blogs.bournemouth.ac.uk/research/files/2014/07/Certificate-of-Merit2.jpg",
       "https://blogs.bournemouth.ac.uk/research/files/2014/07/Certificate-of-Merit2.jpg",
-          "https://blogs.bournemouth.ac.uk/research/files/2014/07/Certificate-of-Merit2.jpg",
+      "https://blogs.bournemouth.ac.uk/research/files/2014/07/Certificate-of-Merit2.jpg",
       "https://blogs.bournemouth.ac.uk/research/files/2014/07/Certificate-of-Merit2.jpg",
       "https://blogs.bournemouth.ac.uk/research/files/2014/07/Certificate-of-Merit2.jpg",
       "https://blogs.bournemouth.ac.uk/research/files/2014/07/Certificate-of-Merit2.jpg",
@@ -62,19 +83,32 @@ class MyApp extends StatelessWidget {
     );
 
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => AuthViewModel()),
-      ],
-      child: GetMaterialApp(
-        title: 'FirstAid App',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrangeAccent),
-          useMaterial3: true,
-          pageTransitionsTheme: const PageTransitionsTheme(
-            builders: {
-              TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-              TargetPlatform.iOS: CupertinoPageTransitionsBuilder()
+        providers: [
+          ChangeNotifierProvider(create: (_) => AuthViewModel()),
+        ],
+        child: GetMaterialApp(
+            title: 'FirstAid App',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              colorScheme:
+                  ColorScheme.fromSeed(seedColor: Colors.deepOrangeAccent),
+              useMaterial3: true,
+              pageTransitionsTheme: const PageTransitionsTheme(builders: {
+                TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+                TargetPlatform.iOS: CupertinoPageTransitionsBuilder()
+              }),
+            ),
+            home: LandingPage(),
+            routes: {
+              '/home': (context) => const LandingPage(),
+              NotificationScreen.routeName: (context) =>
+                  const NotificationScreen(),
+              // '/main': (context) => const MainScreen(),
+              // '/frame': (context) => const FrameScreen(),
+              // '/quiz': (context) => const QuizGameScreen(),
+              // '/complete': (context) => const CompleteQuizScreen(),
+              // '/leaderboard': (context) => const LeaderBoardScreen(),
+              // '/learning': (context) => const LearningFirstAidScreen(),
             }
           ),
         ),

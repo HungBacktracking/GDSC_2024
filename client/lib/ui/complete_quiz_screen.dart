@@ -105,45 +105,23 @@ class CompleteScreen extends StatelessWidget {
               ),
               onPressed: () {
                 final List<QuizCategoryModel> challengeYouCategories = [
-                  QuizCategoryModel(
-                      title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
-                  QuizCategoryModel(
-                      title: 'Electric Shock',
-                      tag: 'First Aid',
-                      tagColor: Colors.blue),
-                  QuizCategoryModel(
-                      title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
-                  QuizCategoryModel(
-                      title: 'Electric Shock',
-                      tag: 'First Aid',
-                      tagColor: Colors.blue),
+                  QuizCategoryModel(title: 'Burn', tag: 'burn', tagColor: Colors.red),
+                  QuizCategoryModel(title: 'Electric Shock', tag: 'electric shock', tagColor: Colors.blue),
+                  QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.orange),
+                  QuizCategoryModel(title: 'CPR for Children', tag: 'CPR', tagColor: Colors.greenAccent),
                 ];
 
                 final List<QuizCategoryModel> topicsCategories = [
-                  QuizCategoryModel(
-                      title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
-                  QuizCategoryModel(
-                      title: 'Electric Shock',
-                      tag: 'First Aid',
-                      tagColor: Colors.blue),
-                  QuizCategoryModel(
-                      title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
-                  QuizCategoryModel(
-                      title: 'Electric Shock',
-                      tag: 'First Aid',
-                      tagColor: Colors.blue),
-                  QuizCategoryModel(
-                      title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
-                  QuizCategoryModel(
-                      title: 'Electric Shock',
-                      tag: 'First Aid',
-                      tagColor: Colors.blue),
-                  QuizCategoryModel(
-                      title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
-                  QuizCategoryModel(
-                      title: 'Electric Shock',
-                      tag: 'First Aid',
-                      tagColor: Colors.blue),
+                  QuizCategoryModel(title: 'Burn', tag: 'burn', tagColor: Colors.red),
+                  QuizCategoryModel(title: 'Electric Shock', tag: 'electric shock', tagColor: Colors.blue),
+                  QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.orange),
+                  QuizCategoryModel(title: 'CPR for Children', tag: 'CPR', tagColor: Colors.greenAccent),
+                  QuizCategoryModel(title: 'Head Bleeding', tag: 'bleeding', tagColor: Colors.red),
+                  QuizCategoryModel(title: 'Poisons', tag: 'poisons', tagColor: Colors.blue),
+                  QuizCategoryModel(title: 'Fracture', tag: 'fracture', tagColor: Colors.orange),
+                  QuizCategoryModel(title: 'Snake Bite', tag: 'bite', tagColor: Colors.greenAccent),
+                  QuizCategoryModel(title: 'Choking', tag: 'choking', tagColor: Colors.red),
+                  QuizCategoryModel(title: 'Drug Overdose', tag: 'drug overdose', tagColor: Colors.blue),
                 ];
 
                 Navigator.of(context).pushReplacement(
@@ -158,6 +136,7 @@ class CompleteScreen extends StatelessWidget {
                   ),
                 );
               },
+
               child: Text(
                   'OKAY',
                   style: TextStyle(

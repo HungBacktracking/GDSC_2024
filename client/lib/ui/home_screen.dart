@@ -24,21 +24,23 @@ class _HomeScreenState extends State<HomeScreen> {
   bool showAllCategories = false;
 
   final List<QuizCategoryModel> challengeYouCategories = [
-    QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
-    QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
-    QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
-    QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
+    QuizCategoryModel(title: 'Burn', tag: 'burn', tagColor: Colors.red),
+    QuizCategoryModel(title: 'Electric Shock', tag: 'electric shock', tagColor: Colors.blue),
+    QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.orange),
+    QuizCategoryModel(title: 'CPR for Children', tag: 'CPR', tagColor: Colors.greenAccent),
   ];
 
   final List<QuizCategoryModel> topicsCategories = [
-    QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
-    QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
-    QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
-    QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
-    QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
-    QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
-    QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.red),
-    QuizCategoryModel(title: 'Electric Shock', tag: 'First Aid', tagColor: Colors.blue),
+    QuizCategoryModel(title: 'Burn', tag: 'burn', tagColor: Colors.red),
+    QuizCategoryModel(title: 'Electric Shock', tag: 'electric shock', tagColor: Colors.blue),
+    QuizCategoryModel(title: 'CPR for Adult', tag: 'CPR', tagColor: Colors.orange),
+    QuizCategoryModel(title: 'CPR for Children', tag: 'CPR', tagColor: Colors.greenAccent),
+    QuizCategoryModel(title: 'Head Bleeding', tag: 'bleeding', tagColor: Colors.red),
+    QuizCategoryModel(title: 'Poisons', tag: 'poisons', tagColor: Colors.blue),
+    QuizCategoryModel(title: 'Fracture', tag: 'fracture', tagColor: Colors.orange),
+    QuizCategoryModel(title: 'Snake Bite', tag: 'bite', tagColor: Colors.greenAccent),
+    QuizCategoryModel(title: 'Choking', tag: 'choking', tagColor: Colors.red),
+    QuizCategoryModel(title: 'Drug Overdose', tag: 'drug overdose', tagColor: Colors.blue),
   ];
 
   @override
@@ -93,6 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                   color: Colors.transparent,
                   width: screen_size.width,
+                  height: screen_size.height - 150 * scaler.widthScaleFactor,
                   child: SingleChildScrollView(
                     child: Column(
                         children: [
@@ -139,9 +142,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 return InkWell(
                                   onTap: () {
                                     List<CategoryItem> cprCategories = [
-                                      CategoryItem(title: 'Adult', iconPath: 'assets/icons/ic_adult.png'),
-                                      CategoryItem(title: 'Child', iconPath: 'assets/icons/ic_child.png'),
-                                      CategoryItem(title: 'Baby', iconPath: 'assets/icons/ic_baby.png'),
+                                      CategoryItem(title: 'Adult', iconPath: 'assets/icons/ic_adult.png', steps_name: "CPR for Adult", youtubeId: "-NodDRTsV88"),
+                                      CategoryItem(title: 'Child', iconPath: 'assets/icons/ic_child.png', steps_name: "CPR for Child", youtubeId: "lDFN1bgdAqM"),
+                                      CategoryItem(title: 'Baby', iconPath: 'assets/icons/ic_baby.png', steps_name: "CPR for Baby", youtubeId: "gHZdBY-CkGw"),
                                     ];
 
                                     Navigator.push(
