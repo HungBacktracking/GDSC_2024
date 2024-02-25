@@ -2,13 +2,19 @@ import 'package:client/utils/scaler.dart';
 import 'package:client/utils/themes.dart';
 import 'package:flutter/material.dart';
 
+import '../models/quiz_model.dart';
 import 'complete_quiz_screen.dart';
 class QuizScreen extends StatefulWidget {
+  final List<QuizModel> quizList;
+  final String title;
+
+  const QuizScreen({Key? key, required this.quizList, required this.title}) : super(key: key);
   @override
   _QuizScreenState createState() => _QuizScreenState();
 }
 
 class _QuizScreenState extends State<QuizScreen> {
+  String imageUrl = 'https://mabustudio.com/wp-content/uploads/2020/02/chup-anh-beauty-7-scaled.jpg';
   int currentQuestionIndex = 1; // assuming starting from question 7
   int totalQuestions = 10;
   String correctAnswer = "Mine";
@@ -22,6 +28,19 @@ class _QuizScreenState extends State<QuizScreen> {
   Color questionCardColor = MyTheme.lightRedBackGround;
   bool isCorrect = false;
   int correctQuestions = 0;
+  String title = 'CPR for Adult';
+
+  @override
+  void initState() {
+    title = widget.title;
+    imageUrl = widget.quizList[0].imageUrl;
+    question = widget.quizList[0].question;
+    choices = widget.quizList[0].options;
+    correctAnswer = widget.quizList[0].correctAnswer;
+    currentQuestionIndex = 1;
+    totalQuestions = widget.quizList.length;
+    super.initState();
+  }
 
   void submitAnswer() {
     setState(() {
@@ -46,8 +65,10 @@ class _QuizScreenState extends State<QuizScreen> {
         // Go to next question or show result
         if (currentQuestionIndex < totalQuestions){
           currentQuestionIndex++;
-          question = "In an emergency situation, who’s safety is priority?";
-          choices = ['Mine', 'The ill', 'The elder', 'Bystander'];
+          imageUrl = widget.quizList[currentQuestionIndex - 1].imageUrl;
+          question = widget.quizList[currentQuestionIndex - 1].question;
+          choices = widget.quizList[currentQuestionIndex - 1].options;
+          correctAnswer = widget.quizList[currentQuestionIndex - 1].correctAnswer;
           selectedChoice = '';
           isSubmitted = false;
           buttonColor = MyTheme.submitBtn;
@@ -60,11 +81,11 @@ class _QuizScreenState extends State<QuizScreen> {
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
               builder: (context) => CompleteScreen(
-                imageUrl: 'https://mabustudio.com/wp-content/uploads/2020/02/chup-anh-beauty-7-scaled.jpg',
+                imageUrl: widget.quizList[0].imageUrl,
                 time: '3:21',
                 correctQuestions: correctQuestions,
                 totalQuestions: totalQuestions,
-                title: 'CPR for Adult',
+                title: title,
               ),
             ),
           );
@@ -79,8 +100,9 @@ class _QuizScreenState extends State<QuizScreen> {
     final scaler = Scaler();
     return Scaffold(
       appBar: AppBar(
+        surfaceTintColor: Colors.white,
         title: Text(
-            'CPR for Adult',
+            title,
             style: TextStyle(
               fontSize: 20.0 * scaler.widthScaleFactor / scaler.textScaleFactor,
               fontWeight: FontWeight.bold,
@@ -181,8 +203,8 @@ class _QuizScreenState extends State<QuizScreen> {
               )
                   : ClipRRect( // Use ClipRRect for rounded corners
                 borderRadius: BorderRadius.circular(10.0 * scaler.widthScaleFactor), // Match Container's borderRadius
-                child: Image.asset(
-                  'assets/images/question_image.png', // Your image asset path
+                child: Image.network(
+                  imageUrl, // Your image asset path
                   fit: BoxFit.cover, // Scales the image to cover the container size while maintaining the aspect ratio
                 ),
               ),

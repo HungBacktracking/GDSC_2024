@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-
 import '../models/sub_category_model.dart';
 import '../utils/scaler.dart';
+import '../view_model/step_viewmodel.dart';
 import 'firstaid_steps_screen.dart';
 
 class CategoryScreen extends StatelessWidget {
@@ -61,24 +60,15 @@ class SubCategoryTag extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
+          StepViewModel stepViewModel = StepViewModel();
           // Handle the tap event for this category
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => StepScreen(
-                appBarTitle: 'CPR for Adult',
-                steps: const [
-                  'Check for danger',
-                  'Check the victim’s response',
-                  'Clear and open the airway',
-                  'If not breathing, begin CPR',
-                  'Children (1-8 yrs) and babies',
-                  'Give 30 check compressions',
-                  'Then give 2 rescue breaths aaaaaa aaaaa aaaaaa ',
-                  'AAb',
-                  'cccd',
-                  'dd',
-                ],
+                appBarTitle: category.title,
+                steps: stepViewModel.getStepsForCategory(category.steps_name),
+                youtubeId: category.youtubeId,
               ),
             ),
           );

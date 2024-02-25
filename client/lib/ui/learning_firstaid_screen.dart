@@ -1,9 +1,12 @@
 import 'package:client/models/quiz_category_model.dart';
+import 'package:client/models/quiz_model.dart';
 import 'package:client/ui/quiz_game_screen.dart';
 import 'package:client/utils/themes.dart';
+import 'package:client/view_model/quiz_viewmodel.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/scaler.dart';
+import 'home_screen.dart';
 
 class LearningFirstAidScreen extends StatelessWidget {
   final String userName;
@@ -24,10 +27,11 @@ class LearningFirstAidScreen extends StatelessWidget {
     final scaler = Scaler();
     return Scaffold(
       appBar: AppBar(
+        surfaceTintColor: Colors.white,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios, size: 25.0 * scaler.widthScaleFactor),
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
           },
         ),
         title: Text(
@@ -195,11 +199,14 @@ class CategoryGrid extends StatelessWidget {
           tag: categories[index].tag,
           tagColor: categories[index].tagColor, // Pass the tag color
           onTap: () {
-            // Handle the tap event. For example:
+            QuizViewModel quizViewModel = QuizViewModel();
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => QuizScreen(),
+                builder: (context) => QuizScreen(
+                  title: "Burn",
+                  quizList: quizViewModel.getListQuestionsForCategory("Burn"),
+                ),
               ),
             );
           },
