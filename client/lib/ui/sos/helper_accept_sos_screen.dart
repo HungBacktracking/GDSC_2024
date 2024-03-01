@@ -51,12 +51,46 @@ class _HelperSOSScreenState extends State<HelperSOSScreen> {
 
   Position? currentPosition;
   Set<Marker> markers = {};
+  StreamSubscription<Position>? positionStreamSubscription;
   @override
   void initState() {
+    super.initState();
     _getCurrentLocation();
+    _listenToPositionUpdates();
     setCustomMarkerIcon();
     getPolyPoints();
-    super.initState();
+  }
+
+  void _listenToPositionUpdates() {
+    // Cấu hình cho getPositionStream
+    const locationOptions = LocationSettings(accuracy: LocationAccuracy.high, distanceFilter: 10);
+
+    // Lắng nghe các cập nhật vị trí
+    positionStreamSubscription = Geolocator.getPositionStream(locationSettings: locationOptions).listen(
+          (Position? position) {
+        if (position != null) {
+          setState(() {
+            currentPosition = position;
+            print('Current position: $currentPosition');
+            markers.add(Marker(
+              markerId: const MarkerId('currentLocation'),
+              position: LatLng(currentPosition!.latitude, currentPosition!.longitude),
+              infoWindow: const InfoWindow(title: 'Current Location'),
+            ));
+            getPolyPoints();
+            // Cập nhật marker hoặc thực hiện các thao tác liên quan tới UI ở đây
+          });
+        }
+      },
+    );
+  }
+
+
+  @override
+  void dispose() {
+    // Hủy bỏ subscription khi không cần thiết
+    positionStreamSubscription?.cancel();
+    super.dispose();
   }
 
   Future<void> _getCurrentLocation() async {
@@ -81,12 +115,11 @@ class _HelperSOSScreenState extends State<HelperSOSScreen> {
     }
 
     Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-
     setState(() {
       currentPosition = position;
       markers.add(Marker(
         markerId: const MarkerId('currentLocation'),
-        position: LatLng(position.latitude, position.longitude),
+        position: LatLng(currentPosition!.latitude, currentPosition!.longitude),
         infoWindow: const InfoWindow(title: 'Current Location'),
       ));
 
@@ -114,14 +147,16 @@ class _HelperSOSScreenState extends State<HelperSOSScreen> {
   List<LatLng> polylineCoordinates = [];
   void getPolyPoints() async {
     PolylinePoints polylinePoints = PolylinePoints();
-
+    // await _getCurrentLocation();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
       MyStrings.google_map_api_key,
       PointLatLng(currentPosition!.latitude, currentPosition!.longitude),
+      // PointLatLng(10.77, 106.6849603),
       PointLatLng(victimLocation.latitude, victimLocation.longitude),
     );
 
     if (result.points.isNotEmpty) {
+      polylineCoordinates = [];
       for (PointLatLng point in result.points) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       }
@@ -139,54 +174,54 @@ class _HelperSOSScreenState extends State<HelperSOSScreen> {
       body: currentPosition == null
           ? const Center(child: CircularProgressIndicator())
           : Stack(
-              alignment: Alignment.bottomCenter,
-          children: [
-            GoogleMap(
-              initialCameraPosition: CameraPosition(
-                  // target: currentPosition,
-                  target: LatLng(currentPosition!.latitude, currentPosition!.longitude),
-                  zoom: 13.0,
+        alignment: Alignment.bottomCenter,
+        children: [
+          GoogleMap(
+            initialCameraPosition: CameraPosition(
+              // target: currentPosition,
+              target: LatLng(currentPosition!.latitude, currentPosition!.longitude),
+              zoom: 13.0,
+            ),
+            onMapCreated: onMapCreated,
+            markers: {
+              Marker(
+                markerId: const MarkerId('helper'),
+                position: LatLng(currentPosition!.latitude, currentPosition!.longitude),
+                infoWindow: const InfoWindow(title: 'Your Location'),
+                icon: helperIcon,
               ),
-              onMapCreated: onMapCreated,
-              markers: {
-                Marker(
-                  markerId: const MarkerId('helper'),
-                  position: LatLng(currentPosition!.latitude, currentPosition!.longitude),
-                  infoWindow: const InfoWindow(title: 'Your Location'),
-                  icon: helperIcon,
+              Marker(
+                markerId: MarkerId("victim"),
+                icon: victimIcon,
+                position: victimLocation,
+                infoWindow: const InfoWindow(title: 'Victim Location'),
+              ),
+            },
+            polylines: {
+              Polyline(
+                polylineId: PolylineId("route"),
+                points: polylineCoordinates,
+                color: Colors.green,
+                width: 6,
+              )
+            },
+          ),
+          Positioned(
+            right: 16 * scaler.widthScaleFactor,
+            bottom: 120 * scaler.widthScaleFactor,
+            child: Container(
+                decoration: BoxDecoration(
+                  color: context.scaffoldBackgroundColor,
+                  borderRadius: BorderRadius.circular(8 * scaler.widthScaleFactor),
                 ),
-                Marker(
-                    markerId: MarkerId("victim"),
-                    icon: victimIcon,
-                    position: victimLocation,
-                    infoWindow: const InfoWindow(title: 'Victim Location'),
-                ),
-              },
-              polylines: {
-                Polyline(
-                  polylineId: PolylineId("route"),
-                  points: polylineCoordinates,
-                  color: Colors.green,
-                  width: 6,
-                )
-              },
-            ),
-            Positioned(
-              right: 16 * scaler.widthScaleFactor,
-              bottom: 120 * scaler.widthScaleFactor,
-              child: Container(
-                  decoration: BoxDecoration(
-                    color: context.scaffoldBackgroundColor,
-                    borderRadius: BorderRadius.circular(8 * scaler.widthScaleFactor),
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.near_me,
+                    color: Colors.blue,
                   ),
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.near_me,
-                      color: Colors.blue,
-                    ),
-                    onPressed: goToCurrentLocation,
-                  )),
-            ),
+                  onPressed: goToCurrentLocation,
+                )),
+          ),
           Positioned(
             bottom: 10 * scaler.widthScaleFactor,
 
@@ -204,7 +239,7 @@ class _HelperSOSScreenState extends State<HelperSOSScreen> {
               ),
               child: Text(
                 'Distance: $distanceInMeters meters',
-                 textAlign: TextAlign.center,
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 24 * scaler.widthScaleFactor / scaler.textScaleFactor,
                   fontWeight: FontWeight.w700,
@@ -213,22 +248,22 @@ class _HelperSOSScreenState extends State<HelperSOSScreen> {
             ),
           ),
           Positioned(
-            right: 16 * scaler.widthScaleFactor,
-            top: (context.statusBarHeight + 16) * scaler.widthScaleFactor ,
-            child: InkWell(
-              onTap: () {
-                SystemNavigator.pop();
-              },
-              child: Text(
-                'Cancel',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 17 * scaler.widthScaleFactor / scaler.textScaleFactor,
-                  fontWeight: FontWeight.w500,
+              right: 16 * scaler.widthScaleFactor,
+              top: (context.statusBarHeight + 16) * scaler.widthScaleFactor ,
+              child: InkWell(
+                onTap: () {
+                  SystemNavigator.pop();
+                },
+                child: Text(
+                  'Cancel',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 17 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
               )
-            ),
+          ),
         ],
       ),
     );

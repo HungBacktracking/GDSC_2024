@@ -55,6 +55,24 @@ class AuthViewModel extends ChangeNotifier {
     }
   }
 
+  Future signInByEmail({
+    required BuildContext context,
+    required String email,
+    required String password,
+  }) async {
+
+    try {
+      await _authRepository.signInByEmail(
+          context: context,
+          email: email,
+          password: password);
+      notifyListeners();
+    } catch (e) {
+      getErrorSnackBar("Verification failed!", e);
+      notifyListeners();
+    }
+  }
+
   Future<bool> checkExistingUser(String phoneNumber) async {
     try {
       return _authRepository.checkExistingUser(phoneNumber);

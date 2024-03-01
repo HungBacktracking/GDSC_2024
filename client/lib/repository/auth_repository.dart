@@ -111,6 +111,15 @@ class AuthRepository {
     }
   }
 
+  Future signInByEmail({
+    required BuildContext context,
+    required String email,
+    required String password,
+  }) async {
+
+
+  }
+
   Future<bool> checkExistingUser(String phoneNumber) async {
     Map<String, dynamic> phoneMap = {"phone_number": phoneNumber};
 

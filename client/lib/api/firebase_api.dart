@@ -129,7 +129,7 @@ Future<void> handleNotificationOpenedApp(RemoteMessage? message, BuildContext co
 
   Navigator.push(context,
       MaterialPageRoute(builder: (context) => HelperNotificationScreen(
-              imageUrl: message.data['image_link'], victimLocation: LatLng(10.7756515, 106.6649603))
+          imageUrl: message.data['image_link'], victimLocation: LatLng(10.7756515, 106.6649603))
       ));
 
 
