@@ -15,6 +15,7 @@ import (
 	"server/bootstrap"
 
 	"cloud.google.com/go/firestore"
+	"github.com/mitchellh/mapstructure"
 	"google.golang.org/api/iterator"
 )
 
