@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:client/models/data_notification.dart';
 import 'package:client/ui/sos/sos_screen.dart';
 import 'package:client/utils/strings.dart';
 import 'package:flutter/services.dart';
@@ -17,12 +18,15 @@ import '../../utils/styles.dart';
 final GlobalKey<ScaffoldState> jcbHomekey = GlobalKey();
 
 class SOSScreen extends StatefulWidget {
+  // final DataNotification dataNotification;
+  // final String roomId;
+  final LatLng victimLocation;
   const SOSScreen({
     super.key,
-    required this.roomId,
+    // required this.roomId,
+    // required this.dataNotification,
+    required this.victimLocation,
   });
-
-  final String roomId;
 
   @override
   State<SOSScreen> createState() => SOSScreenState();
@@ -39,7 +43,7 @@ class SOSScreenState extends State<SOSScreen> {
 
   final FirebaseAuth auth = FirebaseAuth.instance;
 
-  static const LatLng victimLocation = LatLng(10.78, 106.6649603);
+  LatLng victimLocation = LatLng(10.78, 106.6649603);
 
   BitmapDescriptor helperIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor currentLocationIcon = BitmapDescriptor.defaultMarker;
@@ -92,18 +96,21 @@ class SOSScreenState extends State<SOSScreen> {
 
   void _listenToPositionUpdates() {
     // Cấu hình cho getPositionStream
-    const locationOptions = LocationSettings(accuracy: LocationAccuracy.high, distanceFilter: 10);
+    const locationOptions =
+        LocationSettings(accuracy: LocationAccuracy.high, distanceFilter: 10);
 
     // Lắng nghe các cập nhật vị trí
-    positionStreamSubscription = Geolocator.getPositionStream(locationSettings: locationOptions).listen(
-          (Position? position) {
+    positionStreamSubscription =
+        Geolocator.getPositionStream(locationSettings: locationOptions).listen(
+      (Position? position) {
         if (position != null) {
           setState(() {
             currentPosition = position;
             print('Current position: $currentPosition');
             markers.add(Marker(
               markerId: const MarkerId('currentLocation'),
-              position: LatLng(currentPosition!.latitude, currentPosition!.longitude),
+              position:
+                  LatLng(currentPosition!.latitude, currentPosition!.longitude),
               infoWindow: const InfoWindow(title: 'Current Location'),
             ));
             getPolyPoints();
@@ -113,7 +120,6 @@ class SOSScreenState extends State<SOSScreen> {
       },
     );
   }
-
 
   @override
   void dispose() {
@@ -140,12 +146,15 @@ class SOSScreenState extends State<SOSScreen> {
     }
 
     if (permission == LocationPermission.deniedForever) {
-      return Future.error('Location permissions are permanently denied, we cannot request permissions.');
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
     }
 
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
     setState(() {
       currentPosition = position;
+      print("position: $position done");
       markers.add(Marker(
         markerId: const MarkerId('currentLocation'),
         position: LatLng(currentPosition!.latitude, currentPosition!.longitude),
@@ -165,7 +174,6 @@ class SOSScreenState extends State<SOSScreen> {
 
     });
   }
-
 
   Future<void> goToCurrentLocation() async {
     mapController?.animateCamera(CameraUpdate.newCameraPosition(
@@ -336,10 +344,27 @@ class SOSScreenState extends State<SOSScreen> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-              )
-          ),
-        ],
-      ),
+                Positioned(
+                    right: 16 * scaler.widthScaleFactor,
+                    top: (context.statusBarHeight + 16) *
+                        scaler.widthScaleFactor,
+                    child: InkWell(
+                      onTap: () {
+                        SystemNavigator.pop();
+                      },
+                      child: Text(
+                        'Cancel',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 17 *
+                              scaler.widthScaleFactor /
+                              scaler.textScaleFactor,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    )),
+              ],
+            ),
     );
   }
 }
