@@ -19,7 +19,7 @@ import 'package:nb_utils/nb_utils.dart';
 
 import '../../utils/scaler.dart';
 import '../../widgets/custom_filled_button.dart';
-import '../sos_screen.dart';
+import 'sos_screen.dart';
 
 class VictimCaptureScreen extends StatefulWidget {
   const VictimCaptureScreen({
@@ -232,10 +232,10 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
 
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (context) => HelperSOSScreen()
-            // SOSScreen(
-            //   roomId: roomId,
-            // ),
+        builder: (context) =>
+            SOSScreen(
+              roomId: roomId,
+            ),
       ),
   );
   }

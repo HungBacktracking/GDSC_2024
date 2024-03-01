@@ -19,5 +19,5 @@ class MyStrings {
   static const String volunteer_register_option_3_ = "However, I have knowledge about first aid";
   static const String viewLess_text = "View less";
   static const String privacy = "By continuing, you agree to our Privacy Policy";
-  static const String google_map_api_key = "AIzaSyByXZXWSIWHAjixemvx4s570yzOl4L8KFk";
+  static const String google_map_api_key = "AIzaSyBulkNEUihU9ZvGHFL62M_GKzysMgPiJzI";
 }

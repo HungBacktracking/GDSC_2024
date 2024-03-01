@@ -153,7 +153,7 @@ class AuthRepository {
     await _firebaseAuth.signOut();
 
     print("delete device token!!!");
-    deleteDeviceToken(userId!);
+    // deleteDeviceToken(userId!);
     getSuccessSnackBar("Logged out successfully!");
 
     Navigator.of(context).popUntil((route) => false);

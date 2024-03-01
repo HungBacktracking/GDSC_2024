@@ -1,8 +1,9 @@
 import 'dart:async';
-import 'package:client/ui/sos_screen.dart';
+import 'package:client/ui/sos/sos_screen.dart';
 import 'package:client/utils/strings.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:gap/gap.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -10,7 +11,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../../utils/scaler.dart';
+import '../../../utils/scaler.dart';
+import '../../utils/styles.dart';
 
 final GlobalKey<ScaffoldState> jcbHomekey = GlobalKey();
 
@@ -31,6 +33,9 @@ class SOSScreenState extends State<SOSScreen> {
   late int distanceInMeters;
   final Completer<GoogleMapController> _controller = Completer();
   bool isFinished = false;
+  int countHelper = 0;
+  String distanceText = "There is no data for closest distance.";
+  bool showIconAndPolyline = false;
 
   final FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -41,11 +46,11 @@ class SOSScreenState extends State<SOSScreen> {
   BitmapDescriptor victimIcon = BitmapDescriptor.defaultMarker;
 
   void setCustomMarkerIcon() {
-    BitmapDescriptor.fromAssetImage(ImageConfiguration.empty, "assets/icons/green_plus.png").then((icon) {
+    BitmapDescriptor.fromAssetImage(ImageConfiguration.empty, "assets/icons/victim.png").then((icon) {
       helperIcon = icon;
     });
 
-    BitmapDescriptor.fromAssetImage(ImageConfiguration.empty, "assets/icons/victim.png").then((icon) {
+    BitmapDescriptor.fromAssetImage(ImageConfiguration.empty, "assets/icons/green_plus.png").then((icon) {
       victimIcon = icon;
     });
   }
@@ -60,10 +65,29 @@ class SOSScreenState extends State<SOSScreen> {
   @override
   void initState() {
     super.initState();
-    _getCurrentLocation();
+    // _getCurrentLocation();
     _listenToPositionUpdates();
     setCustomMarkerIcon();
-    getPolyPoints();
+    _delayedAction();
+  }
+
+  Future<void> _delayedAction() async {
+    // Đợi 5 giây
+    await Future.delayed(Duration(seconds: 10));
+    // Thực hiện hành động sau khi delay
+    // Đảm bảo kiểm tra mounted để tránh gọi setState() khi State không tồn tại
+    if (mounted) {
+      setState(() {
+        showIconAndPolyline = true;
+        countHelper++;
+        distanceText = "The closest is 2245m far from you";
+        getPolyPoints();
+        // Hành động của bạn sau 5 giây
+        // Ví dụ: Cập nhật UI, hiển thị thông báo, v.v.
+        // Lưu ý: Bạn có thể thực hiện bất kỳ hành động nào ở đây, không nhất thiết phải sử dụng setState()
+      });
+
+    }
   }
 
   void _listenToPositionUpdates() {
@@ -129,13 +153,15 @@ class SOSScreenState extends State<SOSScreen> {
       ));
 
       goToCurrentLocation();
-      getPolyPoints();
+      // getPolyPoints();
 
       // Correctly calculate the distance here after currentPosition is set
-      double distance = Geolocator.distanceBetween(
-          position.latitude, position.longitude, victimLocation.latitude, victimLocation.longitude);
+      if (victimLocation != null) {
+        double distance = Geolocator.distanceBetween(
+            position.latitude, position.longitude, victimLocation.latitude, victimLocation.longitude);
 
-      distanceInMeters = distance.truncate();
+        distanceInMeters = distance.truncate();
+      }
 
     });
   }
@@ -152,25 +178,25 @@ class SOSScreenState extends State<SOSScreen> {
 
   List<LatLng> polylineCoordinates = [];
   void getPolyPoints() async {
+    if (!showIconAndPolyline) return;
     PolylinePoints polylinePoints = PolylinePoints();
-    // await _getCurrentLocation();
     await _getCurrentLocation();
-    print("current: $currentPosition");
+
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      MyStrings.google_map_api_key,
-      // PointLatLng(currentPosition!.latitude, currentPosition!.longitude),
-      PointLatLng(10.77, 106.6849603),
+      "AIzaSyBulkNEUihU9ZvGHFL62M_GKzysMgPiJzI",
+      // MyStrings.google_map_api_key,
+      PointLatLng(currentPosition!.latitude, currentPosition!.longitude),
+      // PointLatLng(10.77, 106.6849603),
       PointLatLng(victimLocation.latitude, victimLocation.longitude),
     );
 
     if (result.points.isNotEmpty) {
-      print("result is: $result");
       polylineCoordinates = [];
       for (PointLatLng point in result.points) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       }
 
-      // setState(() {});
+      setState(() {});
     }
   }
 
@@ -178,6 +204,25 @@ class SOSScreenState extends State<SOSScreen> {
   Widget build(BuildContext context) {
     Scaler().init(context);
     final scaler = Scaler();
+
+    Set<Marker> conditionalMarkers = {};
+    if (showIconAndPolyline) {
+      conditionalMarkers.add(Marker(
+        markerId: MarkerId("victim"),
+        icon: victimIcon,
+        position: victimLocation,
+        infoWindow: const InfoWindow(title: 'Helper Location'),
+      ));
+      // Thêm marker khác nếu cần
+    }
+
+    conditionalMarkers.add(Marker(
+      markerId: const MarkerId('helper'),
+      position: LatLng(currentPosition!.latitude, currentPosition!.longitude),
+      infoWindow: const InfoWindow(title: 'Your Location'),
+      icon: helperIcon,
+    ));
+
     return Scaffold(
       key: jcbHomekey,
       body: currentPosition == null
@@ -192,20 +237,7 @@ class SOSScreenState extends State<SOSScreen> {
               zoom: 13.0,
             ),
             onMapCreated: onMapCreated,
-            markers: {
-              Marker(
-                markerId: const MarkerId('helper'),
-                position: LatLng(currentPosition!.latitude, currentPosition!.longitude),
-                infoWindow: const InfoWindow(title: 'Your Location'),
-                icon: helperIcon,
-              ),
-              Marker(
-                markerId: MarkerId("victim"),
-                icon: victimIcon,
-                position: victimLocation,
-                infoWindow: const InfoWindow(title: 'Victim Location'),
-              ),
-            },
+            markers: conditionalMarkers,
             polylines: {
               Polyline(
                 polylineId: PolylineId("route"),
@@ -215,9 +247,66 @@ class SOSScreenState extends State<SOSScreen> {
               )
             },
           ),
+          Container(
+            decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20))),
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'There are $countHelper people ready to rescue!',
+                  style: TextStyle(
+                    fontSize: 26 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                // SizedBox(height: 5 * scaler.heightScaleFactor),
+                Text(
+                  'Help will arrive shortly',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                Gap(10 * scaler.heightScaleFactor),
+                Text(
+                  '$distanceText',
+                  style: TextStyle(
+                    fontSize: 14 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                // const SizedBox(height: 25),
+                // SizedBox(
+                //   width: double.infinity,
+                //   child: FilledButton(
+                //     onPressed: () {},
+                //     style: FilledButton.styleFrom(
+                //       elevation: 0,
+                //       backgroundColor: Colors.red[600],
+                //       padding: const EdgeInsets.symmetric(vertical: 12),
+                //     ),
+                //     child: const Text(
+                //       "Find help",
+                //       style: MyStyles.tinyBoldTextStyle,
+                //     ),
+                //   ),
+                // ),
+                SizedBox(height: 16 * scaler.heightScaleFactor),
+              ],
+            ),
+          ),
           Positioned(
             right: 16 * scaler.widthScaleFactor,
-            bottom: 120 * scaler.widthScaleFactor,
+            bottom: 220 * scaler.widthScaleFactor,
             child: Container(
                 decoration: BoxDecoration(
                   color: context.scaffoldBackgroundColor,
@@ -231,31 +320,7 @@ class SOSScreenState extends State<SOSScreen> {
                   onPressed: goToCurrentLocation,
                 )),
           ),
-          Positioned(
-            bottom: 10 * scaler.widthScaleFactor,
 
-            child: Container(
-              padding: EdgeInsets.only(
-                  top: 20.0 * scaler.widthScaleFactor, bottom: 20.0 * scaler.widthScaleFactor,
-                  left: 16.0 * scaler.widthScaleFactor, right: 16.0 * scaler.widthScaleFactor),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.grey,
-                  width: 1,
-                ),
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(10 * scaler.widthScaleFactor),),
-              ),
-              child: Text(
-                'Distance: $distanceInMeters meters',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 24 * scaler.widthScaleFactor / scaler.textScaleFactor,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-          ),
           Positioned(
               right: 16 * scaler.widthScaleFactor,
               top: (context.statusBarHeight + 16) * scaler.widthScaleFactor ,

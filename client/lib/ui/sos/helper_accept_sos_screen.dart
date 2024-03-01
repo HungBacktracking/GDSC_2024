@@ -1,8 +1,9 @@
 import 'dart:async';
-import 'package:client/ui/sos_screen.dart';
+import 'package:client/ui/sos/sos_screen.dart';
 import 'package:client/utils/strings.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:gap/gap.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -55,7 +56,7 @@ class _HelperSOSScreenState extends State<HelperSOSScreen> {
   @override
   void initState() {
     super.initState();
-    _getCurrentLocation();
+    // _getCurrentLocation();
     _listenToPositionUpdates();
     setCustomMarkerIcon();
     getPolyPoints();
@@ -123,8 +124,8 @@ class _HelperSOSScreenState extends State<HelperSOSScreen> {
         infoWindow: const InfoWindow(title: 'Current Location'),
       ));
 
-      // goToCurrentLocation();
-      getPolyPoints();
+      goToCurrentLocation();
+      // getPolyPoints();
 
       // Correctly calculate the distance here after currentPosition is set
       double distance = Geolocator.distanceBetween(
@@ -150,7 +151,6 @@ class _HelperSOSScreenState extends State<HelperSOSScreen> {
     PolylinePoints polylinePoints = PolylinePoints();
     await _getCurrentLocation();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-        // "AIzaSyByXZXWSIWHAjixemvx4s570yzOl4L8KFk",
       MyStrings.google_map_api_key,
       PointLatLng(currentPosition!.latitude, currentPosition!.longitude),
       // PointLatLng(10.77, 106.6849603),
@@ -176,7 +176,7 @@ class _HelperSOSScreenState extends State<HelperSOSScreen> {
       body: currentPosition == null
           ? const Center(child: CircularProgressIndicator())
           : Stack(
-        alignment: Alignment.bottomCenter,
+        alignment: Alignment.topCenter,
         children: [
           GoogleMap(
             initialCameraPosition: CameraPosition(
@@ -209,8 +209,36 @@ class _HelperSOSScreenState extends State<HelperSOSScreen> {
             },
           ),
           Positioned(
+            top: 30,
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.green[400],
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                      bottomLeft: Radius.circular(20),
+                      bottomRight: Radius.circular(20))),
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'You have ${distanceInMeters}m to reach the need',
+                    style: TextStyle(
+                      fontSize: 14 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+
+                ],
+              ),
+            ),
+          ),
+          Positioned(
             right: 16 * scaler.widthScaleFactor,
-            bottom: 120 * scaler.widthScaleFactor,
+            bottom: 130 * scaler.widthScaleFactor,
             child: Container(
                 decoration: BoxDecoration(
                   color: context.scaffoldBackgroundColor,
@@ -225,45 +253,21 @@ class _HelperSOSScreenState extends State<HelperSOSScreen> {
                 )),
           ),
           Positioned(
-            bottom: 10 * scaler.widthScaleFactor,
-
-            child: Container(
-              padding: EdgeInsets.only(
-                  top: 20.0 * scaler.widthScaleFactor, bottom: 20.0 * scaler.widthScaleFactor,
-                  left: 16.0 * scaler.widthScaleFactor, right: 16.0 * scaler.widthScaleFactor),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.grey,
-                  width: 1,
-                ),
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(10 * scaler.widthScaleFactor),),
-              ),
-              child: Text(
-                'Distance: $distanceInMeters meters',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 24 * scaler.widthScaleFactor / scaler.textScaleFactor,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-          ),
-          Positioned(
               right: 16 * scaler.widthScaleFactor,
-              top: (context.statusBarHeight + 16) * scaler.widthScaleFactor ,
+              top: (context.statusBarHeight + 30) * scaler.widthScaleFactor ,
               child: InkWell(
                 onTap: () {
                   SystemNavigator.pop();
                 },
-                child: Text(
-                  'Cancel',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 17 * scaler.widthScaleFactor / scaler.textScaleFactor,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+                child: Icon(Icons.clear),
+                // child: Text(
+                //   'Cancel',
+                //   style: TextStyle(
+                //     color: Colors.black,
+                //     fontSize: 17 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                //     fontWeight: FontWeight.w500,
+                //   ),
+                // ),
               )
           ),
         ],

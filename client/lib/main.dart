@@ -7,7 +7,7 @@ import 'package:client/ui/landing_page.dart';
 // import 'package:client/ui/name_input_register.dart';
 import 'package:client/ui/profile_screen.dart';
 import 'package:client/ui/sos/helper_notification_screen.dart';
-import 'package:client/ui/sos_screen.dart';
+import 'package:client/ui/sos/sos_screen.dart';
 import 'package:client/utils/location_helper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:client/models/quiz_category_model.dart';
