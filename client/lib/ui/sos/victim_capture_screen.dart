@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
+import 'package:client/ui/sos/helper_accept_sos_screen.dart';
 import 'package:client/utils/helper.dart';
 import 'package:http/http.dart' as http;
 
@@ -18,6 +19,7 @@ import 'package:nb_utils/nb_utils.dart';
 
 import '../../utils/scaler.dart';
 import '../../widgets/custom_filled_button.dart';
+import '../sos_screen.dart';
 
 class VictimCaptureScreen extends StatefulWidget {
   const VictimCaptureScreen({
@@ -222,11 +224,20 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
     AddressModel location = AddressModel(coordinates: GeoPoint(currentPosition.latitude, currentPosition.longitude));
     print(imageUri);
     String roomId = await sendHelpInfoToServer(userId, location, imageUri);
-    print(roomId);
+    print("Roomm: $roomId");
 
     setState(() {
       _isProcessing = false;
     });
+
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => HelperSOSScreen()
+            // SOSScreen(
+            //   roomId: roomId,
+            // ),
+      ),
+  );
   }
 
   @override

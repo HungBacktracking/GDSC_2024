@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'package:client/ui/sos_screen.dart';
 import 'package:client/utils/strings.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:flutter/material.dart';
@@ -8,26 +10,31 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../utils/scaler.dart';
-import '../utils/styles.dart';
+import '../../utils/scaler.dart';
 
 final GlobalKey<ScaffoldState> jcbHomekey = GlobalKey();
 
 class SOSScreen extends StatefulWidget {
-  const SOSScreen({Key? key}) : super(key: key);
+  const SOSScreen({
+    super.key,
+    required this.roomId,
+  });
+
+  final String roomId;
 
   @override
-  State<SOSScreen> createState() => _SOSScreenState();
+  State<SOSScreen> createState() => SOSScreenState();
 }
 
-class _SOSScreenState extends State<SOSScreen> {
+class SOSScreenState extends State<SOSScreen> {
   GoogleMapController? mapController;
+  late int distanceInMeters;
   final Completer<GoogleMapController> _controller = Completer();
+  bool isFinished = false;
 
   final FirebaseAuth auth = FirebaseAuth.instance;
 
-  static const LatLng sourceLocation = LatLng(37.33500926, -122.03272188);
-  static const LatLng destination = LatLng(37.33429383, -122.06600055);
+  static const LatLng victimLocation = LatLng(10.78, 106.6649603);
 
   BitmapDescriptor helperIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor currentLocationIcon = BitmapDescriptor.defaultMarker;
@@ -37,6 +44,10 @@ class _SOSScreenState extends State<SOSScreen> {
     BitmapDescriptor.fromAssetImage(ImageConfiguration.empty, "assets/icons/green_plus.png").then((icon) {
       helperIcon = icon;
     });
+
+    BitmapDescriptor.fromAssetImage(ImageConfiguration.empty, "assets/icons/victim.png").then((icon) {
+      victimIcon = icon;
+    });
   }
 
   void onMapCreated(GoogleMapController controller) {
@@ -45,12 +56,46 @@ class _SOSScreenState extends State<SOSScreen> {
 
   Position? currentPosition;
   Set<Marker> markers = {};
+  StreamSubscription<Position>? positionStreamSubscription;
   @override
   void initState() {
+    super.initState();
     _getCurrentLocation();
+    _listenToPositionUpdates();
     setCustomMarkerIcon();
     getPolyPoints();
-    super.initState();
+  }
+
+  void _listenToPositionUpdates() {
+    // Cấu hình cho getPositionStream
+    const locationOptions = LocationSettings(accuracy: LocationAccuracy.high, distanceFilter: 10);
+
+    // Lắng nghe các cập nhật vị trí
+    positionStreamSubscription = Geolocator.getPositionStream(locationSettings: locationOptions).listen(
+          (Position? position) {
+        if (position != null) {
+          setState(() {
+            currentPosition = position;
+            print('Current position: $currentPosition');
+            markers.add(Marker(
+              markerId: const MarkerId('currentLocation'),
+              position: LatLng(currentPosition!.latitude, currentPosition!.longitude),
+              infoWindow: const InfoWindow(title: 'Current Location'),
+            ));
+            getPolyPoints();
+            // Cập nhật marker hoặc thực hiện các thao tác liên quan tới UI ở đây
+          });
+        }
+      },
+    );
+  }
+
+
+  @override
+  void dispose() {
+    // Hủy bỏ subscription khi không cần thiết
+    positionStreamSubscription?.cancel();
+    super.dispose();
   }
 
   Future<void> _getCurrentLocation() async {
@@ -71,31 +116,36 @@ class _SOSScreenState extends State<SOSScreen> {
     }
 
     if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
+      return Future.error('Location permissions are permanently denied, we cannot request permissions.');
     }
 
-    Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
-
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     setState(() {
       currentPosition = position;
       markers.add(Marker(
         markerId: const MarkerId('currentLocation'),
-        position: LatLng(position.latitude, position.longitude),
+        position: LatLng(currentPosition!.latitude, currentPosition!.longitude),
         infoWindow: const InfoWindow(title: 'Current Location'),
       ));
 
       goToCurrentLocation();
+      getPolyPoints();
+
+      // Correctly calculate the distance here after currentPosition is set
+      double distance = Geolocator.distanceBetween(
+          position.latitude, position.longitude, victimLocation.latitude, victimLocation.longitude);
+
+      distanceInMeters = distance.truncate();
+
     });
   }
+
 
   Future<void> goToCurrentLocation() async {
     mapController?.animateCamera(CameraUpdate.newCameraPosition(
       CameraPosition(
         target: LatLng(currentPosition!.latitude, currentPosition!.longitude),
-        zoom: 13.0,
+        zoom: 15.0,
       ),
     ));
   }
@@ -103,19 +153,24 @@ class _SOSScreenState extends State<SOSScreen> {
   List<LatLng> polylineCoordinates = [];
   void getPolyPoints() async {
     PolylinePoints polylinePoints = PolylinePoints();
-
+    // await _getCurrentLocation();
+    await _getCurrentLocation();
+    print("current: $currentPosition");
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
       MyStrings.google_map_api_key,
-      PointLatLng(sourceLocation.latitude, sourceLocation.longitude),
-      PointLatLng(destination.latitude, destination.longitude),
+      // PointLatLng(currentPosition!.latitude, currentPosition!.longitude),
+      PointLatLng(10.77, 106.6849603),
+      PointLatLng(victimLocation.latitude, victimLocation.longitude),
     );
 
     if (result.points.isNotEmpty) {
+      print("result is: $result");
+      polylineCoordinates = [];
       for (PointLatLng point in result.points) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       }
 
-      setState(() {});
+      // setState(() {});
     }
   }
 
@@ -130,39 +185,26 @@ class _SOSScreenState extends State<SOSScreen> {
           : Stack(
         alignment: Alignment.bottomCenter,
         children: [
-          // GoogleMap(
-          //   initialCameraPosition: CameraPosition(
-          //     target: LatLng(
-          //       currentPosition!.latitude,
-          //       currentPosition!.longitude,
-          //     ),
-          //     zoom: 15,
-          //   ),
-          //   onMapCreated: onMapCreated,
-          //   markers: markers,
-          // ),
           GoogleMap(
             initialCameraPosition: CameraPosition(
-                target: sourceLocation,
-                // target: LatLng(currentPosition!.latitude, currentPosition!.longitude),
-                zoom: 13
+              // target: currentPosition,
+              target: LatLng(currentPosition!.latitude, currentPosition!.longitude),
+              zoom: 13.0,
             ),
             onMapCreated: onMapCreated,
             markers: {
               Marker(
-                markerId: const MarkerId('currentLocation'),
+                markerId: const MarkerId('helper'),
                 position: LatLng(currentPosition!.latitude, currentPosition!.longitude),
-                infoWindow: const InfoWindow(title: 'Current Location'),
+                infoWindow: const InfoWindow(title: 'Your Location'),
+                icon: helperIcon,
               ),
               Marker(
-                  markerId: MarkerId("source"),
-                  icon: helperIcon,
-                  position: sourceLocation
+                markerId: MarkerId("victim"),
+                icon: victimIcon,
+                position: victimLocation,
+                infoWindow: const InfoWindow(title: 'Victim Location'),
               ),
-              Marker(
-                  markerId: MarkerId("destination"),
-                  position: destination
-              )
             },
             polylines: {
               Polyline(
@@ -173,59 +215,9 @@ class _SOSScreenState extends State<SOSScreen> {
               )
             },
           ),
-           Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20 * scaler.widthScaleFactor),
-                    topRight: Radius.circular(20 * scaler.widthScaleFactor))),
-            padding: EdgeInsets.all(16 * scaler.widthScaleFactor),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Are you in an emergency?',
-                  style: TextStyle(
-                    fontSize: 26 * scaler.widthScaleFactor / scaler.textScaleFactor,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-                SizedBox(height: 16 * scaler.widthScaleFactor),
-                Text(
-                  'Help will arrive shortly',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 18 * scaler.widthScaleFactor/ scaler.textScaleFactor,
-                  ),
-                ),
-                SizedBox(height: 25 * scaler.widthScaleFactor),
-                SizedBox(
-                  width: double.infinity,
-                  child: FilledButton(
-                    onPressed: () {},
-                    style: FilledButton.styleFrom(
-                      elevation: 0,
-                      backgroundColor: Colors.red[600],
-                      padding: EdgeInsets.symmetric(vertical: 12 * scaler.widthScaleFactor),
-                    ),
-                    child: Text(
-                      "Find help",
-                      style: TextStyle(
-                          fontSize: 16 * scaler.widthScaleFactor / scaler.textScaleFactor,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 16 * scaler.widthScaleFactor),
-              ],
-            ),
-          ),
           Positioned(
             right: 16 * scaler.widthScaleFactor,
-            bottom: 200 * scaler.widthScaleFactor,
+            bottom: 120 * scaler.widthScaleFactor,
             child: Container(
                 decoration: BoxDecoration(
                   color: context.scaffoldBackgroundColor,
@@ -240,11 +232,36 @@ class _SOSScreenState extends State<SOSScreen> {
                 )),
           ),
           Positioned(
+            bottom: 10 * scaler.widthScaleFactor,
+
+            child: Container(
+              padding: EdgeInsets.only(
+                  top: 20.0 * scaler.widthScaleFactor, bottom: 20.0 * scaler.widthScaleFactor,
+                  left: 16.0 * scaler.widthScaleFactor, right: 16.0 * scaler.widthScaleFactor),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.grey,
+                  width: 1,
+                ),
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(10 * scaler.widthScaleFactor),),
+              ),
+              child: Text(
+                'Distance: $distanceInMeters meters',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 24 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ),
+          Positioned(
               right: 16 * scaler.widthScaleFactor,
               top: (context.statusBarHeight + 16) * scaler.widthScaleFactor ,
               child: InkWell(
                 onTap: () {
-                  Navigator.pop(context);
+                  SystemNavigator.pop();
                 },
                 child: Text(
                   'Cancel',

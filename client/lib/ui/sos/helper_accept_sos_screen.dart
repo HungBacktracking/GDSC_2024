@@ -123,7 +123,8 @@ class _HelperSOSScreenState extends State<HelperSOSScreen> {
         infoWindow: const InfoWindow(title: 'Current Location'),
       ));
 
-      goToCurrentLocation();
+      // goToCurrentLocation();
+      getPolyPoints();
 
       // Correctly calculate the distance here after currentPosition is set
       double distance = Geolocator.distanceBetween(
@@ -147,8 +148,9 @@ class _HelperSOSScreenState extends State<HelperSOSScreen> {
   List<LatLng> polylineCoordinates = [];
   void getPolyPoints() async {
     PolylinePoints polylinePoints = PolylinePoints();
-    // await _getCurrentLocation();
+    await _getCurrentLocation();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+        // "AIzaSyByXZXWSIWHAjixemvx4s570yzOl4L8KFk",
       MyStrings.google_map_api_key,
       PointLatLng(currentPosition!.latitude, currentPosition!.longitude),
       // PointLatLng(10.77, 106.6849603),
