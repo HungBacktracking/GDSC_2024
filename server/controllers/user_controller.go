@@ -309,3 +309,57 @@ func AddRange(c echo.Context) error {
 
 	return c.NoContent(http.StatusOK)
 }
+
+// DeleteRangeRequest represents the request payload for deleting a user's range
+type DeleteRangeRequest struct {
+	UID       string  `json:"uid"`
+	Radius    float64 `json:"radius"`
+	Latitude  float64 `json:"latitude"`
+	Longitude float64 `json:"longitude"`
+}
+
+// DeleteRange deletes a range from the user's document in Firestore
+// func DeleteRange(c echo.Context) error {
+// 	req := new(DeleteRangeRequest)
+// 	if err := c.Bind(req); err != nil {
+// 		return c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "Invalid request payload"})
+// 	}
+
+// 	ctx := context.Background()
+
+// 	// Get the user document
+// 	userDoc, err := bootstrap.FirestoreClient.Collection("user").Doc(req.UID).Get(ctx)
+// 	if err != nil {
+// 		return c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: "Internal Server Error"})
+// 	}
+
+// 	// Check if the ranges field exists
+// 	rangesField, err := userDoc.DataAt("ranges")
+// 	if err != nil {
+// 		// Ranges field does not exist, return appropriate response
+// 		return c.JSON(http.StatusNotFound, domain.ErrorResponse{Message: "Ranges not found for the user"})
+// 	}
+
+// 	// Parse the ranges field to a slice of domain.Range
+// 	var ranges []domain.Range
+// 	err = mapstructure.Decode(rangesField, &ranges)
+// 	if err != nil {
+// 		return c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: "Internal Server Error"})
+// 	}
+
+// 	// Find and delete the range with matching values
+// 	var updatedRanges []domain.Range
+// 	for _, r := range ranges {
+// 		if r.Radius != req.Radius || r.Lat != req.Latitude || r.Lng != req.Longitude {
+// 			updatedRanges = append(updatedRanges, r)
+// 		}
+// 	}
+
+// 	// Update the ranges field in Firestore
+// 	updateData := map[string]interface{}{"ranges": updatedRanges}
+// 	if _, err := userDoc.Ref.Set(ctx, updateData, firestore.MergeAll); err != nil {
+// 		return c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: "Failed to update user ranges"})
+// 	}
+
+// 	return c.NoContent(http.StatusOK)
+// }
