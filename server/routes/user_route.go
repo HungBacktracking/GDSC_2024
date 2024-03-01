@@ -12,6 +12,6 @@ func RegisterUserRoutes(e *echo.Echo) {
 	e.POST("/user/add_user", controllers.AddUser)
 	e.POST("/user/is_exist_phone", controllers.IsExistPhone)
 	e.POST("/user/upd_location", controllers.UpdLocation)
-	// e.POST("/user/add_range", controllers.AddRange)
-	// e.POST("/user/delete_range", controllers.DeleteRange)
+	e.POST("/user/add_range", controllers.AddRange)
+	e.POST("/user/delete_range", controllers.DeleteRange)
 }
