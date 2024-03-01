@@ -86,7 +86,7 @@ func notifyUsersInVicinity(ctx context.Context, location domain.GeoPoint, roomID
 	}
 
 	// Send push notification to collected tokens
-	title := "SOS at " + location.String()
+	title := "SOS at " + location.String()   //SOS don't have location => Distance is needed
 	body := "Go help right now"
 	data := map[string]string{
 		"roomID":     roomID,
