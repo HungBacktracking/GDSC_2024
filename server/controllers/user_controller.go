@@ -256,3 +256,55 @@ func UpdLocation(c echo.Context) error {
 
 	return c.NoContent(http.StatusOK)
 }
+
+type AddRangeRequest struct {
+	UID       string  `json:"uid"`
+	Radius    float64 `json:"radius"`
+	Latitude  float64 `json:"latitude"`
+	Longitude float64 `json:"longitude"`
+}
+
+// AddRange adds latitude, longitude, and radius to the "ranges" field in Firestore
+func AddRange(c echo.Context) error {
+	req := new(AddRangeRequest)
+	if err := c.Bind(req); err != nil {
+		return c.JSON(http.StatusBadRequest, domain.ErrorResponse{Message: "Invalid request payload"})
+	}
+
+	ctx := context.Background()
+
+	// Get the user document
+	userDoc, err := bootstrap.FirestoreClient.Collection("user").Doc(req.UID).Get(ctx)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: "Internal Server Error"})
+	}
+
+	// Extract existing ranges or initialize a new one
+	var ranges []domain.Range
+	existingRanges, exists := userDoc.Data()["ranges"]
+	if exists {
+		// Convert existingRanges to []domain.Range
+		if err := mapstructure.Decode(existingRanges, &ranges); err != nil {
+			return c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: "Internal Server Error"})
+		}
+	} else {
+		ranges = make([]domain.Range, 0)
+	}
+
+	// Add the new range
+	newRange := domain.Range{
+		Lat:    req.Latitude,
+		Lng:    req.Longitude,
+		Radius: req.Radius,
+	}
+
+	ranges = append(ranges, newRange)
+
+	// Update the ranges field in Firestore
+	updateData := map[string]interface{}{"ranges": ranges}
+	if _, err := userDoc.Ref.Set(ctx, updateData, firestore.MergeAll); err != nil {
+		return c.JSON(http.StatusInternalServerError, domain.ErrorResponse{Message: "Failed to update user ranges"})
+	}
+
+	return c.NoContent(http.StatusOK)
+}
