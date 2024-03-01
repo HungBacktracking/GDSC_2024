@@ -1,3 +1,4 @@
+import 'package:client/ui/sos_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,22 +11,71 @@ import '../../utils/scaler.dart';
 import '../../utils/themes.dart';
 import 'helper_accept_sos_screen.dart';
 
-class HelperNotificationScreen extends StatelessWidget{
+class HelperNotificationScreen extends StatefulWidget {
   final String imageUrl;
   final LatLng victimLocation;
 
   static const routeName = '/helper_notification';
-  const HelperNotificationScreen({Key? key, required this.imageUrl, required this.victimLocation}) : super(key: key);
+  const HelperNotificationScreen(
+      {Key? key, required this.imageUrl, required this.victimLocation})
+      : super(key: key);
+
+  @override
+  State<HelperNotificationScreen> createState() =>
+      _HelperNotificationScreenState();
+}
+
+class _HelperNotificationScreenState extends State<HelperNotificationScreen> {
+  late LatLng currentPosition;
+
+  Future<void> _getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied.');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    currentPosition =
+        LatLng(currentPosition.latitude, currentPosition.longitude);
+  }
+
+  @override
+  initState() {
+    super.initState();
+    currentPosition = LatLng(10.77, 106.67);
+    () async {
+      await _getCurrentLocation();
+    }();
+  }
 
   @override
   Widget build(BuildContext context) {
-
-
     Scaler().init(context);
     final scaler = Scaler();
     final currentLocation = LatLng(37.33500926, -122.03272188);
-    int distanceInMeters =
-    Geolocator.distanceBetween(currentLocation.latitude, currentLocation.longitude, victimLocation.latitude, victimLocation.longitude).truncate();
+    int distanceInMeters = Geolocator.distanceBetween(
+            currentPosition.latitude,
+            currentPosition.longitude,
+            widget.victimLocation.latitude,
+            widget.victimLocation.longitude)
+        .truncate();
 
     return Scaffold(
       appBar: AppBar(
@@ -52,7 +102,7 @@ class HelperNotificationScreen extends StatelessWidget{
             Container(
               height: MediaQuery.of(context).size.height,
               child: Image.network(
-                imageUrl,
+                widget.imageUrl,
                 fit: BoxFit.fill,
               ),
             ),
@@ -75,9 +125,11 @@ class HelperNotificationScreen extends StatelessWidget{
                 child: Column(
                   children: [
                     Text(
-                      'Distance to victim: 484 meters',
+                      'Distance to victim: $distanceInMeters meters',
                       style: TextStyle(
-                        fontSize: 24 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                        fontSize: 24 *
+                            scaler.widthScaleFactor /
+                            scaler.textScaleFactor,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -90,7 +142,9 @@ class HelperNotificationScreen extends StatelessWidget{
                           buttontextstyle: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w500,
-                            fontSize: 18 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                            fontSize: 18 *
+                                scaler.widthScaleFactor /
+                                scaler.textScaleFactor,
                           ),
                           buttonWidget: Container(
                             child: Icon(
@@ -106,16 +160,18 @@ class HelperNotificationScreen extends StatelessWidget{
                               //navigate to the helper accept sos screen
                               Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => HelperSOSScreen())
-                              );
+                                  MaterialPageRoute(
+                                      builder: (context) => HelperSOSScreen()));
                             });
                           },
                           onFinish: () {
                             //navigate to the helper sos screen
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => HelperSOSScreen())
-                              );
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SOSScreen(
+                                          victimLocation: widget.victimLocation,
+                                        )));
                           },
                         ),
                       ),
@@ -135,12 +191,12 @@ class HelperNotificationScreen extends StatelessWidget{
                     'Cancel',
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 17 * scaler.widthScaleFactor / scaler.textScaleFactor,
+                      fontSize:
+                          17 * scaler.widthScaleFactor / scaler.textScaleFactor,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                )
-            ),
+                )),
           ],
         ),
       ),

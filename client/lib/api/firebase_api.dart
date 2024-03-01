@@ -141,8 +141,10 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:client/models/data_notification.dart';
+import 'package:client/ui/sos/helper_notification_screen.dart';
 import 'package:client/ui/sos_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -308,8 +310,11 @@ class NotificationServices {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => SOSScreen(
-                  dataNotification: dataNotification,
+            builder: (context) => HelperNotificationScreen(
+                  imageUrl: dataNotification.imageLink,
+                  victimLocation: LatLng(
+                      dataNotification.location.coordinates.latitude,
+                      dataNotification.location.coordinates.longitude),
                 )));
   }
 

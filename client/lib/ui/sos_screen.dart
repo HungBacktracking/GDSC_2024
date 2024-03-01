@@ -16,13 +16,14 @@ import '../../utils/scaler.dart';
 final GlobalKey<ScaffoldState> jcbHomekey = GlobalKey();
 
 class SOSScreen extends StatefulWidget {
-  final DataNotification dataNotification;
+  // final DataNotification dataNotification;
   // final String roomId;
-
+  final LatLng victimLocation;
   const SOSScreen({
     super.key,
     // required this.roomId,
-    required this.dataNotification,
+    // required this.dataNotification,
+    required this.victimLocation,
   });
 
   @override
@@ -68,9 +69,11 @@ class SOSScreenState extends State<SOSScreen> {
   void initState() {
     super.initState();
 
-    victimLocation = LatLng(
-        widget.dataNotification.location.coordinates.latitude,
-        widget.dataNotification.location.coordinates.longitude);
+    // victimLocation = LatLng(
+    //     widget.dataNotification.location.coordinates.latitude,
+    //     widget.dataNotification.location.coordinates.longitude);
+
+    victimLocation = widget.victimLocation;
 
     () async {
       await _getCurrentLocation();
@@ -140,6 +143,7 @@ class SOSScreenState extends State<SOSScreen> {
         desiredAccuracy: LocationAccuracy.high);
     setState(() {
       currentPosition = position;
+      print("position: $position done");
       markers.add(Marker(
         markerId: const MarkerId('currentLocation'),
         position: LatLng(currentPosition!.latitude, currentPosition!.longitude),
