@@ -17,6 +17,7 @@ class AddressModel {
   static AddressModel fromJson(Map<String, dynamic> map) {
     var latitude = map["location"]["lat"];
     var longitude = map["location"]["lng"];
+
     return AddressModel(
       coordinates: GeoPoint(
         latitude,

@@ -30,14 +30,26 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:client/ui/notification_screen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart'
+    show FirebaseMessaging, RemoteMessage;
+
+import 'api/fcm_provider.dart';
+import 'dart:developer';
 
 import 'ui/greeting_screen.dart';
 
 final NavigatorKey = GlobalKey<NavigatorState>();
 
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
@@ -46,9 +58,26 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    // FirebaseAPI firebaseAPI = FirebaseAPI();
+    // firebaseAPI.initNotification();
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   FCMProvider.setContext(context);
+    //   print("FCMProvider context set to: $FCMProvider.currentContext");
+    // });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,10 +89,6 @@ class MyApp extends StatelessWidget {
       LocationData location = await backgroundLocationService.getLocation();
       print("Location: $location");
       backgroundLocationService.sendLocationToServer(location);
-    }();
-
-    () async{
-      FirebaseAPI().initNotification(context); // Add this line
     }();
 
     final List<String> certificatesTitles = [
@@ -90,35 +115,34 @@ class MyApp extends StatelessWidget {
     );
 
     return MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => AuthViewModel()),
-        ],
-        child: GetMaterialApp(
-            title: 'FirstAid App',
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              colorScheme:
-                  ColorScheme.fromSeed(seedColor: Colors.deepOrangeAccent),
-              useMaterial3: true,
-              pageTransitionsTheme: const PageTransitionsTheme(builders: {
-                TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-                TargetPlatform.iOS: CupertinoPageTransitionsBuilder()
-              }),
-            ),
-            home: LandingPage(),
-            routes: {
-              '/home': (context) => const LandingPage(),
-              NotificationScreen.routeName: (context) =>
-                  const NotificationScreen(),
-              // '/main': (context) => const MainScreen(),
-              // '/frame': (context) => const FrameScreen(),
-              // '/quiz': (context) => const QuizGameScreen(),
-              // '/complete': (context) => const CompleteQuizScreen(),
-              // '/leaderboard': (context) => const LeaderBoardScreen(),
-              // '/learning': (context) => const LearningFirstAidScreen(),
-            }
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthViewModel()),
+      ],
+      child: GetMaterialApp(
+          title: 'FirstAid App',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            colorScheme:
+                ColorScheme.fromSeed(seedColor: Colors.deepOrangeAccent),
+            useMaterial3: true,
+            pageTransitionsTheme: const PageTransitionsTheme(builders: {
+              TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+              TargetPlatform.iOS: CupertinoPageTransitionsBuilder()
+            }),
           ),
-        );
+          home: LandingPage(),
+          routes: {
+            '/home': (context) => const LandingPage(),
+            NotificationScreen.routeName: (context) =>
+                const NotificationScreen(),
+            // '/main': (context) => const MainScreen(),
+            // '/frame': (context) => const FrameScreen(),
+            // '/quiz': (context) => const QuizGameScreen(),
+            // '/complete': (context) => const CompleteQuizScreen(),
+            // '/leaderboard': (context) => const LeaderBoardScreen(),
+            // '/learning': (context) => const LearningFirstAidScreen(),
+          }),
+    );
     //     home: LandingPage(),
     //     routes: {
     //       '/home': (context) => const LandingPage(),
