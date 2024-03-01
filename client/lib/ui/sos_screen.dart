@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:client/models/data_notification.dart';
 import 'package:client/ui/sos_screen.dart';
 import 'package:client/utils/strings.dart';
 import 'package:flutter/services.dart';
@@ -15,12 +16,14 @@ import '../../utils/scaler.dart';
 final GlobalKey<ScaffoldState> jcbHomekey = GlobalKey();
 
 class SOSScreen extends StatefulWidget {
+  final DataNotification dataNotification;
+  // final String roomId;
+
   const SOSScreen({
     super.key,
-    required this.roomId,
+    // required this.roomId,
+    required this.dataNotification,
   });
-
-  final String roomId;
 
   @override
   State<SOSScreen> createState() => SOSScreenState();
@@ -34,18 +37,22 @@ class SOSScreenState extends State<SOSScreen> {
 
   final FirebaseAuth auth = FirebaseAuth.instance;
 
-  static const LatLng victimLocation = LatLng(10.78, 106.6649603);
+  LatLng victimLocation = LatLng(10.78, 106.6649603);
 
   BitmapDescriptor helperIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor currentLocationIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor victimIcon = BitmapDescriptor.defaultMarker;
 
   void setCustomMarkerIcon() {
-    BitmapDescriptor.fromAssetImage(ImageConfiguration.empty, "assets/icons/green_plus.png").then((icon) {
+    BitmapDescriptor.fromAssetImage(
+            ImageConfiguration.empty, "assets/icons/green_plus.png")
+        .then((icon) {
       helperIcon = icon;
     });
 
-    BitmapDescriptor.fromAssetImage(ImageConfiguration.empty, "assets/icons/victim.png").then((icon) {
+    BitmapDescriptor.fromAssetImage(
+            ImageConfiguration.empty, "assets/icons/victim.png")
+        .then((icon) {
       victimIcon = icon;
     });
   }
@@ -60,26 +67,36 @@ class SOSScreenState extends State<SOSScreen> {
   @override
   void initState() {
     super.initState();
-    _getCurrentLocation();
-    _listenToPositionUpdates();
-    setCustomMarkerIcon();
-    getPolyPoints();
+
+    victimLocation = LatLng(
+        widget.dataNotification.location.coordinates.latitude,
+        widget.dataNotification.location.coordinates.longitude);
+
+    () async {
+      await _getCurrentLocation();
+      _listenToPositionUpdates();
+      setCustomMarkerIcon();
+      await getPolyPoints();
+    }();
   }
 
   void _listenToPositionUpdates() {
     // Cấu hình cho getPositionStream
-    const locationOptions = LocationSettings(accuracy: LocationAccuracy.high, distanceFilter: 10);
+    const locationOptions =
+        LocationSettings(accuracy: LocationAccuracy.high, distanceFilter: 10);
 
     // Lắng nghe các cập nhật vị trí
-    positionStreamSubscription = Geolocator.getPositionStream(locationSettings: locationOptions).listen(
-          (Position? position) {
+    positionStreamSubscription =
+        Geolocator.getPositionStream(locationSettings: locationOptions).listen(
+      (Position? position) {
         if (position != null) {
           setState(() {
             currentPosition = position;
             print('Current position: $currentPosition');
             markers.add(Marker(
               markerId: const MarkerId('currentLocation'),
-              position: LatLng(currentPosition!.latitude, currentPosition!.longitude),
+              position:
+                  LatLng(currentPosition!.latitude, currentPosition!.longitude),
               infoWindow: const InfoWindow(title: 'Current Location'),
             ));
             getPolyPoints();
@@ -89,7 +106,6 @@ class SOSScreenState extends State<SOSScreen> {
       },
     );
   }
-
 
   @override
   void dispose() {
@@ -116,10 +132,12 @@ class SOSScreenState extends State<SOSScreen> {
     }
 
     if (permission == LocationPermission.deniedForever) {
-      return Future.error('Location permissions are permanently denied, we cannot request permissions.');
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
     }
 
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
     setState(() {
       currentPosition = position;
       markers.add(Marker(
@@ -128,18 +146,19 @@ class SOSScreenState extends State<SOSScreen> {
         infoWindow: const InfoWindow(title: 'Current Location'),
       ));
 
-      goToCurrentLocation();
+      // goToCurrentLocation();
       getPolyPoints();
 
       // Correctly calculate the distance here after currentPosition is set
       double distance = Geolocator.distanceBetween(
-          position.latitude, position.longitude, victimLocation.latitude, victimLocation.longitude);
+          position.latitude,
+          position.longitude,
+          victimLocation.latitude,
+          victimLocation.longitude);
 
       distanceInMeters = distance.truncate();
-
     });
   }
-
 
   Future<void> goToCurrentLocation() async {
     mapController?.animateCamera(CameraUpdate.newCameraPosition(
@@ -151,26 +170,27 @@ class SOSScreenState extends State<SOSScreen> {
   }
 
   List<LatLng> polylineCoordinates = [];
-  void getPolyPoints() async {
+  Future<void> getPolyPoints() async {
     PolylinePoints polylinePoints = PolylinePoints();
     // await _getCurrentLocation();
-    await _getCurrentLocation();
+    // await _getCurrentLocation();
     print("current: $currentPosition");
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      MyStrings.google_map_api_key,
-      // PointLatLng(currentPosition!.latitude, currentPosition!.longitude),
-      PointLatLng(10.77, 106.6849603),
-      PointLatLng(victimLocation.latitude, victimLocation.longitude),
-    );
+    try {
+      PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+        MyStrings.google_map_api_key,
+        PointLatLng(currentPosition!.latitude, currentPosition!.longitude),
+        PointLatLng(victimLocation.latitude, victimLocation.longitude),
+      );
 
-    if (result.points.isNotEmpty) {
-      print("result is: $result");
-      polylineCoordinates = [];
-      for (PointLatLng point in result.points) {
-        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+      if (result.points.isNotEmpty) {
+        print("result is: $result");
+        polylineCoordinates = [];
+        for (PointLatLng point in result.points) {
+          polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+        }
       }
-
-      // setState(() {});
+    } catch (e) {
+      print("Error: $e");
     }
   }
 
@@ -183,98 +203,108 @@ class SOSScreenState extends State<SOSScreen> {
       body: currentPosition == null
           ? const Center(child: CircularProgressIndicator())
           : Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          GoogleMap(
-            initialCameraPosition: CameraPosition(
-              // target: currentPosition,
-              target: LatLng(currentPosition!.latitude, currentPosition!.longitude),
-              zoom: 13.0,
-            ),
-            onMapCreated: onMapCreated,
-            markers: {
-              Marker(
-                markerId: const MarkerId('helper'),
-                position: LatLng(currentPosition!.latitude, currentPosition!.longitude),
-                infoWindow: const InfoWindow(title: 'Your Location'),
-                icon: helperIcon,
-              ),
-              Marker(
-                markerId: MarkerId("victim"),
-                icon: victimIcon,
-                position: victimLocation,
-                infoWindow: const InfoWindow(title: 'Victim Location'),
-              ),
-            },
-            polylines: {
-              Polyline(
-                polylineId: PolylineId("route"),
-                points: polylineCoordinates,
-                color: Colors.green,
-                width: 6,
-              )
-            },
-          ),
-          Positioned(
-            right: 16 * scaler.widthScaleFactor,
-            bottom: 120 * scaler.widthScaleFactor,
-            child: Container(
-                decoration: BoxDecoration(
-                  color: context.scaffoldBackgroundColor,
-                  borderRadius: BorderRadius.circular(8 * scaler.widthScaleFactor),
-                ),
-                child: IconButton(
-                  icon: const Icon(
-                    Icons.near_me,
-                    color: Colors.blue,
+              alignment: Alignment.bottomCenter,
+              children: [
+                GoogleMap(
+                  initialCameraPosition: CameraPosition(
+                    // target: currentPosition,
+                    target: LatLng(
+                        currentPosition!.latitude, currentPosition!.longitude),
+                    zoom: 13.0,
                   ),
-                  onPressed: goToCurrentLocation,
-                )),
-          ),
-          Positioned(
-            bottom: 10 * scaler.widthScaleFactor,
-
-            child: Container(
-              padding: EdgeInsets.only(
-                  top: 20.0 * scaler.widthScaleFactor, bottom: 20.0 * scaler.widthScaleFactor,
-                  left: 16.0 * scaler.widthScaleFactor, right: 16.0 * scaler.widthScaleFactor),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.grey,
-                  width: 1,
+                  onMapCreated: onMapCreated,
+                  markers: {
+                    Marker(
+                      markerId: const MarkerId('helper'),
+                      position: LatLng(currentPosition!.latitude,
+                          currentPosition!.longitude),
+                      infoWindow: const InfoWindow(title: 'Your Location'),
+                      icon: helperIcon,
+                    ),
+                    Marker(
+                      markerId: MarkerId("victim"),
+                      icon: victimIcon,
+                      position: victimLocation,
+                      infoWindow: const InfoWindow(title: 'Victim Location'),
+                    ),
+                  },
+                  polylines: {
+                    Polyline(
+                      polylineId: PolylineId("route"),
+                      points: polylineCoordinates,
+                      color: Colors.green,
+                      width: 6,
+                    )
+                  },
                 ),
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(10 * scaler.widthScaleFactor),),
-              ),
-              child: Text(
-                'Distance: $distanceInMeters meters',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 24 * scaler.widthScaleFactor / scaler.textScaleFactor,
-                  fontWeight: FontWeight.w700,
+                Positioned(
+                  right: 16 * scaler.widthScaleFactor,
+                  bottom: 120 * scaler.widthScaleFactor,
+                  child: Container(
+                      decoration: BoxDecoration(
+                        color: context.scaffoldBackgroundColor,
+                        borderRadius:
+                            BorderRadius.circular(8 * scaler.widthScaleFactor),
+                      ),
+                      child: IconButton(
+                        icon: const Icon(
+                          Icons.near_me,
+                          color: Colors.blue,
+                        ),
+                        onPressed: goToCurrentLocation,
+                      )),
                 ),
-              ),
-            ),
-          ),
-          Positioned(
-              right: 16 * scaler.widthScaleFactor,
-              top: (context.statusBarHeight + 16) * scaler.widthScaleFactor ,
-              child: InkWell(
-                onTap: () {
-                  SystemNavigator.pop();
-                },
-                child: Text(
-                  'Cancel',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 17 * scaler.widthScaleFactor / scaler.textScaleFactor,
-                    fontWeight: FontWeight.w500,
+                Positioned(
+                  bottom: 10 * scaler.widthScaleFactor,
+                  child: Container(
+                    padding: EdgeInsets.only(
+                        top: 20.0 * scaler.widthScaleFactor,
+                        bottom: 20.0 * scaler.widthScaleFactor,
+                        left: 16.0 * scaler.widthScaleFactor,
+                        right: 16.0 * scaler.widthScaleFactor),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.grey,
+                        width: 1,
+                      ),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10 * scaler.widthScaleFactor),
+                      ),
+                    ),
+                    child: Text(
+                      'Distance: $distanceInMeters meters',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 24 *
+                            scaler.widthScaleFactor /
+                            scaler.textScaleFactor,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ),
                 ),
-              )
-          ),
-        ],
-      ),
+                Positioned(
+                    right: 16 * scaler.widthScaleFactor,
+                    top: (context.statusBarHeight + 16) *
+                        scaler.widthScaleFactor,
+                    child: InkWell(
+                      onTap: () {
+                        SystemNavigator.pop();
+                      },
+                      child: Text(
+                        'Cancel',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 17 *
+                              scaler.widthScaleFactor /
+                              scaler.textScaleFactor,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    )),
+              ],
+            ),
     );
   }
 }

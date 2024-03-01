@@ -1,3 +1,5 @@
+// import 'dart:html';
+
 import 'package:client/api/firebase_api.dart';
 import 'dart:convert';
 import 'package:client/ui/login/pin_authen_login_screen.dart';
@@ -158,12 +160,10 @@ class AuthRepository {
 
     Navigator.of(context).popUntil((route) => false);
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-          builder: (context) {
-            return const GreetingScreen();
-          }
-      ),
-          (Route<dynamic> route) => false,
+      MaterialPageRoute(builder: (context) {
+        return const GreetingScreen();
+      }),
+      (Route<dynamic> route) => false,
     );
   }
 
@@ -201,7 +201,8 @@ class AuthRepository {
   }
 
   Future<void> registerDeviceToken(String userId) async {
-    String? token = await FirebaseAPI().getFirebaseToken();
+    // String? token = await FirebaseAPI().getFirebaseToken();
+    String? token = await NotificationServices().getDeviceToken();
 
     if (token != null) {
       Map<String, dynamic> data = {
@@ -233,7 +234,8 @@ class AuthRepository {
   }
 
   Future<void> deleteDeviceToken(String userId) async {
-    String? token = await FirebaseAPI().getFirebaseToken();
+    // String? token = await FirebaseAPI().getFirebaseToken();
+    String? token = await NotificationServices().getDeviceToken();
 
     if (token != null) {
       Map<String, dynamic> data = {
